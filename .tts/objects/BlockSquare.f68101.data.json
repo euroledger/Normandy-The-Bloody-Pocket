@@ -1,0 +1,46 @@
+{
+  "GUID": "f68101",
+  "Name": "BlockSquare",
+  "Transform": {
+    "posX": -21.0668144,
+    "posY": 1.45999992,
+    "posZ": -14.8776188,
+    "rotX": -0.000004868838,
+    "rotY": -0.00000565141636,
+    "rotZ": 0.00000102525041,
+    "scaleX": 1,
+    "scaleY": 1,
+    "scaleZ": 1
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "-- GUID Configuration WOOF 88888\r\nzoneGUID      = \"58c86e\"\r\nmidDeckGUID   = \"7434f2\"\r\nlateDeckGUID  = \"eb14ea\"\r\n\r\ncard1GUID     = \"d547bc\"\r\ncard2GUID     = \"5ac114\"\r\ncard20GUID    = \"975d05\"\r\ncard37GUID    = \"eb305b\"\r\n\r\ndummyGUID     = \"d8c9e0\"\r\n\r\ndrawCount = 0\r\nshuffleUsed = false\r\n\r\nfunction onSave()\r\n    return JSON.encode({\r\n        drawCount = drawCount,\r\n        shuffleUsed = shuffleUsed\r\n    })\r\nend\r\n\r\nfunction onLoad(saved_data)\r\n    if saved_data ~= \"\" then\r\n        local data = JSON.decode(saved_data)\r\n        drawCount = data.drawCount or 0\r\n        shuffleUsed = data.shuffleUsed or false\r\n    else\r\n        shuffleUsed = false\r\n    end\r\n\r\n    math.randomseed(os.time())\r\n    self.setColorTint({1,1,1,0})\r\n    self.setLock(true)\r\n    createButtons()\r\nend\r\n\r\nfunction createButtons()\r\n    self.clearButtons()\r\n\r\n    -- Draw button\r\n    self.createButton({\r\n        label=\"Draw\",\r\n        click_function=\"drawCard\",\r\n        function_owner=self,\r\n        position={0,0.6,0},\r\n        rotation={0,180,0},\r\n        width=1200,\r\n        height=500,\r\n        font_size=250\r\n    })\r\n\r\n    -- Shuffle button (only before first use)\r\n    if not shuffleUsed then\r\n        self.createButton({\r\n            label=\"Shuffle\",\r\n            click_function=\"shuffleDeck\",\r\n            function_owner=self,\r\n            position={0,0.6,-1},\r\n            rotation={0,180,0},\r\n            width=1200,\r\n            height=500,\r\n            font_size=250\r\n        })\r\n    end\r\nend\r\n\r\nfunction getDeckFromZone()\r\n    local zone = getObjectFromGUID(zoneGUID)\r\n    if not zone then return nil end\r\n    for _, obj in ipairs(zone.getObjects()) do\r\n        if obj.tag == \"Deck\" or obj.tag == \"Card\" then return obj end\r\n    end\r\n    return nil\r\nend\r\n\r\nfunction findCardByGUID(deck, guid)\r\n    for i, obj in ipairs(deck.getObjects()) do\r\n        if obj.guid == guid then return i - 1 end\r\n    end\r\n    return nil\r\nend\r\n\r\n-- =========================\r\n-- MOVE DUMMY TO BOTTOM\r\n-- =========================\r\n\r\nfunction moveDummyToBottom(retries)\r\n    retries = retries or 0\r\n\r\n    local deck = getDeckFromZone()\r\n    if not deck or deck.tag ~= \"Deck\" then return end\r\n\r\n    local objects = deck.getObjects()\r\n    if not objects then return end\r\n\r\n    for i, obj in ipairs(objects) do\r\n        local guid = obj.guid or obj.GUID\r\n\r\n        if guid == dummyGUID then\r\n            if i == #objects then return end\r\n\r\n            deck.takeObject({\r\n                index = i - 1,\r\n                position = {0, -50, 0},\r\n                smooth = false,\r\n                callback_function = function(card)\r\n                    Wait.frames(function()\r\n                        local d = getDeckFromZone()\r\n                        if d and d.tag == \"Deck\" then\r\n                            d.putObject(card)\r\n                        end\r\n                    end, 1)\r\n                end\r\n            })\r\n            return\r\n        end\r\n    end\r\n\r\n    if retries < 5 then\r\n        Wait.time(function()\r\n            moveDummyToBottom(retries + 1)\r\n        end, 0.5)\r\n    end\r\nend\r\n\r\n-- =========================\r\n-- REMOVE DUMMY\r\n-- =========================\r\n\r\nfunction removeDummyFromDeck(retries)\r\n    retries = retries or 0\r\n\r\n    local deck = getDeckFromZone()\r\n    if not deck or deck.tag ~= \"Deck\" then return end\r\n\r\n    local objects = deck.getObjects()\r\n    if not objects then return end\r\n\r\n    for i, obj in ipairs(objects) do\r\n        local guid = obj.guid or obj.GUID\r\n\r\n        if guid == dummyGUID then\r\n            deck.takeObject({\r\n                index = i - 1,\r\n                position = {0, -50, 0},\r\n                smooth = false,\r\n                callback_function = function(card)\r\n                    if card then card.destruct() end\r\n                end\r\n            })\r\n            return\r\n        end\r\n    end\r\n\r\n    if retries < 5 then\r\n        Wait.time(function()\r\n            removeDummyFromDeck(retries + 1)\r\n        end, 0.5)\r\n    end\r\nend\r\n\r\n-- =========================\r\n-- MERGE FUNCTION\r\n-- =========================\r\n\r\nfunction mergeAdditionalDeck(newDeckGUID, newName, broadcastMsg)\r\n    local newDeck = getObjectFromGUID(newDeckGUID)\r\n    local zone = getObjectFromGUID(zoneGUID)\r\n    \r\n    if newDeck and zone then\r\n        broadcastToAll(\"Merging \" .. newName .. \"...\", {0, 1, 1})\r\n        newDeck.setPositionSmooth(zone.getPosition() + Vector(0, 4, 0))\r\n        \r\n        Wait.time(function()\r\n            local deck = getDeckFromZone()\r\n            if deck and deck.tag == \"Deck\" then\r\n                deck.setName(newName)\r\n                \r\n                deck.shuffle()\r\n                Wait.time(function() deck.shuffle() end, 0.2)\r\n                Wait.time(function() deck.shuffle() end, 0.4)\r\n\r\n                if newDeckGUID == lateDeckGUID then\r\n                    -- Reset draw count for new phase\r\n                    drawCount = 0\r\n\r\n                    Wait.time(function()\r\n                        removeDummyFromDeck()\r\n                    end, 1.5)\r\n                else\r\n                    Wait.time(function()\r\n                        moveDummyToBottom()\r\n                    end, 1.5)\r\n                end\r\n\r\n                broadcastToAll(broadcastMsg, {0, 1, 0})\r\n            end\r\n        end, 2.5)\r\n    end\r\nend\r\n\r\n-- =========================\r\n-- DRAW FUNCTION\r\n-- =========================\r\n\r\nfunction drawCard(_, _, alt_click)\r\n    if alt_click then return end\r\n    local deck = getDeckFromZone()\r\n    if not deck then\r\n        broadcastToAll(\"No cards found!\", {1,0,0})\r\n        return\r\n    end\r\n\r\n    local targetPos = self.getPosition() + Vector(10, 2, 0)\r\n    drawCount = drawCount + 1\r\n\r\n    if deck.tag == \"Deck\" then\r\n        local targetGUID = nil\r\n        if drawCount == 1 then targetGUID = card1GUID\r\n        elseif drawCount == 2 then targetGUID = card2GUID end\r\n\r\n        if targetGUID then\r\n            local idx = findCardByGUID(deck, targetGUID)\r\n            if idx ~= nil and idx >= 0 then\r\n                deck.takeObject({\r\n                    index = idx,\r\n                    position = targetPos,\r\n                    rotation = {0,180,0},\r\n                    smooth = true\r\n                })\r\n                return\r\n            end\r\n        end\r\n        \r\n        local deckObjs = deck.getObjects()\r\n        local topCardGUID = deckObjs[1].guid \r\n        \r\n        deck.takeObject({position=targetPos, rotation={0,180,0}, smooth=true})\r\n        \r\n        if topCardGUID == card20GUID then\r\n            Wait.time(function() mergeAdditionalDeck(midDeckGUID, \"Early-Mid Deck\", \"Mid Deck cards merged and shuffled\") end, 1.5)\r\n        elseif topCardGUID == card37GUID then\r\n            Wait.time(function() mergeAdditionalDeck(lateDeckGUID, \"Full Campaign Deck\", \"Late Deck cards merged and shuffled\") end, 1.5)\r\n        end\r\n    else\r\n        if deck.guid == card20GUID then \r\n            Wait.time(function() mergeAdditionalDeck(midDeckGUID, \"Early-Mid Deck\", \"Mid Deck merged\") end, 1.5) \r\n        elseif deck.guid == card37GUID then\r\n            Wait.time(function() mergeAdditionalDeck(lateDeckGUID, \"Full Campaign Deck\", \"Late Deck merged\") end, 1.5)\r\n        end\r\n        deck.setPositionSmooth(targetPos + Vector(0,2,0), false, true)\r\n        deck.setRotation({0,180,0})\r\n    end\r\nend\r\n\r\n-- =========================\r\n-- SHUFFLE FUNCTION\r\n-- =========================\r\n\r\nfunction shuffleDeck()\r\n    local deck = getDeckFromZone()\r\n    if deck and deck.tag == \"Deck\" then\r\n        deck.shuffle()\r\n        drawCount = 0\r\n        broadcastToAll(\"Deck Shuffled and Seeds Reset.\", {1,1,0})\r\n\r\n        shuffleUsed = true\r\n        createButtons()\r\n\r\n        Wait.time(function()\r\n            moveDummyToBottom()\r\n        end, 1.5)\r\n    end\r\nend",
+  "LuaScriptState": "{\"drawCount\":0,\"shuffleUsed\":false}",
+  "XmlUI": ""
+}

@@ -1,0 +1,215 @@
+-- GUID Configuration QUACK 901
+zoneGUID      = "58c86e"
+midDeckGUID   = "7434f2"
+lateDeckGUID  = "eb14ea"
+
+card1GUID     = "7629c3"
+card2GUID     = "d05afe"
+card20GUID    = "599899"
+card37GUID    = "eb305b"
+
+drawCount = 0
+isMerging = false
+
+-- =========================
+-- SAVE / LOAD
+-- =========================
+function onSave()
+    return JSON.encode({ drawCount = drawCount })
+end
+
+function onLoad(saved_data)
+    if saved_data ~= "" then
+        local data = JSON.decode(saved_data)
+        drawCount = data.drawCount or 0
+    end
+
+    math.randomseed(os.time())
+    self.setColorTint({1,1,1,0})
+    self.setLock(true)
+    createButtons()
+end
+
+-- =========================
+-- UI
+-- =========================
+function createButtons()
+    self.clearButtons()
+    self.createButton({
+        label="Draw", click_function="drawCard", function_owner=self,
+        position={0,0.6,0}, rotation={0,180,0}, width=1200, height=500, font_size=250
+    })
+    self.createButton({
+        label="Shuffle", click_function="shuffleDeck", function_owner=self,
+        position={0,0.6,-1}, rotation={0,180,0}, width=1200, height=500, font_size=250
+    })
+end
+
+-- =========================
+-- HELPERS
+-- =========================
+function getDeckFromZone()
+    local zone = getObjectFromGUID(zoneGUID)
+    if not zone then return nil end
+
+    local objs = zone.getObjects()
+    for _, obj in ipairs(objs) do
+        if obj.tag == "Deck" or obj.tag == "Card" then
+            return obj
+        end
+    end
+    return nil
+end
+
+function findCardByGUID(deck, guid)
+    for i, obj in ipairs(deck.getObjects()) do
+        if obj.guid == guid then return i - 1 end
+    end
+    return nil
+end
+
+-- =========================
+-- DUMMY SYSTEM
+-- =========================
+function spawnDummyCard(deck)
+    print("[DBG] Spawning dummy CARD")
+
+    local spawnParams = {
+        type = "CardCustom",
+        -- Spawn below the deck to force "Bottom" placement
+        position = deck.getPosition() + Vector(0, -2, 0),
+        rotation = deck.getRotation(),
+        callback_function = function(obj)
+            obj.setCustomObject({
+                face = "https://steamusercontent-a.akamaihd.net/ugc/blank.png",
+                back = "https://steamusercontent-a.akamaihd.net/ugc/blank.png",
+                width = 1, height = 1
+            })
+
+            obj.setName("DUMMY")
+            obj.setLock(false)
+            
+            -- FORCES THE IMPORT MENU TO CLOSE AUTOMATICALLY
+            obj.reload() 
+
+            -- Wait for reload, then join deck
+            Wait.frames(function()
+                if deck ~= nil and not deck.isDestroyed() then
+                    deck.putObject(obj)
+                    print("[DBG] Dummy tucked under deck.")
+                end
+            end, 1)
+        end
+    }
+
+    spawnObject(spawnParams)
+end
+
+function addDummyToBottom(retries)
+    retries = retries or 0
+    local deck = getDeckFromZone()
+
+    if not deck then
+        if retries < 5 then
+            Wait.time(function() addDummyToBottom(retries + 1) end, 0.5)
+        end
+        return
+    end
+
+    if deck.tag == "Deck" then
+        spawnDummyCard(deck)
+    end
+end
+
+function removeDummyFromDeck()
+    local deck = getDeckFromZone()
+    if not deck or deck.tag ~= "Deck" then return end
+
+    local objs = deck.getObjects()
+    for i, obj in ipairs(objs) do
+        if obj.name == "DUMMY" then
+            deck.takeObject({
+                index = i - 1,
+                position = deck.getPosition() + Vector(5,2,0),
+                smooth = false
+            })
+            return
+        end
+    end
+end
+
+-- =========================
+-- MERGE FUNCTION
+-- =========================
+function mergeAdditionalDeck(newDeckGUID, newName, broadcastMsg)
+    isMerging = true
+    local newDeck = getObjectFromGUID(newDeckGUID)
+    local zone = getObjectFromGUID(zoneGUID)
+    
+    if newDeck and zone then
+        broadcastToAll("Merging " .. newName .. "...", {0, 1, 1})
+        newDeck.setPositionSmooth(zone.getPosition() + Vector(0, 4, 0))
+        
+        Wait.time(function()
+            local deck = getDeckFromZone()
+            if deck and deck.tag == "Deck" then
+                deck.setName(newName)
+                deck.shuffle()
+                broadcastToAll(broadcastMsg, {0, 1, 0})
+
+                if newDeckGUID ~= lateDeckGUID then
+                    Wait.time(function() addDummyToBottom(0) end, 1.5)
+                end
+            end
+            Wait.time(function() isMerging = false end, 1.0)
+        end, 2.5)
+    else
+        isMerging = false
+    end
+end
+
+-- =========================
+-- DRAW FUNCTION
+-- =========================
+function drawCard(_, _, alt_click)
+    if alt_click or isMerging then return end
+
+    local deck = getDeckFromZone()
+    if not deck then
+        broadcastToAll("No cards found!", {1,0,0})
+        return
+    end
+
+    local targetPos = self.getPosition() + Vector(10, 2, 0)
+    drawCount = drawCount + 1
+
+    if deck.tag == "Deck" then
+        local deckObjs = deck.getObjects()
+        local targetGUID = nil
+        
+        if drawCount == 1 then targetGUID = card1GUID
+        elseif drawCount == 2 then targetGUID = card2GUID end
+
+        if targetGUID then
+            local idx = findCardByGUID(deck, targetGUID)
+            if idx then
+                deck.takeObject({index = idx, position = targetPos, rotation = {0,180,0}, smooth = true})
+                return
+            end
+        end
+
+        local topGUID = deckObjs[1].guid
+        deck.takeObject({position = targetPos, rotation = {0,180,0}, smooth = true})
+
+        if topGUID == card20GUID then
+            Wait.time(function() mergeAdditionalDeck(midDeckGUID, "Mid Deck", "Mid cards merged") end, 1.5)
+        elseif topGUID == card37GUID then
+            Wait.time(function() 
+                removeDummyFromDeck()
+                mergeAdditionalDeck(lateDeckGUID, "Late Deck", "Late cards merged") 
+            end, 1.5)
+        end
+    else
+        deck.setPositionSmooth(targetPos + Vector(0,2,0))
+    end
+end
