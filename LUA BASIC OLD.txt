@@ -3,9 +3,9 @@ zoneGUID      = "58c86e"
 midDeckGUID   = "7434f2"
 lateDeckGUID  = "eb14ea"
 
-card1GUID     = "d547bc"
-card2GUID     = "5ac114"
-card20GUID    = "975d05"
+card1GUID     = "b68548"
+card2GUID     = "8b7678"
+card20GUID    = "c9bbe9"
 card37GUID    = "eb305b"
 
 dummyGUID     = "d8c9e0"
