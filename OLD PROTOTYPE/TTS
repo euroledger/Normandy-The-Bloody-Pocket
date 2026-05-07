@@ -1,0 +1,176 @@
+deckGUID = "1f1f6a"
+
+midDeckGUID = "7434f2"  
+lateDeckGUID = "eb14ea"  
+
+drawCount = 0
+
+--------------------------------------------------
+-- SAVE / LOAD
+--------------------------------------------------
+
+function onSave()
+    return JSON.encode({
+        drawCount = drawCount
+    })
+end
+
+function onLoad(saved_data)
+
+    if saved_data ~= "" then
+        local data = JSON.decode(saved_data)
+        drawCount = data.drawCount or 0
+    else
+        drawCount = 0
+    end
+    broadcastToAll("drawCount = "..drawCount, {0,1,1})
+
+    -- Make cube invisible and locked
+    self.setColorTint({1,1,1,0})
+    self.setLock(true)
+
+    -- DRAW BUTTON
+    self.createButton({
+        label="Draw",
+        click_function="drawCard",
+        function_owner=self,
+        position={0,0.6,0},
+        rotation={0,180,0},
+        width=1200,
+        height=500,
+        font_size=250
+    })
+
+    -- SHUFFLE BUTTON
+    self.createButton({
+        label="Shuffle",
+        click_function="shuffleDeck",
+        function_owner=self,
+        position={0,0.6,-1},
+        rotation={0,180,0},
+        width=1200,
+        height=500,
+        font_size=250
+    })
+end
+
+
+function mergeDeck(newDeckGUID)
+    local mainDeck = getObjectFromGUID(deckGUID)
+    local newDeck = getObjectFromGUID(newDeckGUID)
+
+    if not mainDeck or not newDeck then
+        broadcastToAll("Deck merge failed!", {1,0,0})
+        return
+    end
+
+    local pos = mainDeck.getPosition()
+    newDeck.setPosition(pos + Vector(0,2,0))
+
+    Wait.time(function()
+        mainDeck.putObject(newDeck)
+        mainDeck.shuffle()
+    end, 0.5)
+
+    broadcastToAll("New deck added and shuffled!", {0,1,0})
+end
+
+--------------------------------------------------
+-- HELPER: TAKE CARD BY NAME FROM DECK
+--------------------------------------------------
+
+function takeNamedCard(deck, cardName, targetPos)
+    local objects = deck.getObjects()
+
+    for i, obj in ipairs(objects) do
+        if obj.name == cardName then
+            deck.takeObject({
+                index = i - 1,
+                position = targetPos,
+                flip = true,
+                smooth = true
+            })
+            return true
+        end
+    end
+
+    return false
+end
+
+--------------------------------------------------
+-- DRAW LOGIC
+--------------------------------------------------
+
+function drawCard(_, _, alt_click)
+    if alt_click then return end
+
+    drawCount = drawCount + 1
+
+    local deck = getObjectFromGUID(deckGUID)
+
+    if not deck then
+        broadcastToAll("Deck not found!", {1,0,0})
+        return
+    end
+
+    local targetPos = self.getPosition() + Vector(10,2,0)
+
+    -- FIRST CARD
+    if drawCount == 1 then
+        if not takeNamedCard(deck, "CARD1", targetPos) then
+            broadcastToAll("CARD1 not found!", {1,0,0})
+        end
+        return
+    end
+
+    -- SECOND CARD
+    if drawCount == 2 then
+        if not takeNamedCard(deck, "CARD2", targetPos) then
+            broadcastToAll("CARD2 not found!", {1,0,0})
+        end
+        return
+    end
+
+    -- NORMAL DRAW
+    local drawn = deck.takeObject({
+        position = targetPos,
+        flip = true,
+        smooth = true
+    })
+
+    Wait.time(function()
+        checkSpecialCard(drawn)
+    end, 0.2)
+end
+
+function checkSpecialCard(card)
+    if not card then return end
+
+    local name = card.getName()
+
+    if name == "CARD20" then
+        mergeDeck(midDeckGUID)
+    elseif name == "CARD37" then
+        mergeDeck(lateDeckGUID)
+    end
+end
+--------------------------------------------------
+-- SHUFFLE BUTTON
+--------------------------------------------------
+
+function shuffleDeck(_, _, alt_click)
+    if alt_click then return end
+
+    local deck = getObjectFromGUID(deckGUID)
+
+    if not deck then
+        broadcastToAll("Deck not found!", {1,0,0})
+        return
+    end
+
+    deck.shuffle()
+
+    drawCount = 0
+
+    broadcastToAll("Deck shuffled - draw order reset", {1,1,0})
+end
