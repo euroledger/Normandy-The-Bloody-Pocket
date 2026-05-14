@@ -1,0 +1,7253 @@
+
+============================================================
+PATH: deck.py
+============================================================
+
+from cards.card_1 import card as card_001
+from cards.card_2 import card as card_002
+from cards.card_3 import card as card_003
+from cards.card_4 import card as card_004
+from cards.card_5 import card as card_005
+from cards.card_6 import card as card_006
+from cards.card_7 import card as card_007
+from cards.card_8 import card as card_008
+from cards.card_9 import card as card_009
+from cards.card_10 import card as card_010
+from cards.card_11 import card as card_011
+from cards.card_12 import card as card_012
+from cards.card_13 import card as card_013
+from cards.card_14 import card as card_014
+from cards.card_15 import card as card_015
+from cards.card_16 import card as card_016
+from cards.card_17 import card as card_017
+from cards.card_18 import card as card_018
+from cards.card_19 import card as card_019
+from cards.card_20 import card as card_020
+from cards.card_21 import card as card_021
+from cards.card_22 import card as card_022
+from cards.card_23 import card as card_023
+from cards.card_24 import card as card_024
+from cards.card_25 import card as card_025
+from cards.card_26 import card as card_026
+from cards.card_27 import card as card_027
+from cards.card_28 import card as card_028
+from cards.card_29 import card as card_029
+from cards.card_30 import card as card_030
+from cards.card_31 import card as card_031
+from cards.card_33 import card as card_033
+from cards.card_35 import card as card_035
+from cards.card_36 import card as card_036
+from cards.card_37 import card as card_037
+from cards.card_34 import card as card_034
+from cards.card_38 import card as card_038
+from cards.card_40 import card as card_040
+from cards.card_41 import card as card_041
+from cards.card_43 import card as card_043
+from cards.card_44 import card as card_044
+from cards.card_46 import card as card_046
+from cards.card_47 import card as card_047
+from cards.card_48 import card as card_048
+from cards.card_32 import card as card_032
+from cards.card_45 import card as card_045
+from cards.card_39 import card as card_039
+from cards.card_42 import card as card_042
+
+# =========================================================
+# ALL CARDS
+# =========================================================
+
+all_cards = [
+    card_001,
+    card_002,
+    card_003,
+    card_004,
+    card_005,
+    card_006,
+    card_007,
+    card_008,
+    card_009,
+    card_010,
+    card_011,
+    card_012,
+    card_013,
+    card_014,
+    card_015,
+    card_016,
+    card_017,
+    card_018,
+    card_019,
+    card_020,
+    card_021,
+    card_022,
+    card_023,
+    card_024,
+    card_025,
+    card_026,
+    card_027,
+    card_028,
+    card_029,
+    card_030,
+    card_031,
+    card_032,
+    card_033,
+    card_034,
+    card_035,
+    card_036,
+    card_037,
+    card_038,
+    card_039,
+    card_040,
+    card_041,
+    card_042,
+    card_043,
+    card_044,
+    card_045,
+    card_046,
+    card_047,
+    card_048,
+  
+]
+
+
+# =========================================================
+# DECKS
+# =========================================================
+
+early_deck = []
+mid_deck = []
+late_deck = []
+
+MID_DECK_IDS = {
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    33,
+    35,
+    36,
+    37,
+    43
+}
+
+LATE_DECK_IDS = {
+    32,
+    34,
+    38,
+    39,
+    40,
+    41,
+    42,
+    44,
+    45,
+    46,
+    47,
+    48
+}
+
+# =========================================================
+# SORT CARDS INTO DECKS
+# =========================================================
+
+
+for card in all_cards:
+
+    # EARLY DECK
+
+    if 1 <= card.card_id <= 24:
+        early_deck.append(card)
+
+    # MID DECK
+
+    elif card.card_id in MID_DECK_IDS:
+        mid_deck.append(card)
+
+    # LATE DECK
+
+    elif card.card_id in LATE_DECK_IDS:
+        late_deck.append(card)
+
+
+# =========================================================
+# CARD LOOKUP
+# =========================================================
+
+card_lookup = {}
+
+for card in all_cards:
+    card_lookup[card.card_id] = card
+
+
+# =========================================================
+# MAIN LOOP
+# =========================================================
+
+while True:
+
+    print()
+    print("========================================")
+    print("SOS NORMANDY CARD DATABASE")
+    print("========================================")
+    print()
+
+    print("Available Cards:")
+
+    for card in all_cards:
+        print(f"  {card.card_id}: {card.title}")
+
+    print()
+    print("Enter a card number to view summary")
+    print("Enter Q to quit")
+    print()
+
+    user_input = input("> ").strip()
+
+    # -------------------------------------
+    # QUIT
+    # -------------------------------------
+
+    if user_input.upper() == "Q":
+        print("Goodbye.")
+        break
+
+    # -------------------------------------
+    # VALIDATE NUMBER
+    # -------------------------------------
+
+    if not user_input.isdigit():
+        print("Invalid input.")
+        continue
+
+    card_id = int(user_input)
+
+    # -------------------------------------
+    # LOOKUP CARD
+    # -------------------------------------
+
+    if card_id not in card_lookup:
+        print("Card not found.")
+        continue
+
+    # -------------------------------------
+    # PRINT SUMMARY
+    # -------------------------------------
+
+    selected_card = card_lookup[card_id]
+    selected_card.summary()
+
+    print()
+    input("Press ENTER to return to menu...")
+
+============================================================
+PATH: flatten.py
+============================================================
+
+import os
+
+def flatten_codebase(root_dir, output_file):
+    # Folders to skip
+    exclude_dirs = {'.git', '__pycache__', 'venv', 'node_modules', '.vscode', 'dist', 'build'}
+    # File extensions to skip
+    exclude_exts = {'.pyc', '.exe', '.bin', '.pdf', '.jpg', '.png', '.zip', '.lock'}
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for root, dirs, files in os.walk(root_dir):
+            # Modifying dirs in-place to skip excluded folders
+            dirs[:] = [d for d in dirs if d not in exclude_dirs]
+            
+            for file in files:
+                if any(file.endswith(ext) for ext in exclude_exts):
+                    continue
+                
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, root_dir)
+                
+                # Add a clear header for each file
+                f.write(f"\n{'='*60}\n")
+                f.write(f"PATH: {rel_path}\n")
+                f.write(f"{'='*60}\n\n")
+                
+                try:
+                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as code_file:
+                        f.write(code_file.read())
+                    f.write("\n")
+                except Exception as e:
+                    f.write(f"[Error reading file: {e}]\n")
+
+if __name__ == "__main__":
+    # Change '.' to your project folder path if running from elsewhere
+    flatten_codebase('.', 'full_codebase_dump.txt')
+    print("Done! Upload 'full_codebase_dump.txt' to ChatGPT.")
+
+
+============================================================
+PATH: full_codebase_dump.txt
+============================================================
+
+
+
+============================================================
+PATH: tst.txt
+============================================================
+
+ python -m unittest discover -s tests -v
+
+============================================================
+PATH: cards\card_1.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+pz_lehr = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "Pz Lehr"
+)
+
+ss_12 = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "12 SS Pz"
+)
+
+card = Card(
+    card_id=1,
+    title="D-Day Landings: First Wave"
+)
+
+card.military.formations.extend([
+    first_us,
+    second_brit,
+    first_can
+])
+
+card.resources.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=pz_lehr
+    ),
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=ss_12
+    )
+])
+
+card.actions.actions_available = 1
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+)
+
+============================================================
+PATH: cards\card_10.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #10
+# V1 ROCKETS
+# =========================================================
+
+card = Card(
+    card_id=10,
+    title="V1 Rockets"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+============================================================
+PATH: cards\card_11.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# CARD #11
+# SIEGE OF CHERBOURG
+# =========================================================
+
+card = Card(
+    card_id=11,
+    title="Siege of Cherbourg"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=first_us
+    )
+)
+
+============================================================
+PATH: cards\card_12.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# CARD #12
+# OPERATION BAGRATION
+# =========================================================
+
+card = Card(
+    card_id=12,
+    title="Operation Bagration"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Lose 2 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-2,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 1
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+)
+
+============================================================
+PATH: cards\card_13.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+second_ss_panzer = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "2nd SS Panzer"
+)
+
+
+# =========================================================
+# CARD #13
+# THE GREAT STORM
+# =========================================================
+
+card = Card(
+    card_id=13,
+    title="The Great Storm"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.text.append(
+    "Weather automatically Overcast"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Reinforcement
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=second_ss_panzer
+    ),
+
+    # Gain 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 4
+
+============================================================
+PATH: cards\card_14.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+ninth_ss_panzer = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "9th SS Panzer"
+)
+
+
+# =========================================================
+# CARD #14
+# OPERATION EPSOM
+# =========================================================
+
+card = Card(
+    card_id=14,
+    title="Operation Epsom"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+# Carpet Bombing
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=ninth_ss_panzer
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 4
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Attack Strength CAN 1st Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 DRM Transport
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=1,
+        resource_type=ResourceType.TRANSPORT
+    ),
+
+    # +2 Montgomery BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Montgomery",
+        target=second_brit
+    )
+])
+
+============================================================
+PATH: cards\card_15.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+tenth_ss_panzer = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "10th SS Panzer"
+)
+
+
+# =========================================================
+# CARD #15
+# OPERATION WINDSOR
+# =========================================================
+
+card = Card(
+    card_id=15,
+    title="Operation Windsor"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 10th SS Panzer reinforcement
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=tenth_ss_panzer
+    ),
+
+    # Lose 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Lose 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 4
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Attack Strength CAN 1st Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_16.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+one_hundred_sixteenth_panzer = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "116th Panzer"
+)
+
+
+# =========================================================
+# CARD #16
+# BATTLE OF THE BOCAGE
+# =========================================================
+
+card = Card(
+    card_id=16,
+    title="Battle of the Bocage"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 116th Panzer reinforcement
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=one_hundred_sixteenth_panzer
+    ),
+
+    # Lose 1 Transport
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength US 1st Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    ),
+
+    # -1 DRM Transport
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+============================================================
+PATH: cards\card_17.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+nebelwerfer = GermanReinforcement(
+    ReinforcementType.NEBELWERFER,
+    "Nebelwerfer"
+)
+
+
+# =========================================================
+# CARD #17
+# NEBELWERFERS
+# =========================================================
+
+card = Card(
+    card_id=17,
+    title="Nebelwerfers"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    second_brit
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# No Modifiers
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=3,
+        target=nebelwerfer,
+        description="Each marker can be immediately deployed to map or placed in Strategic Reserve box"
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+)
+
+============================================================
+PATH: cards\card_18.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #18
+# OPERATION CHARNWOOD
+# =========================================================
+
+card = Card(
+    card_id=18,
+    title="Operation Charnwood"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+])
+
+# Carpet Bombing
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+)
+
+============================================================
+PATH: cards\card_19.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+flak_88 = GermanReinforcement(
+    ReinforcementType.FLAK_88,
+    "88mm Flak"
+)
+
+
+# =========================================================
+# CARD #19
+# 88MM FLAK
+# =========================================================
+
+card = Card(
+    card_id=19,
+    title="88mm Flak"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+# No Modifiers
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# No Modifiers
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=3,
+        target=flak_88,
+        description="Each marker can be immediately deployed to map or placed in Strategic Reserve box"
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+============================================================
+PATH: cards\card_2.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #2
+# D-DAY LANDINGS: SECOND WAVE
+# =========================================================
+
+card = Card(
+    card_id=2,
+    title="D-Day Landings: Second Wave"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    )
+])
+
+============================================================
+PATH: cards\card_20.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #20
+# OPERATION GOODWOOD
+# =========================================================
+
+card = Card(
+    card_id=20,
+    title="Operation Goodwood"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=second_brit
+    )
+)
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-2,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    ),
+
+    # +2 Montgomery 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Montgomery",
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_21.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #21
+# OPERATION JUPITER
+# =========================================================
+
+card = Card(
+    card_id=21,
+    title="Operation Jupiter"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=first_can
+    )
+)
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    )
+)
+
+============================================================
+PATH: cards\card_22.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #22
+# NAVAL GUNFIRE
+# =========================================================
+
+card = Card(
+    card_id=22,
+    title="Naval Gunfire"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +2 Attack Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=first_us
+    ),
+
+    # +2 Attack Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=second_brit
+    ),
+
+    # +2 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_23.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# CARD #23
+# SHERMAN FIREFLY
+# =========================================================
+
+card = Card(
+    card_id=23,
+    title="Sherman Firefly"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(second_brit)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Gain 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    )
+)
+
+============================================================
+PATH: cards\card_24.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #24
+# OPERATION SPRING
+# =========================================================
+
+card = Card(
+    card_id=24,
+    title="Operation Spring"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-2,
+        resource_type=ResourceType.SUPPLY
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_25.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# CARD #25
+# OPERATION COBRA
+# =========================================================
+
+card = Card(
+    card_id=25,
+    title="Operation Cobra"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +2 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=first_us
+    )
+)
+
+# Carpet Bombing
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Lose 1 Transport
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    ),
+
+    # Lose 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    # +1 Attack Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    )
+)
+
+============================================================
+PATH: cards\card_26.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+
+# =========================================================
+# CARD #26
+# SHERMAN "RHINO"
+# =========================================================
+
+card = Card(
+    card_id=26,
+    title='Sherman "Rhino"'
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    ),
+
+    # +1 Jabos 3rd US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=third_us
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    # +1 Attack Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    )
+)
+
+============================================================
+PATH: cards\card_27.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# CARD #27
+# HITLER ASSASSINATION ATTEMPT
+# =========================================================
+
+card = Card(
+    card_id=27,
+    title="Hitler Assassination Attempt"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.text.append(
+    "Flip Hitler Approval marker from 3 side to 4 side"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-3,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 1
+
+============================================================
+PATH: cards\card_28.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #28
+# UPGRADE ARMIES
+# =========================================================
+
+card = Card(
+    card_id=28,
+    title="Upgrade Armies"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+card.military.text.append(
+    "Flip all armies (increasing their combat power by 1). "
+    "Replace British XXXX Corps with British 2nd Army and "
+    "British I Corps with Canadian 1st Army"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    ),
+
+    # +1 Jabos 3rd US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=third_us
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    # +1 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    )
+)
+
+============================================================
+PATH: cards\card_29.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+
+# =========================================================
+# CARD #29
+# BRITTANY OFFENSIVE
+# =========================================================
+
+card = Card(
+    card_id=29,
+    title="Brittany Offensive"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(third_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=third_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Lose 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    # +2 Patton 3rd US Army
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Patton",
+        target=third_us
+    )
+)
+
+============================================================
+PATH: cards\card_3.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+ss_17_pz_grd = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "17 SS Pz Grd"
+)
+
+
+# =========================================================
+# CARD #3
+# CARENTAN
+# =========================================================
+
+card = Card(
+    card_id=3,
+    title="Carentan"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 17 SS Pz Grd reinforcement
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=ss_17_pz_grd
+    ),
+
+    # Truck icon = Transport loss
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    ),
+
+    # Barrel icon = Supply loss
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    ),
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+============================================================
+PATH: cards\card_30.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# CARD #30
+# OPERATION BLUECOAT
+# =========================================================
+
+card = Card(
+    card_id=30,
+    title="Operation Bluecoat"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(second_brit)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +2 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=second_brit
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=second_brit
+    ),
+
+    # +2 Montgomery 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Montgomery",
+        target=second_brit
+    )
+])
+
+============================================================
+PATH: cards\card_31.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+flak_88 = GermanReinforcement(
+    ReinforcementType.FLAK_88,
+    "88mm Flak"
+)
+
+
+# =========================================================
+# CARD #31
+# BRITTANY OFFENSIVE II
+# =========================================================
+
+card = Card(
+    card_id=31,
+    title="Brittany Offensive II"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 2 x Flak 88
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=2,
+        target=flak_88,
+        description="Each marker can be immediately deployed to the map or placed in Strategic Reserve box"
+    ),
+
+    # Lose 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    # +2 Patton 3rd US Army
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Patton",
+        target=third_us
+    )
+)
+
+============================================================
+PATH: cards\card_32.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# CARD #32
+# MORTAIN COUNTER ATTACK
+# =========================================================
+
+card = Card(
+    card_id=32,
+    title="Mortain Counter Attack"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.display_text = "NONE"
+
+card.military.text.extend([
+
+    "If 3rd Army has not taken St Malo, No Effect.",
+
+    "2 panzer divs (player’s choice) placed in "
+    "Liittich space.",
+
+    "No Hitler roll; attack cannot be cancelled, "
+    "even if supply level is 0.",
+
+    "Must attack US 1st Army."
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.display_text = "NONE"
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Gain 2 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    # +2 Defense Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=2,
+        target=first_us
+    )
+)
+
+============================================================
+PATH: cards\card_33.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+flak_88 = GermanReinforcement(
+    ReinforcementType.FLAK_88,
+    "88mm Flak"
+)
+
+
+# =========================================================
+# CARD #33
+# OPERATION TOTALIZE
+# =========================================================
+
+card = Card(
+    card_id=33,
+    title="Operation Totalize"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+)
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 2 x Flak 88
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=2,
+        target=flak_88,
+        description="Each marker can be immediately deployed to the map or placed in Strategic Reserve box"
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +1 Defense Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +2 Montgomery 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Montgomery",
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_34.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+kampfgruppe = GermanReinforcement(
+    ReinforcementType.KAMPFGRUPPE,
+    "Kampfgruppe"
+)
+
+
+# =========================================================
+# CARD #34
+# OPERATION TRACTABLE
+# =========================================================
+
+card = Card(
+    card_id=34,
+    title="Operation Tractable"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+)
+
+card.air_power.text.append(
+    "Carpet Bombing"
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 1 x Kampfgruppe
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=kampfgruppe,
+        description="Deploy to map or Strategic Reserve (costs no action)"
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # -1 Defense Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=first_can
+    ),
+
+    # +1 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_35.py
+============================================================
+
+from core.models import *
+from core.enums import *
+from core.conditions import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #35
+# HITLER INTERVENTION - ULTRA
+# =========================================================
+
+card = Card(
+    card_id=35,
+    title="Hitler Intervention - ULTRA"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(second_brit)
+
+card.military.text.append(
+    "Hitler redeploys two Panzer Divisions "
+    "(player's choice) and attacks any Allied Army "
+    "(*ignore if player passes Hitler Approval Check)"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Gain 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 0
+
+card.actions.conditional_actions.append(
+
+    Effect(
+        modifier_type=None,
+        value=2,
+        condition=HitlerApprovalCheck(True)
+    )
+)
+
+card.actions.effects.extend([
+
+    # +2 Defense Strength 1st US Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=2,
+        target=first_us,
+        condition=HitlerApprovalCheck(True)
+    ),
+
+    # +2 Defense Strength 2nd BRIT Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=2,
+        target=second_brit,
+        condition=HitlerApprovalCheck(True)
+    ),
+
+    # +2 Defense Strength 1st CAN Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=2,
+        target=first_can,
+        condition=HitlerApprovalCheck(True)
+    ),
+
+    # +2 Defense Strength 3rd US Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=2,
+        target=third_us,
+        condition=HitlerApprovalCheck(True)
+    )
+])
+
+============================================================
+PATH: cards\card_36.py
+============================================================
+
+from core.models import *
+from core.enums import *
+from core.conditions import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #36
+# HITLER INTERVENTION
+# =========================================================
+
+card = Card(
+    card_id=36,
+    title="Hitler Intervention"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+card.military.text.append(
+    "Hitler redeploys a Panzer Division "
+    "(player's choice) and attacks the "
+    "1st Canadian Army "
+    "(*ignore if player passes Hitler Approval Check)"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Gain 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 0
+
+card.actions.conditional_actions.append(
+
+    Effect(
+        modifier_type=None,
+        value=2,
+        condition=HitlerApprovalCheck(True)
+    )
+)
+
+============================================================
+PATH: cards\card_37.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+nebelwerfer = GermanReinforcement(
+    ReinforcementType.NEBELWERFER,
+    "Nebelwerfer"
+)
+
+
+# =========================================================
+# CARD #37
+# PATTON
+# =========================================================
+
+card = Card(
+    card_id=37,
+    title="Patton"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 3rd US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=third_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 2 x Nebelwerfer
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=2,
+        target=nebelwerfer,
+        description="Each marker can be immediately deployed to map or placed in Strategic Reserve box"
+    ),
+
+    # Lose 1 Transport
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    ),
+
+    # +2 Patton 3rd US Army
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=2,
+        label="Patton",
+        target=third_us
+    )
+])
+
+============================================================
+PATH: cards\card_38.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+kampfgruppe = GermanReinforcement(
+    ReinforcementType.KAMPFGRUPPE,
+    "Kampfgruppe"
+)
+
+
+# =========================================================
+# CARD #38
+# MODEL TAKES COMMAND
+# =========================================================
+
+card = Card(
+    card_id=38,
+    title="Model Takes Command"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    # 1 x Kampfgruppe
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=kampfgruppe,
+        description="Deploy to map or Strategic Reserve (costs no action)"
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # -1 DRM Transport
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    ),
+
+    # +1 Model
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=1,
+        label="Model"
+    )
+])
+
+============================================================
+PATH: cards\card_39.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #39
+# TACTICAL REDEPLOYMENT
+# =========================================================
+
+card = Card(
+    card_id=39,
+    title="Tactical Redeployment"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 1
+
+============================================================
+PATH: cards\card_4.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #4
+# 21st Panzer Counterattack
+# =========================================================
+
+card = Card(
+    card_id=4,
+    title="21st Panzer Counterattack"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    second_brit
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # -1 Defense Strength BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=second_brit
+    ),
+
+    # +1 Defense Strength CAN 1st Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Defense Strength US 1st Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=first_us
+    ),
+
+    # -1 DRM Transport
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+============================================================
+PATH: cards\card_40.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+kampfgruppe = GermanReinforcement(
+    ReinforcementType.KAMPFGRUPPE,
+    "Kampfgruppe"
+)
+
+
+# =========================================================
+# CARD #40
+# CANADIAN 4TH ARMORED DIVISION
+# =========================================================
+
+card = Card(
+    card_id=40,
+    title="Canadian 4th Armored Division"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    # 1 x Kampfgruppe
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=kampfgruppe,
+        description="Deploy to map or Strategic Reserve (costs no action)"
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # -2 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=-2,
+        target=first_can
+    ),
+
+    # -1 DRM Transport
+
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+============================================================
+PATH: cards\card_41.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #41
+# FALAISE POCKET
+# =========================================================
+
+card = Card(
+    card_id=41,
+    title="Falaise Pocket"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 1
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Defense Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=second_brit
+    )
+])
+
+============================================================
+PATH: cards\card_42.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #42
+# BRADLEY HALT ORDER
+# =========================================================
+
+card = Card(
+    card_id=42,
+    title="Bradley Halt Order"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    third_us,
+    second_brit,
+    first_can
+])
+
+card.military.text.extend([
+
+    "RETREAT 3rd Army.",
+
+    "Applies if 3rd Army has reached "
+    "Le Mans or further otherwise "
+    "return card to draw pile."
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.extend([
+
+    # -2 Defense Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-2,
+        target=second_brit
+    ),
+
+    # -2 Defense Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-2,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_43.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #43
+# ALLIED ARTILLERY
+# =========================================================
+
+card = Card(
+    card_id=43,
+    title="Allied Artillery"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +2 Attack Strength 1st US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=first_us
+    ),
+
+    # +2 Attack Strength 3rd US
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=third_us
+    ),
+
+    # +2 Attack Strength 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=second_brit
+    ),
+
+    # +2 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_44.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+kampfgruppe = GermanReinforcement(
+    ReinforcementType.KAMPFGRUPPE,
+    "Kampfgruppe"
+)
+
+
+# =========================================================
+# CARD #44
+# POLISH 1ST ARMORED DIVISION
+# =========================================================
+
+card = Card(
+    card_id=44,
+    title="Polish 1st Armored Division"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 1 x Kampfgruppe
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=kampfgruppe,
+        description="Deploy to map or Strategic Reserve (costs no action)"
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +1 Defense Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Model
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=1,
+        label="Model"
+    )
+])
+
+============================================================
+PATH: cards\card_45.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+kampfgruppe = GermanReinforcement(
+    ReinforcementType.KAMPFGRUPPE,
+    "Kampfgruppe"
+)
+
+
+# =========================================================
+# CARD #45
+# DESPERATE DEFENSE
+# =========================================================
+
+card = Card(
+    card_id=45,
+    title="Desperate Defense"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 1 x Kampfgruppe
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=kampfgruppe,
+        description="Deploy to map or Strategic Reserve (costs no action)"
+    ),
+
+    # Lose 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_can
+    ),
+
+    # +1 Model
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=1,
+        label="Model"
+    )
+])
+
+============================================================
+PATH: cards\card_46.py
+============================================================
+
+from core.models import *
+from core.enums import *
+from core.conditions import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+
+# =========================================================
+# CARD #46
+# HITLER INTERVENTION:
+# ALENCON COUNTER ATTACK
+# =========================================================
+
+card = Card(
+    card_id=46,
+    title="Hitler Intervention: Alencon Counter Attack"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+card.military.text.append(
+    "Hitler redeploys 2 pz divs/kampfgruppen "
+    "(player's choice) and attacks the "
+    "3rd US Army "
+    "(*ignore if player passes Hitler roll)"
+)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Gain 1 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 2 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 0
+
+card.actions.conditional_actions.append(
+
+    Effect(
+        modifier_type=None,
+        value=2,
+        condition=HitlerApprovalCheck(True)
+    )
+)
+
+card.actions.effects.append(
+
+    # +1 Defense Strength 3rd US
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=third_us,
+        condition=HitlerApprovalCheck(True)
+    )
+)
+
+============================================================
+PATH: cards\card_47.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+
+panzer_9 = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "9th Panzer"
+)
+
+card = Card(
+    card_id=47,
+    title="Red Ball Express"
+)
+
+card.military.formations.extend([
+    first_us,
+    third_us
+])
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    )
+)
+
+card.resources.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=panzer_9
+    ),
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+card.actions.actions_available = 4
+
+card.actions.effects.extend([
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=third_us
+    ),
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=2,
+        target=third_us
+    )
+])
+
+============================================================
+PATH: cards\card_48.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+third_us = AlliedArmy("3rd US", Nation.US_3)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# CARD #48
+# FALAISE GAP CLOSED
+# =========================================================
+
+card = Card(
+    card_id=48,
+    title="Falaise Gap Closed"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    third_us,
+    second_brit,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.extend([
+
+    # +1 Jabos 1st US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_us
+    ),
+
+    # +1 Jabos 3rd US
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=third_us
+    ),
+
+    # +1 Jabos 2nd BRIT
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=second_brit
+    ),
+
+    # +1 Jabos 1st CAN
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+])
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.display_text = "NONE"
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 4
+
+card.actions.effects.append(
+
+    # +1 Model
+
+    Effect(
+        modifier_type=ModifierType.COMMANDER,
+        value=1,
+        label="Model"
+    )
+)
+
+============================================================
+PATH: cards\card_5.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+second_pz = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "2nd Panzer"
+)
+
+
+# =========================================================
+# CARD #5
+# PANZER MEYER
+# =========================================================
+
+card = Card(
+    card_id=5,
+    title="Panzer Meyer"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_can)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=1,
+        target=first_can
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=second_pz
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 2
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=second_brit
+    )
+)
+
+============================================================
+PATH: cards\card_6.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# CARD #6
+# FRENCH RESISTANCE
+# =========================================================
+
+card = Card(
+    card_id=6,
+    title="French Resistance"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.extend([
+    first_us,
+    first_can
+])
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # Hitler Approval loss
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Supply loss
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.SUPPLY
+    ),
+
+    # Transport loss
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_LOSS,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 1
+
+card.actions.effects.extend([
+
+    # +1 Attack Strength US 1st Army
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    ),
+
+    # -1 Defense Strength BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=second_brit
+    ),
+
+    # -1 Defense Strength CAN 1st Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_7.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+
+
+# =========================================================
+# CARD #7
+# COTENTIN OFFENSIVE
+# =========================================================
+
+card = Card(
+    card_id=7,
+    title="Cotentin Offensive"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(first_us)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=first_us
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+# None
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.ATTACK_STRENGTH,
+        value=1,
+        target=first_us
+    )
+)
+
+============================================================
+PATH: cards\card_8.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+first_us = AlliedArmy("1st US", Nation.US_1)
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+first_ss_panzer = GermanReinforcement(
+    ReinforcementType.PZ_DIV,
+    "1st SS Panzer"
+)
+
+
+# =========================================================
+# CARD #8
+# VILLERS-BOCAGE
+# =========================================================
+
+card = Card(
+    card_id=8,
+    title="Villers-Bocage"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+
+card.military.formations.append(second_brit)
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+
+card.air_power.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.AIR_POWER,
+        value=2,
+        target=second_brit
+    )
+)
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=first_ss_panzer
+    )
+)
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.extend([
+
+    # -1 Defense Strength US 1st Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=first_us
+    ),
+
+    # -2 Defense Strength BRIT 2nd Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-2,
+        target=second_brit
+    ),
+
+    # -1 Defense Strength CAN 1st Army
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=-1,
+        target=first_can
+    )
+])
+
+============================================================
+PATH: cards\card_9.py
+============================================================
+
+from core.models import *
+from core.enums import *
+
+
+# =========================================================
+# COMMON OBJECTS
+# =========================================================
+
+second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+
+
+# =========================================================
+# GERMAN REINFORCEMENTS
+# =========================================================
+
+tiger_101 = GermanReinforcement(
+    ReinforcementType.MARKER,
+    "101st Tiger Battalion"
+)
+
+
+# =========================================================
+# CARD #9
+# MICHAEL WITTMANN
+# =========================================================
+
+card = Card(
+    card_id=9,
+    title="Michael Wittmann"
+)
+
+
+# =========================================================
+# MILITARY
+# =========================================================
+# NONE
+
+
+# =========================================================
+# AIR POWER
+# =========================================================
+# N/A
+
+
+# =========================================================
+# RESOURCES
+# =========================================================
+
+card.resources.effects.extend([
+
+    # 101st Tiger Battalion
+
+    Effect(
+        modifier_type=ModifierType.REINFORCEMENT,
+        value=1,
+        target=tiger_101,
+        description="Available to deploy immediately"
+    ),
+
+    # Gain 2 Hitler Approval
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=2,
+        resource_type=ResourceType.HITLER_APPROVAL
+    ),
+
+    # Gain 1 Supply
+
+    Effect(
+        modifier_type=ModifierType.RESOURCE_GAIN,
+        value=1,
+        resource_type=ResourceType.SUPPLY
+    )
+])
+
+
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+
+card.actions.effects.append(
+
+    Effect(
+        modifier_type=ModifierType.DEFENSE_STRENGTH,
+        value=1,
+        target=second_brit
+    )
+)
+
+============================================================
+PATH: cards\__init__.py
+============================================================
+
+
+
+============================================================
+PATH: core\armies.py
+============================================================
+
+# core/armies.py
+
+from core.models import AlliedArmy
+from core.enums import Nation
+
+
+FIRST_US = AlliedArmy("1st US", Nation.US_1)
+THIRD_US = AlliedArmy("3rd US", Nation.US_3)
+SECOND_BRIT = AlliedArmy("2nd BRIT", Nation.BRIT_2)
+FIRST_CAN = AlliedArmy("1st CAN", Nation.CAN_1)
+
+============================================================
+PATH: core\card_utlities.py
+============================================================
+
+from core.enums import ModifierType
+from core.weather import ALL_JABOS_AVAILABLE
+
+
+from core.enums import ModifierType
+from core.weather import ALL_JABOS_AVAILABLE
+
+
+def print_modifiers(card):
+    modifiers = card.get_action_modifiers()
+
+    print(f"\nMODIFIERS CARD {card.card_id} - {card.title}")
+
+    for modifier in modifiers:
+        print(
+            f"  "
+            f"{modifier['modifier_type'].name:<20} "
+            f"value={modifier['value']:<2} "
+            f"target={modifier['target']} "
+            f"label={modifier['label']}"
+        )
+        
+from core.enums import ModifierType
+from core.weather import ALL_JABOS_AVAILABLE
+
+
+def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0):
+    army_name = army.name if hasattr(army, "name") else army
+    modifiers = card.get_action_modifiers()
+
+    total_attack_strength = 0
+    attack_breakdown = []
+
+    # =========================================================
+    # JABOS
+    # =========================================================
+
+    jabo_strength = 0
+
+    if num_jabos > 0:
+
+        # CLEAR WEATHER
+        # ALL JABOS AVAILABLE
+
+        if num_jabos == ALL_JABOS_AVAILABLE:
+
+            for effect in card.air_power.effects:
+
+                if (
+                    effect.modifier_type == ModifierType.AIR_POWER
+                    and effect.target.name == army_name
+                ):
+                    jabo_strength += effect.value
+
+        # PARTLY CLEAR
+        # ONLY ONE JABO AVAILABLE
+
+        else:
+
+            first_air_power_target = None
+
+            for effect in card.air_power.effects:
+
+                if effect.modifier_type == ModifierType.AIR_POWER:
+                    first_air_power_target = effect.target.name
+                    break
+
+            if army_name == first_air_power_target:
+                jabo_strength = num_jabos
+
+    if jabo_strength > 0:
+        total_attack_strength += jabo_strength
+        attack_breakdown.append(f"+{jabo_strength} Jabo")
+
+    # =========================================================
+    # CARPET BOMBING
+    # =========================================================
+
+    if carpet_bombing > 0:
+        total_attack_strength += carpet_bombing
+        attack_breakdown.append(f"+{carpet_bombing} Carpet Bombing")
+
+    # =========================================================
+    # CARD MODIFIERS
+    # =========================================================
+
+    for modifier in modifiers:
+
+        modifier_type = modifier["modifier_type"]
+        target = modifier["target"]
+        value = modifier["value"]
+        label = modifier["label"]
+
+        if target != army_name:
+            continue
+
+        if modifier_type == ModifierType.ATTACK_STRENGTH:
+            total_attack_strength += value
+            attack_breakdown.append(f"+{value} Card modifier")
+
+        if modifier_type == ModifierType.COMMANDER:
+            total_attack_strength += value
+            attack_breakdown.append(f"+{value} {label}")
+
+    print(
+        f"{army_name} "
+        f"-> ATTACK STRENGTH: {total_attack_strength} "
+        f"({', '.join(attack_breakdown)})"
+    )
+
+    return total_attack_strength
+
+============================================================
+PATH: core\carpet_bombing.py
+============================================================
+
+from dataclasses import dataclass
+from enum import Enum
+
+
+# =========================================================
+# CARPET BOMBING CONSTANTS
+# =========================================================
+
+ATTACK_CANCELLED = -999
+
+
+# =========================================================
+# CARPET BOMBING RESULT TYPES
+# =========================================================
+
+class CarpetBombingResultType(Enum):
+    PLUS_TWO = "+2 Carpet Bombing"
+    PLUS_ONE = "+1 Carpet Bombing"
+    CANCELLED = "Attack Cancelled"
+
+
+# =========================================================
+# CARPET BOMBING RESULT
+# =========================================================
+
+@dataclass
+class CarpetBombingResult:
+
+    result_type: CarpetBombingResultType
+    attack_modifier: int
+
+
+# =========================================================
+# CARPET BOMBING TABLE
+# =========================================================
+
+CARPET_BOMBING_TABLE = {
+
+    1: CarpetBombingResult(
+        result_type=CarpetBombingResultType.PLUS_TWO,
+        attack_modifier=2
+    ),
+
+    2: CarpetBombingResult(
+        result_type=CarpetBombingResultType.PLUS_TWO,
+        attack_modifier=2
+    ),
+
+    3: CarpetBombingResult(
+        result_type=CarpetBombingResultType.PLUS_TWO,
+        attack_modifier=2
+    ),
+
+    4: CarpetBombingResult(
+        result_type=CarpetBombingResultType.PLUS_TWO,
+        attack_modifier=2
+    ),
+
+    5: CarpetBombingResult(
+        result_type=CarpetBombingResultType.PLUS_ONE,
+        attack_modifier=1
+    ),
+
+    6: CarpetBombingResult(
+        result_type=CarpetBombingResultType.CANCELLED,
+        attack_modifier=ATTACK_CANCELLED
+    )
+}
+
+
+# =========================================================
+# LOOKUP
+# =========================================================
+
+def get_carpet_bombing_result(
+    die_roll: int,
+    drm: int = 0
+) -> CarpetBombingResult:
+    modified_roll = die_roll + drm
+    modified_roll = max(1, min(6, modified_roll))
+    return CARPET_BOMBING_TABLE[modified_roll]
+
+============================================================
+PATH: core\conditions.py
+============================================================
+
+
+
+class Condition:
+
+    def is_met(self, game_state):
+        return True
+    
+# =========================================================
+# HITLER APPROVAL CHECK
+# =========================================================
+
+class HitlerApprovalCheck(Condition):
+
+    def __init__(self, passed=True):
+
+        self.passed = passed
+
+    def is_met(self, game_state):
+
+        return (
+            getattr(
+                game_state,
+                "hitler_approval_check_passed",
+                False
+            )
+            == self.passed
+        )
+
+============================================================
+PATH: core\enums.py
+============================================================
+
+from enum import Enum
+
+
+class ModifierType(Enum):
+    ATTACK_STRENGTH = "Attack Strength"
+    DEFENSE_STRENGTH = "Defense Strength"
+    AIR_POWER = "Air Power"
+    REINFORCEMENT = "Reinforcement"
+    RESOURCE_GAIN = "Resource Gain"
+    RESOURCE_LOSS = "Resource Loss"
+    DRM = "DRM"
+    COMMANDER = "Commander"
+    RETREAT = "Retreat"
+
+
+class Nation(Enum):
+    US_1 = "US FIRST ARMY"
+    US_3 = "US THIRD ARMY"
+    BRIT_2 = "BRIT SECOND ARMY"
+    CAN_1 = "CANADIAN FIRST ARMY"
+
+
+class ReinforcementType(Enum):
+    PZ_DIV = "PANZER"
+    MARKER = "MARKER"
+    NEBELWERFER = "NEBELWERFER"
+    FLAK_88 = "FLAK 88"
+    KAMPFGRUPPE = "KAMPFGRUPPE"
+
+
+
+class ResourceType(Enum):
+    TRANSPORT = "Transport"
+    SUPPLY = "Supply"
+    HITLER_APPROVAL = "Hitler Approval"
+    
+# =========================================================
+# TERRAIN TYPES
+# =========================================================
+
+class TerrainType(Enum):
+    BOCAGE = ("Bocage", 2)
+    TOWN = ("Town", 1)
+    HILL = ("Hill", 2)
+    BEACH = ("Beach", 2)
+    FORTRESS = ("Fortress", 4)
+    FORTIFIED_VILLAGE = ("Fortified Village", 3)
+    FALAISE_GAP = ("Falaise Gap", 1)
+
+    def __init__(self, display_name, defense_value):
+        self.display_name = display_name
+        self.defense_value = defense_value
+    
+
+
+============================================================
+PATH: core\map.py
+============================================================
+
+from dataclasses import dataclass
+
+from core.models import AlliedArmy
+from core.enums import TerrainType
+
+
+# =========================================================
+# BASE LOCATION
+# =========================================================
+
+@dataclass
+class Location:
+    name: str
+
+
+# =========================================================
+# START BOX
+# =========================================================
+
+@dataclass
+class StartBox(Location):
+    army: AlliedArmy
+
+
+# =========================================================
+# MAP SPACE
+# =========================================================
+
+@dataclass
+class MapSpace(Location):
+    army: AlliedArmy
+    terrain: TerrainType
+    position: int
+
+============================================================
+PATH: core\models.py
+============================================================
+
+from dataclasses import dataclass, field
+from typing import List, Optional, Union
+
+from core.enums import *
+from core.conditions import *
+
+
+# =========================================================
+# CORE DOMAIN OBJECTS
+# =========================================================
+
+@dataclass(frozen=True)
+class AlliedArmy:
+    name: str
+    nation: Nation
+
+    def __str__(self):
+        return self.name
+
+
+@dataclass(frozen=True)
+class GermanReinforcement:
+    type: ReinforcementType
+    name: Optional[str] = None
+
+    def __str__(self):
+
+        if self.name:
+            return self.name
+
+        return self.type.value
+
+
+# =========================================================
+# EFFECTS
+# =========================================================
+
+@dataclass
+class Effect:
+
+    modifier_type: Optional[ModifierType] = None
+    value: int = 0
+
+    target: Optional[
+        Union[AlliedArmy, GermanReinforcement]
+    ] = None
+
+    resource_type: Optional[ResourceType] = None
+
+    condition: Optional[Condition] = None
+    description: Optional[str] = None
+
+    label: Optional[str] = None
+
+    def apply(self, game_state):
+
+        if self.condition and not self.condition.is_met(game_state):
+            return
+
+        print(f"Applying: {self}")
+
+    def is_active(self, game_state=None):
+
+        if self.condition is None:
+            return True
+
+        return self.condition.is_met(game_state)
+
+    def __str__(self):
+
+        # =================================================
+        # CONDITIONAL ACTION EFFECTS
+        # =================================================
+
+        if self.modifier_type is None:
+            return f"{self.value:+}"
+
+        parts = []
+
+        # =================================================
+        # EFFECT NAME
+        # =================================================
+
+        effect_name = self.modifier_type.value
+
+        # Special display names
+
+        if self.modifier_type == ModifierType.AIR_POWER:
+            effect_name = "Jabos"
+
+        elif self.modifier_type == ModifierType.REINFORCEMENT:
+            effect_name = "Reinforcement"
+
+        elif self.modifier_type == ModifierType.DRM:
+            effect_name = "DRM"
+
+        elif self.modifier_type == ModifierType.COMMANDER:
+            effect_name = (
+                self.label
+                if self.label
+                else "Commander"
+            )
+
+        # Example:
+        # +2 Attack Strength
+        # -1 DRM
+        # +1 Jabos
+
+        parts.append(f"{self.value:+} {effect_name}")
+
+        # =================================================
+        # RESOURCE TYPE
+        # =================================================
+
+        if self.resource_type:
+            parts.append(self.resource_type.value)
+
+        # =================================================
+        # TARGET
+        # =================================================
+
+        if self.target:
+            parts.append(str(self.target))
+
+        return " ".join(parts)
+
+
+# =========================================================
+# CARD SECTIONS
+# =========================================================
+
+@dataclass
+class MilitarySection:
+    formations: List[AlliedArmy] = field(default_factory=list)
+    effects: List[Effect] = field(default_factory=list)
+    text: List[str] = field(default_factory=list)
+    display_text: Optional[str] = None
+
+
+@dataclass
+class AirPowerSection:
+    effects: List[Effect] = field(default_factory=list)
+    text: List[str] = field(default_factory=list)
+    display_text: Optional[str] = None
+
+    def has_carpet_bombing(self) -> bool:
+        return "Carpet Bombing" in self.text
+
+
+@dataclass
+class ResourceSection:
+    effects: List[Effect] = field(default_factory=list)
+    display_text: Optional[str] = None
+
+
+@dataclass
+class ActionSection:
+
+    actions_available: int = 0
+
+    conditional_actions: List[Effect] = field(
+        default_factory=list
+    )
+
+    effects: List[Effect] = field(
+        default_factory=list
+    )
+
+    def total_actions(self, game_state=None):
+
+        total = self.actions_available
+
+        for effect in self.conditional_actions:
+
+            if effect.is_active(game_state):
+                total += effect.value
+
+        return total
+
+
+# =========================================================
+# CARD OBJECT
+# =========================================================
+
+@dataclass
+class Card:
+
+    card_id: int
+    title: str
+
+    military: MilitarySection = field(
+        default_factory=MilitarySection
+    )
+
+    air_power: AirPowerSection = field(
+        default_factory=AirPowerSection
+    )
+
+    resources: ResourceSection = field(
+        default_factory=ResourceSection
+    )
+
+    actions: ActionSection = field(
+        default_factory=ActionSection
+    )
+
+    # =====================================================
+    # HELPERS
+    # =====================================================
+
+    def advancing_armies(self):
+        return self.military.formations
+
+    def is_army_advancing(self, army):
+        return army in self.military.formations
+
+    # =====================================================
+    # ACTION HELPERS
+    # =====================================================
+
+    def total_actions(self, game_state=None):
+        return self.actions.total_actions(game_state)
+    
+    # =====================================================
+    # RESOURCE HELPERS
+    # =====================================================
+
+    def resource_changes(self):
+
+        results = []
+
+        for effect in self.resources.effects:
+
+            if effect.resource_type:
+
+                results.append(
+                    (
+                        effect.resource_type,
+                        effect.value
+                    )
+                )
+
+        return results
+
+    # =====================================================
+    # REINFORCEMENT HELPERS
+    # =====================================================
+
+    def reinforcements(self):
+
+        results = []
+
+        for effect in self.resources.effects:
+
+            if (
+                effect.modifier_type
+                == ModifierType.REINFORCEMENT
+                and effect.target
+            ):
+
+                results.append(
+                    (
+                        effect.target,
+                        effect.value
+                    )
+                )
+
+        return results
+
+
+    # =====================================================
+    # STRENGTH MODIFIERS
+    # =====================================================
+    def get_action_modifiers(card):
+        modifiers = []
+        for effect in card.actions.effects:
+            modifiers.append({
+                "modifier_type": effect.modifier_type,
+                "value": effect.value,
+                "target": getattr(effect.target, "name", None),
+                "label": getattr(effect, "label", None)
+            })
+        return modifiers
+    # =====================================================
+    # CARD SUMMARY
+    # =====================================================
+
+    def summary(self):
+
+        print()
+        print("=" * 60)
+        print(f"CARD #{self.card_id} - {self.title}")
+        print("=" * 60)
+
+        # -------------------------------------------------
+        # MILITARY
+        # -------------------------------------------------
+
+        print("\nMILITARY")
+
+        if self.military.display_text:
+            print(f"  {self.military.display_text}")
+
+        else:
+
+            if (
+                not self.military.formations
+                and not self.military.effects
+                and not self.military.text
+            ):
+                print("  None")
+
+            for formation in self.military.formations:
+                print(f"  {formation}")
+
+            for effect in self.military.effects:
+                print(f"  {effect}")
+
+            for text in self.military.text:
+                print(f"  {text}")
+
+        # -------------------------------------------------
+        # AIR POWER
+        # -------------------------------------------------
+
+        print("\nAIR POWER")
+
+        if (
+            not self.air_power.effects
+            and not self.air_power.text
+        ):
+            print("  N/A")
+
+        for effect in self.air_power.effects:
+            print(f"  {effect}")
+
+        for text in self.air_power.text:
+            print(f"  {text}")
+
+        # -------------------------------------------------
+        # RESOURCES
+        # -------------------------------------------------
+
+        print("\nRESOURCES")
+
+        if self.resources.display_text:
+            print(f"  {self.resources.display_text}")
+
+        elif not self.resources.effects:
+            print("  NONE")
+
+        for effect in self.resources.effects:
+            print(f"  {effect}")
+
+        # -------------------------------------------------
+        # ACTIONS
+        # -------------------------------------------------
+
+        print("\nACTIONS")
+        print(
+            f"  Actions Available: "
+            f"{self.actions.actions_available}"
+        )
+
+        if self.actions.conditional_actions:
+            print("  Conditional Actions:")
+
+            for effect in self.actions.conditional_actions:
+                print(f"    {effect}")
+
+        if not self.actions.effects:
+            print("  No Modifiers")
+
+        for effect in self.actions.effects:
+            print(f"  {effect}")
+
+============================================================
+PATH: core\weather.py
+============================================================
+
+from dataclasses import dataclass
+from enum import Enum
+
+
+# =========================================================
+# WEATHER TYPES
+# =========================================================
+
+class WeatherType(Enum):
+    OVERCAST = "Overcast"
+    PARTLY_CLEAR = "Partly Clear"
+    CLEAR = "Clear"
+
+ALL_JABOS_AVAILABLE = 999
+CARPET_BOMBING_UNAVAILABLE = -999
+
+# =========================================================
+# WEATHER RESULT
+# =========================================================
+
+@dataclass
+class WeatherResult:
+
+    weather_type: WeatherType
+    available_jabos: int 
+    resource_drm: int
+    carpet_bombing_drm: int
+
+
+# =========================================================
+# WEATHER TABLE
+# =========================================================
+
+def get_weather_result(die_roll: int) -> WeatherResult:
+    return WEATHER_TABLE[die_roll]
+
+
+WEATHER_TABLE = {
+    1: WeatherResult(
+        weather_type=WeatherType.OVERCAST,
+        available_jabos=0,
+        resource_drm=1,
+        carpet_bombing_drm=CARPET_BOMBING_UNAVAILABLE
+    ),
+
+    2: WeatherResult(
+        weather_type=WeatherType.PARTLY_CLEAR,
+        available_jabos=1,
+        resource_drm=0,
+        carpet_bombing_drm=1
+    ),
+
+    3: WeatherResult(
+        weather_type=WeatherType.PARTLY_CLEAR,
+        available_jabos=1,
+        resource_drm=0,
+        carpet_bombing_drm=1
+    ),
+
+    4: WeatherResult(
+        weather_type=WeatherType.CLEAR,
+        available_jabos=ALL_JABOS_AVAILABLE,
+        resource_drm=0,
+        carpet_bombing_drm=0
+    ),
+
+    5: WeatherResult(
+        weather_type=WeatherType.CLEAR,
+        available_jabos=ALL_JABOS_AVAILABLE,
+        resource_drm=0,
+        carpet_bombing_drm=0
+    ),
+
+    6: WeatherResult(
+        weather_type=WeatherType.CLEAR,
+        available_jabos=ALL_JABOS_AVAILABLE,
+        resource_drm=0,
+        carpet_bombing_drm=0
+    )
+}
+
+============================================================
+PATH: core\__init__.py
+============================================================
+
+
+
+============================================================
+PATH: tests\test_actions.py
+============================================================
+
+# tests/test_actions.py
+
+import unittest
+
+from cards.card_1 import card as card_1
+from cards.card_10 import card as card_10
+from cards.card_25 import card as card_25
+from cards.card_35 import card as card_35
+
+
+# =========================================================
+# TEST GAME STATE
+# =========================================================
+
+class MockGameState:
+
+    def __init__(self, hitler_approval_check_passed=False):
+
+        self.hitler_approval_check_passed = (
+            hitler_approval_check_passed
+        )
+
+
+class TestActions(unittest.TestCase):
+
+    # =====================================================
+    # STANDARD ACTION CARDS
+    # =====================================================
+
+    def test_card_1_actions(self):
+
+        self.assertEqual(
+            card_1.total_actions(),
+            1
+        )
+
+    def test_card_10_actions(self):
+
+        self.assertEqual(
+            card_10.total_actions(),
+            3
+        )
+
+    def test_card_25_actions(self):
+
+        self.assertEqual(
+            card_25.total_actions(),
+            2
+        )
+
+    # =====================================================
+    # CARD 35 - HITLER INTERVENTION
+    # =====================================================
+
+    def test_card_35_failed_hitler_approval_check(self):
+
+        game_state = MockGameState(
+            hitler_approval_check_passed=False
+        )
+
+        self.assertEqual(
+            card_35.total_actions(game_state),
+            0
+        )
+
+    def test_card_35_passed_hitler_approval_check(self):
+
+        game_state = MockGameState(
+            hitler_approval_check_passed=True
+        )
+
+        self.assertEqual(
+            card_35.total_actions(game_state),
+            2
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+PATH: tests\test_advancing_armies.py
+============================================================
+
+# tests/test_advancing_armies.py
+
+import unittest
+
+from core.armies import (
+    FIRST_US,
+    THIRD_US,
+    SECOND_BRIT,
+    FIRST_CAN
+)
+
+from cards.card_1 import card as card_1
+from cards.card_5 import card as card_5
+from cards.card_11 import card as card_11
+from cards.card_14 import card as card_14
+from cards.card_22 import card as card_22
+from cards.card_47 import card as card_47
+
+
+class TestAdvancingArmies(unittest.TestCase):
+
+    # =====================================================
+    # CARD 1
+    # =====================================================
+
+    def test_card_1_advancing_armies(self):
+
+        self.assertEqual(
+            card_1.advancing_armies(),
+            [FIRST_US, SECOND_BRIT, FIRST_CAN]
+        )
+
+    # =====================================================
+    # CARD 5
+    # =====================================================
+    def test_card_5_advancing_armies(self):
+
+        self.assertEqual(
+            card_5.advancing_armies(),
+            [FIRST_CAN]
+        )
+
+    # =====================================================
+    # CARD 11
+    # =====================================================
+    def test_card_11_advancing_armies(self):
+
+        self.assertEqual(
+            card_11.advancing_armies(),
+            [FIRST_US]
+        )
+
+    # =====================================================
+    # CARD 14
+    # =====================================================
+    def test_card_14_advancing_armies(self):
+
+        self.assertEqual(
+            card_14.advancing_armies(),
+            [SECOND_BRIT, FIRST_CAN]
+        )
+
+    # =====================================================
+    # CARD 22
+    # =====================================================
+    def test_card_22_advancing_armies(self):
+        self.assertEqual(
+            card_22.advancing_armies(),
+            [FIRST_US, SECOND_BRIT, FIRST_CAN]
+        )
+
+    # =====================================================
+    # CARD 47
+    # =====================================================
+    def test_card_47_advancing_armies(self):
+        self.assertEqual(
+            card_47.advancing_armies(),
+            [FIRST_US, THIRD_US]
+        )
+
+    # =====================================================
+    # CANADIAN ARMY ADVANCING
+    # =====================================================
+    def test_canadian_army_advances_on_card_14(self):
+        self.assertTrue(
+            card_14.is_army_advancing(FIRST_CAN)
+        )
+        
+    def test_canadian_army_does_not_advance_on_card_11(self):\
+        self.assertFalse(
+            card_11.is_army_advancing(FIRST_CAN)
+        )
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+PATH: tests\test_air_power.py
+============================================================
+
+import unittest
+
+from cards.card_14 import card as card_14
+from cards.card_18 import card as card_18
+from cards.card_20 import card as card_20
+from cards.card_15 import card as card_15
+from cards.card_23 import card as card_23
+
+
+class TestAirPower(unittest.TestCase):
+
+    # =====================================================
+    # CARPET BOMBING
+    # =====================================================
+
+    def test_card_14_has_carpet_bombing(self):
+
+        self.assertTrue(
+            card_14.air_power.has_carpet_bombing()
+        )
+
+    def test_card_18_has_carpet_bombing(self):
+
+        self.assertTrue(
+            card_18.air_power.has_carpet_bombing()
+        )
+        
+    def test_card_20_has_carpet_bombing(self):
+
+        self.assertTrue(
+            card_20.air_power.has_carpet_bombing()
+        )
+        
+    def test_card_15_does_not_have_carpet_bombing(self):
+
+        self.assertFalse(
+            card_15.air_power.has_carpet_bombing()
+        )
+
+    # =====================================================
+    # AIR POWER VALUES
+    # =====================================================
+
+    def test_card_23_has_one_jabos(self):
+
+        total_air_power = sum(
+            effect.value
+            for effect in card_23.air_power.effects
+        )
+
+        self.assertEqual(total_air_power, 1)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+PATH: tests\test_carpet_bombing.py
+============================================================
+
+import unittest
+from core.carpet_bombing import get_carpet_bombing_result
+from core.carpet_bombing import CarpetBombingResultType
+from core.carpet_bombing import ATTACK_CANCELLED
+
+# =========================================================
+# TEST CARPET BOMBING
+# =========================================================
+
+class TestCarpetBombing(unittest.TestCase):
+    def test_roll_1_no_drm(self):
+        result = get_carpet_bombing_result(1, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_TWO)
+        self.assertEqual(result.attack_modifier, 2)
+
+    def test_roll_2_no_drm(self):
+        result = get_carpet_bombing_result(2, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_TWO)
+        self.assertEqual(result.attack_modifier, 2)
+
+    def test_roll_3_no_drm(self):
+        result = get_carpet_bombing_result(3, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_TWO)
+        self.assertEqual(result.attack_modifier, 2)
+
+    def test_roll_4_no_drm(self):
+        result = get_carpet_bombing_result(4, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_TWO)
+        self.assertEqual(result.attack_modifier, 2)
+
+    def test_roll_5_no_drm(self):
+        result = get_carpet_bombing_result(5, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_ONE)
+        self.assertEqual(result.attack_modifier, 1)
+
+    def test_roll_6_no_drm(self):
+        result = get_carpet_bombing_result(6, 0)
+        self.assertEqual(result.result_type, CarpetBombingResultType.CANCELLED)
+        self.assertEqual(result.attack_modifier, ATTACK_CANCELLED)
+
+    def test_roll_1_with_plus_1_drm(self):
+        result = get_carpet_bombing_result(1, 1)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_TWO)
+        self.assertEqual(result.attack_modifier, 2)
+
+    def test_roll_4_with_plus_1_drm(self):
+        result = get_carpet_bombing_result(4, 1)
+        self.assertEqual(result.result_type, CarpetBombingResultType.PLUS_ONE)
+        self.assertEqual(result.attack_modifier, 1)
+
+    def test_roll_5_with_plus_1_drm(self):
+        result = get_carpet_bombing_result(5, 1)
+        self.assertEqual(result.result_type, CarpetBombingResultType.CANCELLED)
+        self.assertEqual(result.attack_modifier, ATTACK_CANCELLED)
+
+    def test_roll_6_with_plus_1_drm(self):
+        result = get_carpet_bombing_result(6, 1)
+        self.assertEqual(result.result_type, CarpetBombingResultType.CANCELLED)
+        self.assertEqual(result.attack_modifier, ATTACK_CANCELLED)
+
+============================================================
+PATH: tests\test_modifiers.py
+============================================================
+
+import unittest
+
+from core.enums import ModifierType
+
+from cards.card_38 import card as card_38
+from cards.card_35 import card as card_35
+from cards.card_14 import card as card_14
+
+# =========================================================
+# HELPER
+# =========================================================
+
+
+
+# =========================================================
+# TEST MODIFIERS
+# =========================================================
+
+class TestModifiers(unittest.TestCase):
+
+    def test_card_35_modifiers(self):
+        modifiers = card_35.get_action_modifiers()
+        expected = [
+            {
+                "modifier_type": ModifierType.DEFENSE_STRENGTH,
+                "value": 2,
+                "target": "1st US",
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.DEFENSE_STRENGTH,
+                "value": 2,
+                "target": "2nd BRIT",
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.DEFENSE_STRENGTH,
+                "value": 2,
+                "target": "1st CAN",
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.DEFENSE_STRENGTH,
+                "value": 2,
+                "target": "3rd US",
+                "label": None
+            }
+        ]
+        self.assertEqual(modifiers, expected)
+
+    def test_card_14_modifiers(self):
+        modifiers = card_14.get_action_modifiers()
+        expected = [
+            {
+                "modifier_type": ModifierType.ATTACK_STRENGTH,
+                "value": 1,
+                "target": "2nd BRIT",
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.ATTACK_STRENGTH,
+                "value": 1,
+                "target": "1st CAN",
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.DRM,
+                "value": 1,
+                "target": None,
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.COMMANDER,
+                "value": 2,
+                "target": "2nd BRIT",
+                "label": "Montgomery"
+            }
+        ]
+        self.assertEqual(modifiers, expected)
+
+    def test_card_38_modifiers(self):
+        modifiers = card_38.get_action_modifiers()
+        expected = [
+            {
+                "modifier_type": ModifierType.DRM,
+                "value": -1,
+                "target": None,
+                "label": None
+            },
+            {
+                "modifier_type": ModifierType.COMMANDER,
+                "value": 1,
+                "target": None,
+                "label": "Model"
+            }
+        ]
+        self.assertEqual(modifiers, expected)
+
+============================================================
+PATH: tests\test_reinforcements_resources.py
+============================================================
+
+import unittest
+
+from core.enums import ResourceType
+from core.models import GermanReinforcement
+from core.enums import ReinforcementType
+
+from cards.card_1 import card as card_1
+from cards.card_9 import card as card_9
+from cards.card_10 import card as card_10
+from cards.card_19 import card as card_19
+from cards.card_25 import card as card_25
+from cards.card_26 import card as card_26
+from cards.card_31 import card as card_31
+from cards.card_34 import card as card_34
+
+
+class TestResourcesAndReinforcements(unittest.TestCase):
+
+    # =====================================================
+    # RESOURCE CHANGES
+    # =====================================================
+
+    def test_card_9_resource_changes(self):
+
+        self.assertEqual(
+
+            card_9.resource_changes(),
+
+            [
+                (ResourceType.HITLER_APPROVAL, 2),
+                (ResourceType.SUPPLY, 1)
+            ]
+        )
+
+    def test_card_10_resource_changes(self):
+
+        self.assertEqual(
+
+            card_10.resource_changes(),
+
+            [
+                (ResourceType.HITLER_APPROVAL, 2)
+            ]
+        )
+
+    def test_card_25_resource_changes(self):
+
+        self.assertEqual(
+
+            card_25.resource_changes(),
+
+            [
+                (ResourceType.TRANSPORT, -1),
+                (ResourceType.HITLER_APPROVAL, -1),
+                (ResourceType.SUPPLY, -1)
+            ]
+        )
+
+    def test_card_26_resource_changes(self):
+
+        self.assertEqual(
+
+            card_26.resource_changes(),
+
+            [
+                (ResourceType.HITLER_APPROVAL, 1)
+            ]
+        )
+
+    # =====================================================
+    # REINFORCEMENTS
+    # =====================================================
+
+    def test_card_1_reinforcements(self):
+
+        self.assertEqual(
+
+            card_1.reinforcements(),
+
+            [
+                (
+                    GermanReinforcement(
+                        ReinforcementType.PZ_DIV,
+                        "Pz Lehr"
+                    ),
+                    1
+                ),
+
+                (
+                    GermanReinforcement(
+                        ReinforcementType.PZ_DIV,
+                        "12 SS Pz"
+                    ),
+                    1
+                )
+            ]
+        )
+
+    def test_card_19_reinforcements(self):
+
+        self.assertEqual(
+
+            card_19.reinforcements(),
+
+            [
+                (
+                    GermanReinforcement(
+                        ReinforcementType.FLAK_88,
+                        "88mm Flak"
+                    ),
+                    3
+                )
+            ]
+        )
+
+    def test_card_31_reinforcements(self):
+
+        self.assertEqual(
+
+            card_31.reinforcements(),
+
+            [
+                (
+                    GermanReinforcement(
+                        ReinforcementType.FLAK_88,
+                        "88mm Flak"
+                    ),
+                    2
+                )
+            ]
+        )
+        
+    def test_card_34_reinforcements(self):
+        self.assertEqual(
+            card_34.reinforcements(),
+            [
+                (
+                    GermanReinforcement(
+                        ReinforcementType.KAMPFGRUPPE,
+                        "Kampfgruppe"
+                    ),
+                    1
+                )
+            ]
+        )
+        
+    def test_card_25_has_no_reinforcements(self):
+
+        self.assertEqual(
+
+            card_25.reinforcements(),
+
+            []
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+PATH: tests\test_weather.py
+============================================================
+
+import unittest
+
+from core.weather import get_weather_result
+from core.weather import WeatherType
+from core.weather import ALL_JABOS_AVAILABLE, CARPET_BOMBING_UNAVAILABLE
+
+# =========================================================
+# TEST WEATHER
+# =========================================================
+
+class TestWeather(unittest.TestCase):
+
+    def test_weather_roll_1(self):
+        result = get_weather_result(1)
+
+        self.assertEqual(result.weather_type, WeatherType.OVERCAST)
+        self.assertEqual(result.available_jabos, 0)
+        self.assertEqual(result.resource_drm, 1)
+        self.assertEqual(result.carpet_bombing_drm, CARPET_BOMBING_UNAVAILABLE)
+
+    def test_weather_roll_2(self):
+        result = get_weather_result(2)
+
+        self.assertEqual(result.weather_type, WeatherType.PARTLY_CLEAR)
+        self.assertEqual(result.available_jabos, 1)
+        self.assertEqual(result.resource_drm, 0)
+        self.assertEqual(result.carpet_bombing_drm, 1)
+
+    def test_weather_roll_3(self):
+        result = get_weather_result(3)
+
+        self.assertEqual(result.weather_type, WeatherType.PARTLY_CLEAR)
+        self.assertEqual(result.available_jabos, 1)
+        self.assertEqual(result.resource_drm, 0)
+        self.assertEqual(result.carpet_bombing_drm, 1)
+
+    def test_weather_roll_4(self):
+        result = get_weather_result(4)
+
+        self.assertEqual(result.weather_type, WeatherType.CLEAR)
+        self.assertEqual(result.available_jabos,ALL_JABOS_AVAILABLE)
+        self.assertEqual(result.resource_drm, 0)
+        self.assertEqual(result.carpet_bombing_drm, 0)
+
+    def test_weather_roll_5(self):
+        result = get_weather_result(5)
+
+        self.assertEqual(result.weather_type, WeatherType.CLEAR)
+        self.assertEqual(result.available_jabos, ALL_JABOS_AVAILABLE)
+        self.assertEqual(result.resource_drm, 0)
+        self.assertEqual(result.carpet_bombing_drm, 0)
+
+    def test_weather_roll_6(self):
+        result = get_weather_result(6)
+
+        self.assertEqual(result.weather_type, WeatherType.CLEAR)
+        self.assertEqual(result.available_jabos, ALL_JABOS_AVAILABLE)
+        self.assertEqual(result.resource_drm, 0)
+        self.assertEqual(result.carpet_bombing_drm, 0)
+
+============================================================
+PATH: tests\__init__.py
+============================================================
+
+
+
+============================================================
+PATH: tests\attack_strengths\attack_strength_test_utilities.py
+============================================================
+
+from core.card_utlities import calculate_attack_modifiers
+
+def assert_attack_strengths(
+    test_case,
+    armies,
+    expected_attack_strengths,
+    card,
+    num_jabos=0,
+    carpet_bombing=0
+):
+    for army in armies:
+        if army not in expected_attack_strengths:
+            continue
+        attack_strength = calculate_attack_modifiers(
+            card=card,
+            army=army,
+            num_jabos=num_jabos,
+            carpet_bombing=carpet_bombing
+        )
+        test_case.assertEqual(
+            attack_strength,
+            expected_attack_strengths[army]
+        )
+        
+def get_armies(card):
+    return [
+        formation.name
+        for formation in card.military.formations
+    ]
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_10.py
+============================================================
+
+import unittest
+from cards.card_10 import card as card_10
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from core.carpet_bombing import get_carpet_bombing_result
+from core.carpet_bombing import ATTACK_CANCELLED
+from core.card_utlities import calculate_attack_modifiers
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard10(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_10)
+
+    def test_01_attack_strength_overcast(self):
+
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "2nd BRIT": 0,
+            "1st CAN": 0
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_10
+        )
+
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+   
+
+        expected_attack_strengths = {
+            "2nd BRIT": 0,
+            "1st CAN": 1
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_10,
+            num_jabos=weather.available_jabos,
+        )
+
+    @unittest.skip
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        # +2 CARPET BOMBING
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=1,
+            drm=weather.carpet_bombing_drm
+        )
+        print("\n  CLEAR -> +2 CARPET BOMBING")
+        print("  ==========================")
+
+        self.assertEqual(carpet_bombing.attack_modifier, 2)
+        expected_attack_strengths = {
+            "2nd BRIT": 6,
+            "1st CAN": 4
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_10,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+
+        # +1 CARPET BOMBING
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=5,
+            drm=weather.carpet_bombing_drm
+        )
+
+        self.assertEqual(carpet_bombing.attack_modifier, 1)
+        print("\n  CLEAR -> +1 CARPET BOMBING")
+        print("  ==========================")
+        expected_attack_strengths = {
+            "2nd BRIT": 5,
+            "1st CAN": 3
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_10,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+        # ATTACK CANCELLED
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=6,
+            drm=weather.carpet_bombing_drm
+        )
+
+        self.assertEqual(
+            carpet_bombing.attack_modifier,
+            ATTACK_CANCELLED
+        )
+
+        print("\n  CLEAR -> NO CARPET BOMBING")
+        print("  ==========================")
+
+        expected_attack_strengths = {
+            "2nd BRIT": 4,
+            "1st CAN": 2
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_10,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_14.py
+============================================================
+
+import unittest
+from cards.card_14 import card as card_14
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from core.carpet_bombing import get_carpet_bombing_result
+from core.carpet_bombing import ATTACK_CANCELLED
+from core.card_utlities import calculate_attack_modifiers
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard14(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_14)
+        
+    def test_01_attack_strength_overcast(self):
+
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "2nd BRIT": 3,
+            "1st CAN": 1
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        # +2 CARPET BOMBING
+        print("\n  PARTLY CLEAR -> +2 CARPET BOMBING")
+        print("  =================================")
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=1,
+            drm=weather.carpet_bombing_drm
+        )
+        self.assertEqual(carpet_bombing.attack_modifier, 2)
+
+        expected_attack_strengths = {
+            "2nd BRIT": 6,
+            "1st CAN": 3
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+        
+        # +1 CARPET BOMBING
+        print("\n  PARTLY CLEAR -> +1 CARPET BOMBING")
+        print("  =================================")
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=4,
+            drm=weather.carpet_bombing_drm
+        )
+        self.assertEqual(carpet_bombing.attack_modifier, 1)
+        expected_attack_strengths = {
+            "2nd BRIT": 5,
+            "1st CAN": 2
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=6,
+            drm=weather.carpet_bombing_drm
+        )
+
+        self.assertEqual(
+            carpet_bombing.attack_modifier,
+            ATTACK_CANCELLED
+        )
+
+        print("\n  PARTLY CLEAR -> NO CARPET BOMBING")
+        print("  =================================")
+        expected_attack_strengths = {
+            "2nd BRIT": 4,
+            "1st CAN": 1
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        # +2 CARPET BOMBING
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=1,
+            drm=weather.carpet_bombing_drm
+        )
+        print("\n  CLEAR -> +2 CARPET BOMBING")
+        print("  ==========================")
+
+        self.assertEqual(carpet_bombing.attack_modifier, 2)
+        expected_attack_strengths = {
+            "2nd BRIT": 6,
+            "1st CAN": 4
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+
+        # +1 CARPET BOMBING
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=5,
+            drm=weather.carpet_bombing_drm
+        )
+
+        self.assertEqual(carpet_bombing.attack_modifier, 1)
+        print("\n  CLEAR -> +1 CARPET BOMBING")
+        print("  ==========================")
+        expected_attack_strengths = {
+            "2nd BRIT": 5,
+            "1st CAN": 3
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+        # ATTACK CANCELLED
+        carpet_bombing = get_carpet_bombing_result(
+            die_roll=6,
+            drm=weather.carpet_bombing_drm
+        )
+
+        self.assertEqual(
+            carpet_bombing.attack_modifier,
+            ATTACK_CANCELLED
+        )
+
+        print("\n  CLEAR -> NO CARPET BOMBING")
+        print("  ==========================")
+
+        expected_attack_strengths = {
+            "2nd BRIT": 4,
+            "1st CAN": 2
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_14,
+            num_jabos=weather.available_jabos,
+            carpet_bombing=carpet_bombing.attack_modifier
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_3.py
+============================================================
+
+import unittest
+from cards.card_3 import card as card_3
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard3(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_3)
+
+    def test_01_attack_strength_overcast(self):
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "1st US": 1,
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_3
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+
+        expected_attack_strengths = {
+            "1st US": 2,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_3,
+            num_jabos=weather.available_jabos,
+        )
+
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        print("\n  CLEAR")
+        print("  =====")
+        expected_attack_strengths = {
+            "1st US": 2,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_3,
+            num_jabos=weather.available_jabos,
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_4.py
+============================================================
+
+import unittest
+from cards.card_4 import card as card_4
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard4(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_4)
+
+    def test_01_attack_strength_overcast(self):
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "1st US": 0,
+            "2nd BRIT": 0
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_4
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+
+        expected_attack_strengths = {
+            "1st US": 1,
+            "2nd BRIT": 0
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_4,
+            num_jabos=weather.available_jabos,
+        )
+
+    def test_03_attack_strength_clear(self):
+        print("\n  CLEAR")
+        print("  =====")
+        weather = get_weather_result(4)
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        expected_attack_strengths = {
+            "1st US": 1,
+            "2nd BRIT": 0
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_4,
+            num_jabos=weather.available_jabos,
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_5.py
+============================================================
+
+import unittest
+from cards.card_5 import card as card_5
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard5(unittest.TestCase):
+    def setUp(self):    
+        self.armies = get_armies(card_5)
+        
+    def test_01_attack_strength_overcast(self):
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "1st CAN": 0,
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_5
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+
+        expected_attack_strengths = {
+            "1st CAN": 1,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_5,
+            num_jabos=weather.available_jabos,
+        )
+
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        print("\n  CLEAR")
+        print("  =====")
+        expected_attack_strengths = {
+            "1st CAN": 1,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_5,
+            num_jabos=weather.available_jabos,
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_6.py
+============================================================
+
+import unittest
+
+from cards.card_6 import card as card_6
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+# =========================================================
+# TEST ATTACK STRENGTH CARD 6
+# =========================================================
+
+class TestAttackStrengthCard6(unittest.TestCase):
+
+    def setUp(self):
+        self.armies = get_armies(card_6)
+        
+    def test_attack_strength(self):
+        print("\n  CARD 6 -> NO AIR POWER")
+        print("  ======================")
+
+        expected_attack_strengths = {
+            "1st US": 1,
+            "1st CAN": 0
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_6
+        )
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_7.py
+============================================================
+
+import unittest
+from cards.card_7 import card as card_7
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard3(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_7)
+        
+    def test_01_attack_strength_overcast(self):
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "1st US": 1,
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_7
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+
+        expected_attack_strengths = {
+            "1st US": 2,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_7,
+            num_jabos=weather.available_jabos,
+        )
+
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        print("\n  CLEAR")
+        print("  =====")
+        expected_attack_strengths = {
+            "1st US": 3,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_7,
+            num_jabos=weather.available_jabos,
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_8.py
+============================================================
+
+import unittest
+from cards.card_8 import card as card_8
+from core.weather import get_weather_result
+from core.weather import ALL_JABOS_AVAILABLE
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+
+
+# =========================================================
+# TEST OPERATION EPSOM ATTACK STRENGTH
+# =========================================================
+
+
+class TestAttackStrengthCard3(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies(card_8)
+        
+    def test_01_attack_strength_overcast(self):
+        weather = get_weather_result(1)
+        self.assertEqual(
+            weather.available_jabos,
+            0
+        )
+
+        print("\n  OVERCAST -> NO AIR POWER")
+        print("  =================================")
+        expected_attack_strengths = {
+            "2nd BRIT": 0,
+        }
+            
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_8
+        )
+
+    def test_02_attack_strength_partly_clear(self):
+        weather = get_weather_result(2)
+        self.assertEqual(
+            weather.available_jabos,
+            1
+        )
+        print("\n  PARTLY CLEAR")
+        print("  ============")
+
+        expected_attack_strengths = {
+            "2nd BRIT": 1,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_8,
+            num_jabos=weather.available_jabos,
+        )
+
+    def test_03_attack_strength_clear(self):
+        weather = get_weather_result(4)
+        self.assertEqual(
+            weather.available_jabos,
+            ALL_JABOS_AVAILABLE
+        )
+
+        print("\n  CLEAR")
+        print("  =====")
+        expected_attack_strengths = {
+            "2nd BRIT": 2,
+        }
+
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_8,
+            num_jabos=weather.available_jabos,
+        )
+
+
+============================================================
+PATH: tests\attack_strengths\test_attack_strength_card_9.py
+============================================================
+
+import unittest
+
+from cards.card_9 import card as card_9
+from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from tests.attack_strengths.attack_strength_test_utilities import get_armies
+
+# =========================================================
+# TEST ATTACK STRENGTH CARD 6
+# =========================================================
+
+class TestAttackStrengthCard9(unittest.TestCase):
+
+    def setUp(self):
+        self.armies = get_armies(card_9)
+        
+    def test_attack_strength(self):
+        print("\n  CARD 9 -> NO ARMIES OR AIR POWER")
+        print("  ================================")
+
+        expected_attack_strengths = {
+        }
+        assert_attack_strengths(
+            test_case=self,
+            armies=self.armies,
+            expected_attack_strengths=expected_attack_strengths,
+            card=card_9
+        )
+
+============================================================
+PATH: tests\attack_strengths\__init__.py
+============================================================
+
+

@@ -2,13 +2,14 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 from core.enums import *
+from core.conditions import *
 
 
 # =========================================================
 # CORE DOMAIN OBJECTS
 # =========================================================
 
-@dataclass
+@dataclass(frozen=True)
 class AlliedArmy:
     name: str
     nation: Nation
@@ -17,7 +18,7 @@ class AlliedArmy:
         return self.name
 
 
-@dataclass
+@dataclass(frozen=True)
 class GermanReinforcement:
     type: ReinforcementType
     name: Optional[str] = None
@@ -30,17 +31,6 @@ class GermanReinforcement:
         return self.type.value
 
 
-@dataclass
-class Condition:
-    text: str
-
-    def is_met(self, game_state) -> bool:
-        """
-        Stub for future game logic.
-        """
-        return True
-
-
 # =========================================================
 # EFFECTS
 # =========================================================
@@ -48,16 +38,18 @@ class Condition:
 @dataclass
 class Effect:
 
-    modifier_type: ModifierType
-    value: int
+    modifier_type: Optional[ModifierType] = None
+    value: int = 0
 
-    target: Optional[Union[AlliedArmy, GermanReinforcement]] = None
+    target: Optional[
+        Union[AlliedArmy, GermanReinforcement]
+    ] = None
 
     resource_type: Optional[ResourceType] = None
 
     condition: Optional[Condition] = None
     description: Optional[str] = None
-    
+
     label: Optional[str] = None
 
     def apply(self, game_state):
@@ -67,7 +59,21 @@ class Effect:
 
         print(f"Applying: {self}")
 
+    def is_active(self, game_state=None):
+
+        if self.condition is None:
+            return True
+
+        return self.condition.is_met(game_state)
+
     def __str__(self):
+
+        # =================================================
+        # CONDITIONAL ACTION EFFECTS
+        # =================================================
+
+        if self.modifier_type is None:
+            return f"{self.value:+}"
 
         parts = []
 
@@ -87,9 +93,13 @@ class Effect:
 
         elif self.modifier_type == ModifierType.DRM:
             effect_name = "DRM"
-            
+
         elif self.modifier_type == ModifierType.COMMANDER:
-            effect_name = self.label if self.label else "Commander"
+            effect_name = (
+                self.label
+                if self.label
+                else "Commander"
+            )
 
         # Example:
         # +2 Attack Strength
@@ -102,21 +112,12 @@ class Effect:
         # RESOURCE TYPE
         # =================================================
 
-        # Example:
-        # Supply
-        # Transport
-        # Hitler Approval
-
         if self.resource_type:
             parts.append(self.resource_type.value)
 
         # =================================================
         # TARGET
         # =================================================
-
-        # Example:
-        # 3rd US
-        # Pz Lehr
 
         if self.target:
             parts.append(str(self.target))
@@ -133,23 +134,48 @@ class MilitarySection:
     formations: List[AlliedArmy] = field(default_factory=list)
     effects: List[Effect] = field(default_factory=list)
     text: List[str] = field(default_factory=list)
+    display_text: Optional[str] = None
 
 
 @dataclass
 class AirPowerSection:
     effects: List[Effect] = field(default_factory=list)
     text: List[str] = field(default_factory=list)
+    display_text: Optional[str] = None
+
+    def has_carpet_bombing(self) -> bool:
+        return "Carpet Bombing" in self.text
 
 
 @dataclass
 class ResourceSection:
     effects: List[Effect] = field(default_factory=list)
+    display_text: Optional[str] = None
 
 
 @dataclass
 class ActionSection:
+
     actions_available: int = 0
-    effects: List[Effect] = field(default_factory=list)
+
+    conditional_actions: List[Effect] = field(
+        default_factory=list
+    )
+
+    effects: List[Effect] = field(
+        default_factory=list
+    )
+
+    def total_actions(self, game_state=None):
+
+        total = self.actions_available
+
+        for effect in self.conditional_actions:
+
+            if effect.is_active(game_state):
+                total += effect.value
+
+        return total
 
 
 # =========================================================
@@ -162,11 +188,99 @@ class Card:
     card_id: int
     title: str
 
-    military: MilitarySection = field(default_factory=MilitarySection)
-    air_power: AirPowerSection = field(default_factory=AirPowerSection)
-    resources: ResourceSection = field(default_factory=ResourceSection)
-    actions: ActionSection = field(default_factory=ActionSection)
+    military: MilitarySection = field(
+        default_factory=MilitarySection
+    )
 
+    air_power: AirPowerSection = field(
+        default_factory=AirPowerSection
+    )
+
+    resources: ResourceSection = field(
+        default_factory=ResourceSection
+    )
+
+    actions: ActionSection = field(
+        default_factory=ActionSection
+    )
+
+    # =====================================================
+    # HELPERS
+    # =====================================================
+
+    def advancing_armies(self):
+        return self.military.formations
+
+    def is_army_advancing(self, army):
+        return army in self.military.formations
+
+    # =====================================================
+    # ACTION HELPERS
+    # =====================================================
+
+    def total_actions(self, game_state=None):
+        return self.actions.total_actions(game_state)
+    
+    # =====================================================
+    # RESOURCE HELPERS
+    # =====================================================
+
+    def resource_changes(self):
+
+        results = []
+
+        for effect in self.resources.effects:
+
+            if effect.resource_type:
+
+                results.append(
+                    (
+                        effect.resource_type,
+                        effect.value
+                    )
+                )
+
+        return results
+
+    # =====================================================
+    # REINFORCEMENT HELPERS
+    # =====================================================
+
+    def reinforcements(self):
+
+        results = []
+
+        for effect in self.resources.effects:
+
+            if (
+                effect.modifier_type
+                == ModifierType.REINFORCEMENT
+                and effect.target
+            ):
+
+                results.append(
+                    (
+                        effect.target,
+                        effect.value
+                    )
+                )
+
+        return results
+
+
+    # =====================================================
+    # STRENGTH MODIFIERS
+    # =====================================================
+    def get_action_modifiers(card):
+        modifiers = []
+        for effect in card.actions.effects:
+            modifiers.append({
+                "modifier_type": effect.modifier_type,
+                "value": effect.value,
+                "target": getattr(effect.target, "name", None),
+                "label": getattr(effect, "label", None)
+            })
+        return modifiers
     # =====================================================
     # CARD SUMMARY
     # =====================================================
@@ -184,28 +298,26 @@ class Card:
 
         print("\nMILITARY")
 
-        if (
-            not self.military.formations
-            and not self.military.effects
-            and not self.military.text
-        ):
-            print("  No Modifiers")
+        if self.military.display_text:
+            print(f"  {self.military.display_text}")
 
-        # Formations
+        else:
 
-        for formation in self.military.formations:
-            print(f"  {formation}")
+            if (
+                not self.military.formations
+                and not self.military.effects
+                and not self.military.text
+            ):
+                print("  None")
 
-        # Effects
+            for formation in self.military.formations:
+                print(f"  {formation}")
 
-        for effect in self.military.effects:
-            print(f"  {effect}")
+            for effect in self.military.effects:
+                print(f"  {effect}")
 
-        # Text
-
-        for text in self.military.text:
-            print(f"  {text}")
-            
+            for text in self.military.text:
+                print(f"  {text}")
 
         # -------------------------------------------------
         # AIR POWER
@@ -213,8 +325,11 @@ class Card:
 
         print("\nAIR POWER")
 
-        if not self.air_power.effects and not self.air_power.text:
-            print("  No Modifiers")
+        if (
+            not self.air_power.effects
+            and not self.air_power.text
+        ):
+            print("  N/A")
 
         for effect in self.air_power.effects:
             print(f"  {effect}")
@@ -228,8 +343,11 @@ class Card:
 
         print("\nRESOURCES")
 
-        if not self.resources.effects:
-            print("  N/A")
+        if self.resources.display_text:
+            print(f"  {self.resources.display_text}")
+
+        elif not self.resources.effects:
+            print("  NONE")
 
         for effect in self.resources.effects:
             print(f"  {effect}")
@@ -239,7 +357,16 @@ class Card:
         # -------------------------------------------------
 
         print("\nACTIONS")
-        print(f"  Actions Available: {self.actions.actions_available}")
+        print(
+            f"  Actions Available: "
+            f"{self.actions.actions_available}"
+        )
+
+        if self.actions.conditional_actions:
+            print("  Conditional Actions:")
+
+            for effect in self.actions.conditional_actions:
+                print(f"    {effect}")
 
         if not self.actions.effects:
             print("  No Modifiers")
