@@ -6,7 +6,7 @@ from core.enums import *
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-flak_88 = GermanReinforcement(
+flak_88 = GermanUnit(
     ReinforcementType.FLAK_88,
     "88mm Flak"
 )

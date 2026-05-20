@@ -11,7 +11,7 @@ third_us = AlliedArmy("3rd US", Nation.US_3)
 second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 first_can = AlliedArmy("1st CAN", Nation.CAN_1)
 
-kampfgruppe = GermanReinforcement(
+kampfgruppe = GermanUnit(
     ReinforcementType.KAMPFGRUPPE,
     "Kampfgruppe"
 )

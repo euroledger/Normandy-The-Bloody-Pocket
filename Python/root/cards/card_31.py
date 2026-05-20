@@ -14,7 +14,7 @@ third_us = AlliedArmy("3rd US", Nation.US_3)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-flak_88 = GermanReinforcement(
+flak_88 = GermanUnit(
     ReinforcementType.FLAK_88,
     "88mm Flak"
 )

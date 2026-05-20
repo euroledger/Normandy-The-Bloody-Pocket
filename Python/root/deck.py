@@ -1,5 +1,5 @@
-from cards.card_1 import card as card_001
-from cards.card_2 import card as card_002
+from random import choice, shuffle
+
 from cards.card_3 import card as card_003
 from cards.card_4 import card as card_004
 from cards.card_5 import card as card_005
@@ -22,6 +22,7 @@ from cards.card_21 import card as card_021
 from cards.card_22 import card as card_022
 from cards.card_23 import card as card_023
 from cards.card_24 import card as card_024
+
 from cards.card_25 import card as card_025
 from cards.card_26 import card as card_026
 from cards.card_27 import card as card_027
@@ -33,27 +34,28 @@ from cards.card_33 import card as card_033
 from cards.card_35 import card as card_035
 from cards.card_36 import card as card_036
 from cards.card_37 import card as card_037
+from cards.card_43 import card as card_043
+
+from cards.card_32 import card as card_032
 from cards.card_34 import card as card_034
 from cards.card_38 import card as card_038
+from cards.card_39 import card as card_039
 from cards.card_40 import card as card_040
 from cards.card_41 import card as card_041
-from cards.card_43 import card as card_043
+from cards.card_42 import card as card_042
 from cards.card_44 import card as card_044
+from cards.card_45 import card as card_045
 from cards.card_46 import card as card_046
 from cards.card_47 import card as card_047
 from cards.card_48 import card as card_048
-from cards.card_32 import card as card_032
-from cards.card_45 import card as card_045
-from cards.card_39 import card as card_039
-from cards.card_42 import card as card_042
+
 
 # =========================================================
-# ALL CARDS
+# EARLY DECK
 # =========================================================
 
-all_cards = [
-    card_001,
-    card_002,
+draw_deck = [
+
     card_003,
     card_004,
     card_005,
@@ -75,7 +77,16 @@ all_cards = [
     card_021,
     card_022,
     card_023,
-    card_024,
+    card_024
+]
+
+
+# =========================================================
+# MID DECK
+# =========================================================
+
+mid_deck = [
+
     card_025,
     card_026,
     card_027,
@@ -83,154 +94,165 @@ all_cards = [
     card_029,
     card_030,
     card_031,
-    card_032,
     card_033,
-    card_034,
     card_035,
     card_036,
     card_037,
+    card_043
+]
+
+
+# =========================================================
+# LATE DECK
+# =========================================================
+
+late_deck = [
+
+    card_032,
+    card_034,
     card_038,
     card_039,
     card_040,
     card_041,
     card_042,
-    card_043,
     card_044,
     card_045,
     card_046,
     card_047,
-    card_048,
-  
+    card_048
 ]
 
 
 # =========================================================
-# DECKS
+# TRACKING
 # =========================================================
 
-early_deck = []
-mid_deck = []
-late_deck = []
+cards_drawn = 0
 
-MID_DECK_IDS = {
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    33,
-    35,
-    36,
-    37,
-    43
-}
+drawn_cards = []
 
-LATE_DECK_IDS = {
-    32,
-    34,
-    38,
-    39,
-    40,
-    41,
-    42,
-    44,
-    45,
-    46,
-    47,
-    48
-}
-
-# =========================================================
-# SORT CARDS INTO DECKS
-# =========================================================
-
-
-for card in all_cards:
-
-    # EARLY DECK
-
-    if 1 <= card.card_id <= 24:
-        early_deck.append(card)
-
-    # MID DECK
-
-    elif card.card_id in MID_DECK_IDS:
-        mid_deck.append(card)
-
-    # LATE DECK
-
-    elif card.card_id in LATE_DECK_IDS:
-        late_deck.append(card)
+mid_deck_added = False
+late_deck_added = False
 
 
 # =========================================================
-# CARD LOOKUP
-# =========================================================
-
-card_lookup = {}
-
-for card in all_cards:
-    card_lookup[card.card_id] = card
-
-
-# =========================================================
-# MAIN LOOP
+# SIEGE TEST ENGINE
 # =========================================================
 
 while True:
 
     print()
     print("========================================")
-    print("SOS NORMANDY CARD DATABASE")
+    print("SIEGE TEST ENGINE")
     print("========================================")
     print()
 
-    print("Available Cards:")
+    print(f"Cards Drawn: {cards_drawn}")
 
-    for card in all_cards:
-        print(f"  {card.card_id}: {card.title}")
+    if drawn_cards:
+
+        drawn_ids = [
+            str(card.card_id)
+            for card in drawn_cards
+        ]
+
+        print(f"Drawn Cards: {', '.join(drawn_ids)}")
+
+    else:
+
+        print("Drawn Cards: NONE")
+
+    print(f"Cards Remaining: {len(draw_deck)}")
 
     print()
-    print("Enter a card number to view summary")
-    print("Enter Q to quit")
+    print("1. Draw Card")
+    print("Q. Quit")
     print()
 
-    user_input = input("> ").strip()
+    user_input = input("> ").strip().upper()
 
-    # -------------------------------------
+    # =====================================================
     # QUIT
-    # -------------------------------------
+    # =====================================================
 
-    if user_input.upper() == "Q":
+    if user_input == "Q":
+
         print("Goodbye.")
         break
 
-    # -------------------------------------
-    # VALIDATE NUMBER
-    # -------------------------------------
+    # =====================================================
+    # DRAW CARD
+    # =====================================================
 
-    if not user_input.isdigit():
-        print("Invalid input.")
-        continue
+    if user_input == "1":
 
-    card_id = int(user_input)
+        if not draw_deck:
 
-    # -------------------------------------
-    # LOOKUP CARD
-    # -------------------------------------
+            print()
+            print("DRAW DECK EMPTY")
+            input("Press ENTER to continue...")
+            continue
 
-    if card_id not in card_lookup:
-        print("Card not found.")
-        continue
+        drawn_card = choice(draw_deck)
 
-    # -------------------------------------
-    # PRINT SUMMARY
-    # -------------------------------------
+        # Remove from deck
 
-    selected_card = card_lookup[card_id]
-    selected_card.summary()
+        draw_deck.remove(drawn_card)
 
-    print()
-    input("Press ENTER to return to menu...")
+        # Track
+
+        drawn_cards.append(drawn_card)
+
+        cards_drawn += 1
+
+        # =================================================
+        # ADD MID DECK
+        # =================================================
+
+        if (
+            drawn_card.card_id == 20
+            and not mid_deck_added
+        ):
+
+            draw_deck.extend(mid_deck)
+
+            shuffle(draw_deck)
+
+            mid_deck_added = True
+
+            print()
+            print("========================================")
+            print("MID DECK ADDED")
+            print("DRAW DECK SHUFFLED")
+            print("========================================")
+
+        # =================================================
+        # ADD LATE DECK
+        # =================================================
+
+        if (
+            drawn_card.card_id == 37
+            and not late_deck_added
+        ):
+
+            draw_deck.extend(late_deck)
+
+            shuffle(draw_deck)
+
+            late_deck_added = True
+
+            print()
+            print("========================================")
+            print("LATE DECK ADDED")
+            print("DRAW DECK SHUFFLED")
+            print("========================================")
+
+        print()
+        print("========================================")
+        print(f"DREW CARD {drawn_card.card_id}")
+        print("========================================")
+
+        drawn_card.summary()
+
+        print()
+        input("Press ENTER to continue...")

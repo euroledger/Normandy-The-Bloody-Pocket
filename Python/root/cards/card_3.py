@@ -13,7 +13,7 @@ first_us = AlliedArmy("1st US", Nation.US_1)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-ss_17_pz_grd = GermanReinforcement(
+ss_17_pz_grd = GermanUnit(
     ReinforcementType.PZ_DIV,
     "17 SS Pz Grd"
 )

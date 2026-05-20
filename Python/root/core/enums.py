@@ -13,11 +13,16 @@ class ModifierType(Enum):
     RETREAT = "Retreat"
 
 
+class SideType(Enum):
+    ALLIED = "ALLIED",
+    GERMAN = "GERMAN"
+    
 class Nation(Enum):
     US_1 = "US FIRST ARMY"
     US_3 = "US THIRD ARMY"
     BRIT_2 = "BRIT SECOND ARMY"
     CAN_1 = "CANADIAN FIRST ARMY"
+    GER = "GERMAN SEVENTH ARMY"
 
 
 class ReinforcementType(Enum):

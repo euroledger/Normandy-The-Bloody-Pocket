@@ -6,7 +6,7 @@ from core.enums import *
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-second_ss_panzer = GermanReinforcement(
+second_ss_panzer = GermanUnit(
     ReinforcementType.PZ_DIV,
     "2nd SS Panzer"
 )

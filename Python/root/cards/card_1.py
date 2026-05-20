@@ -5,12 +5,12 @@ first_us = AlliedArmy("1st US", Nation.US_1)
 second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 first_can = AlliedArmy("1st CAN", Nation.CAN_1)
 
-pz_lehr = GermanReinforcement(
+pz_lehr = GermanUnit(
     ReinforcementType.PZ_DIV,
     "Pz Lehr"
 )
 
-ss_12 = GermanReinforcement(
+ss_12 = GermanUnit(
     ReinforcementType.PZ_DIV,
     "12 SS Pz"
 )

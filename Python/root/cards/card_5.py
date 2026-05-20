@@ -14,7 +14,7 @@ second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-second_pz = GermanReinforcement(
+second_pz = GermanUnit(
     ReinforcementType.PZ_DIV,
     "2nd Panzer"
 )

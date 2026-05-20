@@ -9,19 +9,47 @@ from core.conditions import *
 # CORE DOMAIN OBJECTS
 # =========================================================
 
-@dataclass(frozen=True)
+# @dataclass(frozen=True)
+# class AlliedArmy:
+#     name: str
+#     nation: Nation
+
+#     def __str__(self):
+#         return self.name
+
+@dataclass
 class AlliedArmy:
     name: str
     nation: Nation
+    reverse_name: Optional[str] = None
+    strength: int = 0
+    reverse_strength: int = 0
+    flipped: bool = False
 
-    def __str__(self):
+    @property
+    def display_name(self):
+        if self.flipped and self.reverse_name:
+            return self.reverse_name
         return self.name
 
+    @property
+    def strength(self):
+        if self.flipped:
+            return self.reverse_strength
+        return self._strength
 
+    @strength.setter
+    def strength(self, value):
+        self._strength = value
+
+    def flip(self):
+        self.flipped = not self.flipped
+        
 @dataclass(frozen=True)
-class GermanReinforcement:
+class GermanUnit:
     type: ReinforcementType
     name: Optional[str] = None
+    combat_value: int = 0
 
     def __str__(self):
 
@@ -42,7 +70,7 @@ class Effect:
     value: int = 0
 
     target: Optional[
-        Union[AlliedArmy, GermanReinforcement]
+        Union[AlliedArmy, GermanUnit]
     ] = None
 
     resource_type: Optional[ResourceType] = None
@@ -373,3 +401,9 @@ class Card:
 
         for effect in self.actions.effects:
             print(f"  {effect}")
+            
+
+@dataclass
+class UnitBox:
+    name: str
+    units: list = field(default_factory=list)

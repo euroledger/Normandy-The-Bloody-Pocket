@@ -3,8 +3,7 @@ from cards.card_12 import card as card_12
 from core.weather import get_weather_result
 from core.weather import ALL_JABOS_AVAILABLE
 from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
-from tests.attack_strengths.attack_strength_test_utilities import get_armies
-
+from core.card_utilities import get_armies
 
 class TestAttackStrengthCard12(unittest.TestCase):
     def setUp(self):    

@@ -14,7 +14,7 @@ second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-nebelwerfer = GermanReinforcement(
+nebelwerfer = GermanUnit(
     ReinforcementType.NEBELWERFER,
     "Nebelwerfer"
 )

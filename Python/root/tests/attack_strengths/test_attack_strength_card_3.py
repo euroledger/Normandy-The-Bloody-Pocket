@@ -3,7 +3,7 @@ from cards.card_3 import card as card_3
 from core.weather import get_weather_result
 from core.weather import ALL_JABOS_AVAILABLE
 from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
-from tests.attack_strengths.attack_strength_test_utilities import get_armies
+from core.card_utilities import get_armies
 
 # =========================================================
 # TEST OPERATION EPSOM ATTACK STRENGTH

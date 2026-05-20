@@ -1,4 +1,4 @@
-from core.card_utlities import calculate_attack_modifiers
+from core.card_utilities import calculate_attack_modifiers
 
 def assert_attack_strengths(
     test_case,
@@ -33,8 +33,3 @@ def assert_attack_strengths(
         
     print("\n")
 
-def get_armies(card):
-    return [
-        formation.name
-        for formation in card.military.formations
-    ]

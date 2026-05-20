@@ -13,7 +13,7 @@ second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-tiger_101 = GermanReinforcement(
+tiger_101 = GermanUnit(
     ReinforcementType.MARKER,
     "101st Tiger Battalion"
 )

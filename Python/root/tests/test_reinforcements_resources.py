@@ -1,7 +1,7 @@
 import unittest
 
 from core.enums import ResourceType
-from core.models import GermanReinforcement
+from core.models import GermanUnit
 from core.enums import ReinforcementType
 
 from cards.card_1 import card as card_1
@@ -79,7 +79,7 @@ class TestResourcesAndReinforcements(unittest.TestCase):
 
             [
                 (
-                    GermanReinforcement(
+                    GermanUnit(
                         ReinforcementType.PZ_DIV,
                         "Pz Lehr"
                     ),
@@ -87,7 +87,7 @@ class TestResourcesAndReinforcements(unittest.TestCase):
                 ),
 
                 (
-                    GermanReinforcement(
+                    GermanUnit(
                         ReinforcementType.PZ_DIV,
                         "12 SS Pz"
                     ),
@@ -104,7 +104,7 @@ class TestResourcesAndReinforcements(unittest.TestCase):
 
             [
                 (
-                    GermanReinforcement(
+                    GermanUnit(
                         ReinforcementType.FLAK_88,
                         "88mm Flak"
                     ),
@@ -121,7 +121,7 @@ class TestResourcesAndReinforcements(unittest.TestCase):
 
             [
                 (
-                    GermanReinforcement(
+                    GermanUnit(
                         ReinforcementType.FLAK_88,
                         "88mm Flak"
                     ),
@@ -135,7 +135,7 @@ class TestResourcesAndReinforcements(unittest.TestCase):
             card_34.reinforcements(),
             [
                 (
-                    GermanReinforcement(
+                    GermanUnit(
                         ReinforcementType.KAMPFGRUPPE,
                         "Kampfgruppe"
                     ),

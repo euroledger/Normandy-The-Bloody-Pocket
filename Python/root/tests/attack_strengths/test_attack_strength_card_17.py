@@ -2,8 +2,7 @@ import unittest
 
 from cards.card_17 import card as card_17
 from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
-from tests.attack_strengths.attack_strength_test_utilities import get_armies
-
+from core.card_utilities import get_armies
 class TestAttackStrengthCard17(unittest.TestCase):
 
     def setUp(self):

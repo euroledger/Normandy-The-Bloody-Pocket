@@ -4,7 +4,7 @@ from core.enums import *
 first_us = AlliedArmy("1st US", Nation.US_1)
 third_us = AlliedArmy("3rd US", Nation.US_3)
 
-panzer_9 = GermanReinforcement(
+panzer_9 = GermanUnit(
     ReinforcementType.PZ_DIV,
     "9th Panzer"
 )

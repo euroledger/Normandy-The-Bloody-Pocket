@@ -8,7 +8,7 @@ from core.enums import *
 
 first_can = AlliedArmy("1st CAN", Nation.CAN_1)
 
-kampfgruppe = GermanReinforcement(
+kampfgruppe = GermanUnit(
     ReinforcementType.KAMPFGRUPPE,
     "Kampfgruppe"
 )

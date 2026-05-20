@@ -2,8 +2,7 @@ import unittest
 
 from cards.card_19 import card as card_19
 from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
-from tests.attack_strengths.attack_strength_test_utilities import get_armies
-
+from core.card_utilities import get_armies
 # =========================================================
 # TEST ATTACK STRENGTH CARD 19
 # =========================================================

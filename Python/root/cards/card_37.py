@@ -9,7 +9,7 @@ from core.enums import *
 first_us = AlliedArmy("1st US", Nation.US_1)
 third_us = AlliedArmy("3rd US", Nation.US_3)
 
-nebelwerfer = GermanReinforcement(
+nebelwerfer = GermanUnit(
     ReinforcementType.NEBELWERFER,
     "Nebelwerfer"
 )

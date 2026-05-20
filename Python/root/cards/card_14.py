@@ -14,7 +14,7 @@ first_can = AlliedArmy("1st CAN", Nation.CAN_1)
 # GERMAN REINFORCEMENTS
 # =========================================================
 
-ninth_ss_panzer = GermanReinforcement(
+ninth_ss_panzer = GermanUnit(
     ReinforcementType.PZ_DIV,
     "9th SS Panzer"
 )
