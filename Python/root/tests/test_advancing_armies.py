@@ -2,7 +2,7 @@
 
 import unittest
 
-from core.armies import (
+from core.allied_armies import (
     FIRST_US,
     THIRD_US,
     SECOND_BRIT,

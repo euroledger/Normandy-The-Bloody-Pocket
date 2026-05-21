@@ -60,7 +60,6 @@ card.air_power.effects.extend([
 # =========================================================
 
 card.resources.effects.append(
-
     Effect(
         modifier_type=ModifierType.RESOURCE_GAIN,
         value=2,

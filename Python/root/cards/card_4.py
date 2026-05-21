@@ -49,54 +49,41 @@ card.air_power.effects.append(
 # =========================================================
 # RESOURCES
 # =========================================================
-
-card.resources.effects.append(
-
+card.resources.effects.extend([
     Effect(
         modifier_type=ModifierType.RESOURCE_LOSS,
         value=-1,
         resource_type=ResourceType.SUPPLY
+    ),
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
     )
-)
-
+])
 
 # =========================================================
 # ACTIONS
 # =========================================================
 
 card.actions.actions_available = 2
-
 card.actions.effects.extend([
-
     # -1 Defense Strength BRIT 2nd Army
-
     Effect(
         modifier_type=ModifierType.DEFENSE_STRENGTH,
         value=-1,
         target=second_brit
     ),
-
     # +1 Defense Strength CAN 1st Army
-
     Effect(
         modifier_type=ModifierType.DEFENSE_STRENGTH,
         value=1,
         target=first_can
     ),
-
     # +1 Defense Strength US 1st Army
-
     Effect(
         modifier_type=ModifierType.DEFENSE_STRENGTH,
         value=1,
         target=first_us
-    ),
-
-    # -1 DRM Transport
-
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
     )
 ])

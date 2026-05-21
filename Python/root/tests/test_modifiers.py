@@ -64,12 +64,6 @@ class TestModifiers(unittest.TestCase):
                 "label": None
             },
             {
-                "modifier_type": ModifierType.DRM,
-                "value": 1,
-                "target": None,
-                "label": None
-            },
-            {
                 "modifier_type": ModifierType.COMMANDER,
                 "value": 2,
                 "target": "2nd BRIT",
@@ -81,12 +75,6 @@ class TestModifiers(unittest.TestCase):
     def test_card_38_modifiers(self):
         modifiers = card_38.get_action_modifiers()
         expected = [
-            {
-                "modifier_type": ModifierType.DRM,
-                "value": -1,
-                "target": None,
-                "label": None
-            },
             {
                 "modifier_type": ModifierType.COMMANDER,
                 "value": 1,

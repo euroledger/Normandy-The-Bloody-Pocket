@@ -60,19 +60,19 @@ card.resources.effects.append(
         description="Each marker can be immediately deployed to map or placed in Strategic Reserve box"
     )
 )
-
-
 # =========================================================
-# ACTIONS
+# RESOURCES
 # =========================================================
-
-card.actions.actions_available = 3
-
-card.actions.effects.append(
-
+card.resources.effects.append(
     Effect(
         modifier_type=ModifierType.DRM,
         value=-1,
         resource_type=ResourceType.TRANSPORT
     )
 )
+# =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3
+

@@ -7,7 +7,8 @@ def assert_attack_strengths(
     card,
     num_jabos=0,
     carpet_bombing=0,
-    expected_has_air_support=None
+    expected_has_air_support=None,
+    print_modifiers=False
 ):
     for army in armies:
         if army not in expected_attack_strengths:
@@ -16,7 +17,8 @@ def assert_attack_strengths(
             card=card,
             army=army,
             num_jabos=num_jabos,
-            carpet_bombing=carpet_bombing
+            carpet_bombing=carpet_bombing,
+            print_modifiers=print_modifiers
         )
         attack_strength = result["attack_strength"]
         has_air_support = result["has_air_support"]

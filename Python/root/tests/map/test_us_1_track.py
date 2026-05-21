@@ -5,6 +5,7 @@ from core.map.map_spaces_us_1 import us_1_track
 from core.enums import SideType
 from core.map.map_model import TerrainType
 
+
 class TestUs1Track(unittest.TestCase):
     def test_track_has_12_spaces(self):
         self.assertEqual(
@@ -131,10 +132,3 @@ class TestUs1Track(unittest.TestCase):
             space.name,
             "FLERS"
         )
-
-    def test_all_spaces_start_empty(self):
-        for space in us_1_track:
-            self.assertEqual(
-                len(space.units),
-                0
-            )

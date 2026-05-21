@@ -1,19 +1,10 @@
 from core.models import *
 from core.enums import *
+from core.german_units import PZ_LEHR, SS_12
 
 first_us = AlliedArmy("1st US", Nation.US_1)
 second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
 first_can = AlliedArmy("1st CAN", Nation.CAN_1)
-
-pz_lehr = GermanUnit(
-    ReinforcementType.PZ_DIV,
-    "Pz Lehr"
-)
-
-ss_12 = GermanUnit(
-    ReinforcementType.PZ_DIV,
-    "12 SS Pz"
-)
 
 card = Card(
     card_id=1,
@@ -27,24 +18,22 @@ card.military.formations.extend([
 ])
 
 card.resources.effects.extend([
-
     Effect(
         modifier_type=ModifierType.REINFORCEMENT,
         value=1,
-        target=pz_lehr
+        target=PZ_LEHR
     ),
 
     Effect(
         modifier_type=ModifierType.REINFORCEMENT,
         value=1,
-        target=ss_12
+        target=SS_12
     )
 ])
 
 card.actions.actions_available = 1
 
-card.actions.effects.append(
-
+card.resources.effects.append(
     Effect(
         modifier_type=ModifierType.DRM,
         value=-1,

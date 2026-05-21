@@ -1,6 +1,15 @@
 from core.map.map_model import MapSpace, TerrainType, falaise_gap
 from core.enums import SideType, Nation
 
+us_3_start_box = MapSpace(
+    name="3RD US START BOX",
+    track=Nation.US_3,
+    terrain=TerrainType.START_BOX,
+    terrain_value=0,
+    track_number=8,
+    controlling_player=SideType.ALLIED
+)
+
 st_malo = MapSpace(
     name="ST. MALO",
     track=Nation.US_3,

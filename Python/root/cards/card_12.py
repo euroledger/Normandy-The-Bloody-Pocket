@@ -61,6 +61,11 @@ card.resources.effects.extend([
         modifier_type=ModifierType.RESOURCE_LOSS,
         value=-1,
         resource_type=ResourceType.SUPPLY
+    ),
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
     )
 ])
 
@@ -70,12 +75,3 @@ card.resources.effects.extend([
 # =========================================================
 
 card.actions.actions_available = 1
-
-card.actions.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
-    )
-)

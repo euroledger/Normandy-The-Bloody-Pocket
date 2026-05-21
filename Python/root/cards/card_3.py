@@ -84,22 +84,25 @@ card.resources.effects.extend([
 
 
 # =========================================================
+# RESOURCES
+# =========================================================
+card.resources.effects.extend([
+    Effect(
+        modifier_type=ModifierType.DRM,
+        value=-1,
+        resource_type=ResourceType.TRANSPORT
+    )
+])
+# =========================================================
 # ACTIONS
 # =========================================================
 
 card.actions.actions_available = 2
 
 card.actions.effects.extend([
-
     Effect(
         modifier_type=ModifierType.ATTACK_STRENGTH,
         value=1,
         target=first_us
-    ),
-
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
     )
 ])
