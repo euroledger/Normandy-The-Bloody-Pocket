@@ -1,70 +1,36 @@
 from core.models import *
 from core.enums import *
-
-
-# =========================================================
-# COMMON OBJECTS
-# =========================================================
-
-first_can = AlliedArmy("1st CAN", Nation.CAN_1)
-second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
-
-
-# =========================================================
-# GERMAN REINFORCEMENTS
-# =========================================================
-
-second_pz = GermanUnit(
-    ReinforcementType.PZ_DIV,
-    "2nd Panzer"
-)
-
+from core.german_units import PZ_2
+from core.allied_armies import (CANADIAN_FIRST_ARMY, BRITISH_SECOND_ARMY)
 
 # =========================================================
 # CARD #5
 # PANZER MEYER
 # =========================================================
 
-card = Card(
-    card_id=5,
-    title="Panzer Meyer"
-)
-
+card = Card(card_id=5, title="Panzer Meyer")
 
 # =========================================================
 # MILITARY
 # =========================================================
 
-card.military.formations.append(first_can)
-
+card.military.formations.append(CANADIAN_FIRST_ARMY)
 
 # =========================================================
 # AIR POWER
 # =========================================================
 
 card.air_power.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=first_can
-    )
-)
-
+    Effect(modifier_type=ModifierType.AIR_POWER,
+           value=1,
+           target=CANADIAN_FIRST_ARMY))
 
 # =========================================================
 # RESOURCES
 # =========================================================
 
 card.resources.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.REINFORCEMENT,
-        value=1,
-        target=second_pz
-    )
-)
-
+    Effect(modifier_type=ModifierType.REINFORCEMENT, value=1, target=PZ_2))
 
 # =========================================================
 # ACTIONS
@@ -73,10 +39,6 @@ card.resources.effects.append(
 card.actions.actions_available = 2
 
 card.actions.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.DEFENSE_STRENGTH,
-        value=-1,
-        target=second_brit
-    )
-)
+    Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
+           value=-1,
+           target=BRITISH_SECOND_ARMY))

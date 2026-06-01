@@ -1,39 +1,21 @@
 from core.models import *
 from core.enums import *
-
-
-# =========================================================
-# COMMON OBJECTS
-# =========================================================
-
-first_us = AlliedArmy("1st US", Nation.US_1)
-third_us = AlliedArmy("3rd US", Nation.US_3)
-second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
-first_can = AlliedArmy("1st CAN", Nation.CAN_1)
-
+from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
+                                BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY)
 
 # =========================================================
 # CARD #43
 # ALLIED ARTILLERY
 # =========================================================
 
-card = Card(
-    card_id=43,
-    title="Allied Artillery"
-)
-
+card = Card(card_id=43, title="Allied Artillery")
 
 # =========================================================
 # MILITARY
 # =========================================================
 
-card.military.formations.extend([
-    first_us,
-    third_us,
-    second_brit,
-    first_can
-])
-
+card.military.formations.extend(
+    [US_FIRST_ARMY, US_THIRD_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY])
 
 # =========================================================
 # AIR POWER
@@ -42,29 +24,21 @@ card.military.formations.extend([
 card.air_power.effects.extend([
 
     # +1 Jabos 1st CAN
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=first_can
-    ),
+    Effect(modifier_type=ModifierType.AIR_POWER,
+           value=1,
+           target=CANADIAN_FIRST_ARMY),
 
     # +1 Jabos 2nd BRIT
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=second_brit
-    )
+    Effect(modifier_type=ModifierType.AIR_POWER,
+           value=1,
+           target=BRITISH_SECOND_ARMY)
 ])
-
 
 # =========================================================
 # RESOURCES
 # =========================================================
 
 card.resources.display_text = "NONE"
-
 
 # =========================================================
 # ACTIONS
@@ -75,34 +49,22 @@ card.actions.actions_available = 3
 card.actions.effects.extend([
 
     # +2 Attack Strength 1st US
-
-    Effect(
-        modifier_type=ModifierType.ATTACK_STRENGTH,
-        value=2,
-        target=first_us
-    ),
+    Effect(modifier_type=ModifierType.ATTACK_STRENGTH,
+           value=2,
+           target=US_FIRST_ARMY),
 
     # +2 Attack Strength 3rd US
-
-    Effect(
-        modifier_type=ModifierType.ATTACK_STRENGTH,
-        value=2,
-        target=third_us
-    ),
+    Effect(modifier_type=ModifierType.ATTACK_STRENGTH,
+           value=2,
+           target=US_THIRD_ARMY),
 
     # +2 Attack Strength 2nd BRIT
-
-    Effect(
-        modifier_type=ModifierType.ATTACK_STRENGTH,
-        value=2,
-        target=second_brit
-    ),
+    Effect(modifier_type=ModifierType.ATTACK_STRENGTH,
+           value=2,
+           target=BRITISH_SECOND_ARMY),
 
     # +2 Attack Strength 1st CAN
-
-    Effect(
-        modifier_type=ModifierType.ATTACK_STRENGTH,
-        value=2,
-        target=first_can
-    )
+    Effect(modifier_type=ModifierType.ATTACK_STRENGTH,
+           value=2,
+           target=CANADIAN_FIRST_ARMY)
 ])

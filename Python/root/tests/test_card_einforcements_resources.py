@@ -48,24 +48,40 @@ class TestResourcesAndReinforcements(unittest.TestCase):
         self.assertEqual(card_1.reinforcements(), [(PZ_LEHR, 1), (SS_12, 1)])
 
     def test_card_19_reinforcements(self):
-        self.assertEqual(
-            card_19.reinforcements(),
-            [(GermanUnit(ReinforcementType.FLAK_88, "88mm Flak"), 3)])
+        reinforcements = card_19.reinforcements()
+        self.assertEqual(len(reinforcements), 3)
+        # for unit in reinforcements:
+        #     self.assertEqual(unit.type, ReinforcementType.FLAK_88)
+        #     self.assertEqual(unit.name, "Flak 88")
+        #     self.assertEqual(unit.combat_value, 2)
+        for unit, quantity in reinforcements:
+            self.assertEqual(unit.type, ReinforcementType.FLAK_88)
+            self.assertEqual(unit.name, "Flak 88")
+            self.assertEqual(unit.combat_value, 2)
+            self.assertEqual(quantity, 1)
 
     def test_card_31_reinforcements(self):
-
-        self.assertEqual(
-            card_31.reinforcements(),
-            [(GermanUnit(ReinforcementType.FLAK_88, "88mm Flak"), 2)])
+        reinforcements = card_31.reinforcements()
+        self.assertEqual(len(reinforcements), 2)
+        for unit, quantity in reinforcements:
+            self.assertEqual(unit.type, ReinforcementType.FLAK_88)
+            self.assertEqual(unit.name, "Flak 88")
+            self.assertEqual(unit.combat_value, 2)
+            self.assertEqual(quantity, 1)
 
     def test_card_34_reinforcements(self):
-        self.assertEqual(
-            card_34.reinforcements(),
-            [(GermanUnit(ReinforcementType.KAMPFGRUPPE, "Kampfgruppe"), 1)])
+        reinforcements = card_34.reinforcements()
+        self.assertEqual(len(reinforcements), 1)
+        unit, quantity = reinforcements[0]
+        self.assertEqual(unit.type, ReinforcementType.KAMPFGRUPPE)
+        self.assertEqual(unit.name, "Kampfgruppe")
+        self.assertEqual(unit.combat_value, 1)
+        self.assertEqual(quantity, 1)
 
-    def test_card_25_has_no_reinforcements(self):
 
-        self.assertEqual(card_25.reinforcements(), [])
+def test_card_25_has_no_reinforcements(self):
+
+    self.assertEqual(card_25.reinforcements(), [])
 
 
 if __name__ == "__main__":

@@ -1,22 +1,7 @@
 from core.models import *
 from core.enums import *
-
-
-# =========================================================
-# COMMON OBJECTS
-# =========================================================
-
-first_us = AlliedArmy("1st US", Nation.US_1)
-
-
-# =========================================================
-# GERMAN REINFORCEMENTS
-# =========================================================
-
-ss_17_pz_grd = GermanUnit(
-    ReinforcementType.PZ_DIV,
-    "17 SS Pz Grd"
-)
+from core.allied_armies import US_FIRST_ARMY
+from core.german_units import SS_21_PZGRD
 
 
 # =========================================================
@@ -24,32 +9,21 @@ ss_17_pz_grd = GermanUnit(
 # CARENTAN
 # =========================================================
 
-card = Card(
-    card_id=3,
-    title="Carentan"
-)
-
+card = Card(card_id=3, title="Carentan")
 
 # =========================================================
 # MILITARY
 # =========================================================
 
-card.military.formations.append(first_us)
-
+card.military.formations.append(US_FIRST_ARMY)
 
 # =========================================================
 # AIR POWER
 # =========================================================
 
 card.air_power.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=first_us
-    )
-)
-
+    Effect(modifier_type=ModifierType.AIR_POWER, value=1,
+           target=US_FIRST_ARMY))
 
 # =========================================================
 # RESOURCES
@@ -58,41 +32,31 @@ card.air_power.effects.append(
 card.resources.effects.extend([
 
     # 17 SS Pz Grd reinforcement
-
-    Effect(
-        modifier_type=ModifierType.REINFORCEMENT,
-        value=1,
-        target=ss_17_pz_grd
-    ),
+    Effect(modifier_type=ModifierType.REINFORCEMENT,
+           value=1,
+           target=SS_21_PZGRD),
 
     # Truck icon = Transport loss
-
-    Effect(
-        modifier_type=ModifierType.RESOURCE_LOSS,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
-    ),
+    Effect(modifier_type=ModifierType.RESOURCE_LOSS,
+           value=-1,
+           resource_type=ResourceType.TRANSPORT),
 
     # Barrel icon = Supply loss
-
-    Effect(
-        modifier_type=ModifierType.RESOURCE_LOSS,
-        value=-1,
-        resource_type=ResourceType.SUPPLY
-    )
+    Effect(modifier_type=ModifierType.RESOURCE_LOSS,
+           value=-1,
+           resource_type=ResourceType.SUPPLY)
 ])
 
+# =========================================================
+# RESOURCE DRMS
+# =========================================================
 
-# =========================================================
-# RESOURCES
-# =========================================================
 card.resources.effects.extend([
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
-    )
+    Effect(modifier_type=ModifierType.DRM,
+           value=-1,
+           resource_type=ResourceType.TRANSPORT)
 ])
+
 # =========================================================
 # ACTIONS
 # =========================================================
@@ -100,9 +64,7 @@ card.resources.effects.extend([
 card.actions.actions_available = 2
 
 card.actions.effects.extend([
-    Effect(
-        modifier_type=ModifierType.ATTACK_STRENGTH,
-        value=1,
-        target=first_us
-    )
+    Effect(modifier_type=ModifierType.ATTACK_STRENGTH,
+           value=1,
+           target=US_FIRST_ARMY)
 ])

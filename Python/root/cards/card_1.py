@@ -1,10 +1,11 @@
 from core.models import *
 from core.enums import *
 from core.german_units import PZ_LEHR, SS_12
-
-first_us = AlliedArmy("1st US", Nation.US_1)
-second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
-first_can = AlliedArmy("1st CAN", Nation.CAN_1)
+from core.allied_armies import (
+    US_FIRST_ARMY,
+    BRITISH_SECOND_ARMY,
+    CANADIAN_FIRST_ARMY
+)
 
 card = Card(
     card_id=1,
@@ -12,9 +13,9 @@ card = Card(
 )
 
 card.military.formations.extend([
-    first_us,
-    second_brit,
-    first_can
+    US_FIRST_ARMY,
+    BRITISH_SECOND_ARMY,
+    CANADIAN_FIRST_ARMY
 ])
 
 card.resources.effects.extend([

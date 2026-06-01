@@ -1,6 +1,7 @@
 import sys
 from random import choice, shuffle, randint
 
+from core.allied_armies import CANADIAN_FIRST_ARMY
 from core.weather import get_weather_result
 from core.carpet_bombing import get_carpet_bombing_result
 from core.carpet_bombing import ATTACK_CANCELLED
@@ -258,7 +259,7 @@ def perform_canadian_siege_roll(
 
     canadian_result = calculate_attack_modifiers(
         card=card,
-        army="1st CAN",
+        army=CANADIAN_FIRST_ARMY,
         num_jabos=weather.available_jabos,
         carpet_bombing=carpet_bombing
     )

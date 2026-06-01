@@ -16,7 +16,7 @@ class ModifierType(Enum):
 class SideType(Enum):
     ALLIED = "ALLIED",
     GERMAN = "GERMAN"
-    
+
 class Nation(Enum):
     US_1 = "US FIRST ARMY"
     US_3 = "US THIRD ARMY"
@@ -38,21 +38,6 @@ class ResourceType(Enum):
     TRANSPORT = "Transport"
     SUPPLY = "Supply"
     HITLER_APPROVAL = "Hitler Approval"
-    
-# =========================================================
-# TERRAIN TYPES
-# =========================================================
 
-class TerrainType(Enum):
-    BOCAGE = ("Bocage", 2)
-    TOWN = ("Town", 1)
-    HILL = ("Hill", 2)
-    BEACH = ("Beach", 2)
-    FORTRESS = ("Fortress", 4)
-    FORTIFIED_VILLAGE = ("Fortified Village", 3)
-    FALAISE_GAP = ("Falaise Gap", 1)
 
-    def __init__(self, display_name, defense_value):
-        self.display_name = display_name
-        self.defense_value = defense_value
-    
+

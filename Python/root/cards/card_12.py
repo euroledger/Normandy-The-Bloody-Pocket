@@ -1,45 +1,27 @@
 from core.models import *
 from core.enums import *
-
-
-# =========================================================
-# COMMON OBJECTS
-# =========================================================
-
-first_us = AlliedArmy("1st US", Nation.US_1)
-
+from core.allied_armies import US_FIRST_ARMY
 
 # =========================================================
 # CARD #12
 # OPERATION BAGRATION
 # =========================================================
 
-card = Card(
-    card_id=12,
-    title="Operation Bagration"
-)
-
+card = Card(card_id=12, title="Operation Bagration")
 
 # =========================================================
 # MILITARY
 # =========================================================
 
-card.military.formations.append(first_us)
-
+card.military.formations.append(US_FIRST_ARMY)
 
 # =========================================================
 # AIR POWER
 # =========================================================
 
 card.air_power.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=first_us
-    )
-)
-
+    Effect(modifier_type=ModifierType.AIR_POWER, value=1,
+           target=US_FIRST_ARMY))
 
 # =========================================================
 # RESOURCES
@@ -48,27 +30,18 @@ card.air_power.effects.append(
 card.resources.effects.extend([
 
     # Lose 2 Hitler Approval
-
-    Effect(
-        modifier_type=ModifierType.RESOURCE_LOSS,
-        value=-2,
-        resource_type=ResourceType.HITLER_APPROVAL
-    ),
+    Effect(modifier_type=ModifierType.RESOURCE_LOSS,
+           value=-2,
+           resource_type=ResourceType.HITLER_APPROVAL),
 
     # Lose 1 Supply
-
-    Effect(
-        modifier_type=ModifierType.RESOURCE_LOSS,
-        value=-1,
-        resource_type=ResourceType.SUPPLY
-    ),
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
-    )
+    Effect(modifier_type=ModifierType.RESOURCE_LOSS,
+           value=-1,
+           resource_type=ResourceType.SUPPLY),
+    Effect(modifier_type=ModifierType.DRM,
+           value=-1,
+           resource_type=ResourceType.TRANSPORT)
 ])
-
 
 # =========================================================
 # ACTIONS

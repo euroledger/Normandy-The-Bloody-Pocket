@@ -1,18 +1,24 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List
 from core.models import AlliedArmy, UnitBox
 from core.enums import SideType
 
 class TerrainType(Enum):
-    BEACH = "Beach"
-    BOCAGE = "Bocage"
-    TOWN = "Town"
-    HILL = "Hill"
-    FORTRESS = "Fortress"
-    FALAISE_GAP = "Falaise Gap"
-    START_BOX = "Start Box"
-    
+    BOCAGE = ("Bocage", 2)
+    TOWN = ("Town", 1)
+    HILL = ("Hill", 2)
+    BEACH = ("Beach", 2)
+    FORTRESS = ("Fortress", 4)
+    FORTIFIED_VILLAGE_1 = ("Fortified Village+1", 1)
+    FORTIFIED_VILLAGE_2 = ("Fortified Village+1", 2)
+    FALAISE_GAP = ("Falaise Gap", 1)
+    START_BOX = ("Start Box", 0)
+
+    def __init__(self, display_name, defense_value):
+        self.display_name = display_name
+        self.defense_value = defense_value
+
+
 @dataclass
 class MapSpace:
     name: str
@@ -24,13 +30,13 @@ class MapSpace:
     fortified: bool = False
     under_siege: bool = False
     units: list = field(default_factory=list)
-  
+
+
 @dataclass
 class Track:
     name: str
     spaces: list[MapSpace]
-    
-from dataclasses import dataclass
+
 
 
 @dataclass
@@ -40,7 +46,7 @@ class ResourceTrack:
     base_level: int
     minimum: int
     maximum: int
-    
+
 transport_track = ResourceTrack(
     name="Transport",
     value=5,

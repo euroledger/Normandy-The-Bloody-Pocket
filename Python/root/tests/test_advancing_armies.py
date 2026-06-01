@@ -2,12 +2,8 @@
 
 import unittest
 
-from core.allied_armies import (
-    FIRST_US,
-    THIRD_US,
-    SECOND_BRIT,
-    FIRST_CAN
-)
+from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY, BRITISH_SECOND_ARMY,
+                         CANADIAN_FIRST_ARMY)
 
 from cards.card_1 import card as card_1
 from cards.card_5 import card as card_5
@@ -19,77 +15,36 @@ from cards.card_47 import card as card_47
 
 class TestAdvancingArmies(unittest.TestCase):
 
-    # =====================================================
-    # CARD 1
-    # =====================================================
-
     def test_card_1_advancing_armies(self):
-
         self.assertEqual(
             card_1.advancing_armies(),
-            [FIRST_US, SECOND_BRIT, FIRST_CAN]
-        )
+            [US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY])
 
-    # =====================================================
-    # CARD 5
-    # =====================================================
     def test_card_5_advancing_armies(self):
+        self.assertEqual(card_5.advancing_armies(), [CANADIAN_FIRST_ARMY])
 
-        self.assertEqual(
-            card_5.advancing_armies(),
-            [FIRST_CAN]
-        )
-
-    # =====================================================
-    # CARD 11
-    # =====================================================
     def test_card_11_advancing_armies(self):
+        self.assertEqual(card_11.advancing_armies(), [US_FIRST_ARMY])
 
-        self.assertEqual(
-            card_11.advancing_armies(),
-            [FIRST_US]
-        )
-
-    # =====================================================
-    # CARD 14
-    # =====================================================
     def test_card_14_advancing_armies(self):
+        self.assertEqual(card_14.advancing_armies(),
+                         [BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY])
 
-        self.assertEqual(
-            card_14.advancing_armies(),
-            [SECOND_BRIT, FIRST_CAN]
-        )
-
-    # =====================================================
-    # CARD 22
-    # =====================================================
     def test_card_22_advancing_armies(self):
         self.assertEqual(
             card_22.advancing_armies(),
-            [FIRST_US, SECOND_BRIT, FIRST_CAN]
-        )
+            [US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY])
 
-    # =====================================================
-    # CARD 47
-    # =====================================================
     def test_card_47_advancing_armies(self):
-        self.assertEqual(
-            card_47.advancing_armies(),
-            [FIRST_US, THIRD_US]
-        )
+        self.assertEqual(card_47.advancing_armies(),
+                         [US_FIRST_ARMY, US_THIRD_ARMY])
 
-    # =====================================================
-    # CANADIAN ARMY ADVANCING
-    # =====================================================
     def test_canadian_army_advances_on_card_14(self):
-        self.assertTrue(
-            card_14.is_army_advancing(FIRST_CAN)
-        )
-        
-    def test_canadian_army_does_not_advance_on_card_11(self):\
-        self.assertFalse(
-            card_11.is_army_advancing(FIRST_CAN)
-        )
+        self.assertTrue(card_14.is_army_advancing(CANADIAN_FIRST_ARMY))
+
+    def test_canadian_army_does_not_advance_on_card_11(self):
+        self.assertFalse(card_11.is_army_advancing(CANADIAN_FIRST_ARMY))
+
 
 if __name__ == "__main__":
     unittest.main()

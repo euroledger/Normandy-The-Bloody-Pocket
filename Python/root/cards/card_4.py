@@ -1,65 +1,40 @@
 from core.models import *
 from core.enums import *
-
-
-# =========================================================
-# COMMON OBJECTS
-# =========================================================
-
-first_us = AlliedArmy("1st US", Nation.US_1)
-second_brit = AlliedArmy("2nd BRIT", Nation.BRIT_2)
-first_can = AlliedArmy("1st CAN", Nation.CAN_1)
-
+from core.allied_armies import (US_FIRST_ARMY, BRITISH_SECOND_ARMY,
+                                CANADIAN_FIRST_ARMY)
 
 # =========================================================
 # CARD #4
 # 21st Panzer Counterattack
 # =========================================================
 
-card = Card(
-    card_id=4,
-    title="21st Panzer Counterattack"
-)
-
+card = Card(card_id=4, title="21st Panzer Counterattack")
 
 # =========================================================
 # MILITARY
 # =========================================================
 
-card.military.formations.extend([
-    first_us,
-    second_brit
-])
-
+card.military.formations.extend([US_FIRST_ARMY, BRITISH_SECOND_ARMY])
 
 # =========================================================
 # AIR POWER
 # =========================================================
 
 card.air_power.effects.append(
-
-    Effect(
-        modifier_type=ModifierType.AIR_POWER,
-        value=1,
-        target=first_us
-    )
-)
-
+    Effect(modifier_type=ModifierType.AIR_POWER, value=1,
+           target=US_FIRST_ARMY))
 
 # =========================================================
 # RESOURCES
 # =========================================================
+
 card.resources.effects.extend([
-    Effect(
-        modifier_type=ModifierType.RESOURCE_LOSS,
-        value=-1,
-        resource_type=ResourceType.SUPPLY
-    ),
-    Effect(
-        modifier_type=ModifierType.DRM,
-        value=-1,
-        resource_type=ResourceType.TRANSPORT
-    )
+    Effect(modifier_type=ModifierType.RESOURCE_LOSS,
+           value=-1,
+           resource_type=ResourceType.SUPPLY),
+    Effect(modifier_type=ModifierType.DRM,
+           value=-1,
+           resource_type=ResourceType.TRANSPORT)
 ])
 
 # =========================================================
@@ -67,23 +42,21 @@ card.resources.effects.extend([
 # =========================================================
 
 card.actions.actions_available = 2
+
 card.actions.effects.extend([
+
     # -1 Defense Strength BRIT 2nd Army
-    Effect(
-        modifier_type=ModifierType.DEFENSE_STRENGTH,
-        value=-1,
-        target=second_brit
-    ),
+    Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
+           value=-1,
+           target=BRITISH_SECOND_ARMY),
+
     # +1 Defense Strength CAN 1st Army
-    Effect(
-        modifier_type=ModifierType.DEFENSE_STRENGTH,
-        value=1,
-        target=first_can
-    ),
+    Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
+           value=1,
+           target=CANADIAN_FIRST_ARMY),
+
     # +1 Defense Strength US 1st Army
-    Effect(
-        modifier_type=ModifierType.DEFENSE_STRENGTH,
-        value=1,
-        target=first_us
-    )
+    Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
+           value=1,
+           target=US_FIRST_ARMY)
 ])

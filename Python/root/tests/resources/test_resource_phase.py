@@ -49,13 +49,12 @@ from cards.card_46 import card as card_046
 from cards.card_47 import card as card_047
 from cards.card_48 import card as card_048
 
-from core.resources import do_resource_phase
+from core.resources import do_resource_phase_drms
 from core.global_game_state import GlobalGameState
 from core.weather import WeatherType
 
 
 class TestResourcePhase(unittest.TestCase):
-
     def setUp(self):
         GlobalGameState.transport_roll_drm = 0
         GlobalGameState.supply_roll_drm = 0
@@ -64,300 +63,300 @@ class TestResourcePhase(unittest.TestCase):
         GlobalGameState.hitler_approval_check_drm = 0
 
     def test_resource_roll_drms(self):
-        do_resource_phase(WeatherType.OVERCAST, card_001)
+        do_resource_phase_drms(WeatherType.OVERCAST, card_001)
         self.assertEqual(GlobalGameState.transport_roll_drm, 1)
         self.assertEqual(GlobalGameState.supply_roll_drm, 1)
 
         GlobalGameState.transport_roll_drm = 5
         GlobalGameState.supply_roll_drm = 5
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_001)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_001)
         self.assertEqual(GlobalGameState.transport_roll_drm, 0)
         self.assertEqual(GlobalGameState.supply_roll_drm, 0)
 
     def test_card_1_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_001)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_001)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_2_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_002)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_002)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
 
     def test_card_3_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_003)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_003)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_4_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_004)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_004)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_5_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_005)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_005)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_6_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_006)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_006)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_7_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_007)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_007)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_8_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_008)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_008)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_9_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_009)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_009)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_10_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_010)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_010)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_11_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_011)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_011)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_12_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_012)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_012)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_13_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_013)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_013)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_14_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_014)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_014)
         self.assertEqual(GlobalGameState.transport_check_drm, 1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_15_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_015)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_015)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_16_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_016)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_016)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_17_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_017)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_017)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_18_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_018)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_018)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_19_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_019)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_019)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_20_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_020)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_020)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_21_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_021)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_021)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_22_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_022)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_022)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_23_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_023)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_023)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_24_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_024)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_024)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_25_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_025)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_025)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_26_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_026)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_026)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_27_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_027)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_027)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_28_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_028)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_028)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_29_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_029)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_029)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_30_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_030)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_030)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_31_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_031)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_031)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_32_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_032)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_032)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_33_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_033)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_033)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_34_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_034)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_034)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_35_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_035)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_035)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_36_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_036)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_036)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_37_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_037)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_037)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_38_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_038)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_038)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_39_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_039)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_039)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_40_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_040)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_040)
         self.assertEqual(GlobalGameState.transport_check_drm, -1)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_41_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_041)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_041)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_42_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_042)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_042)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_43_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_043)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_043)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_44_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_044)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_044)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_45_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_045)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_045)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_46_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_046)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_046)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_47_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_047)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_047)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)
 
     def test_card_48_resource_check_drms(self):
-        do_resource_phase(WeatherType.PARTLY_CLEAR, card_048)
+        do_resource_phase_drms(WeatherType.PARTLY_CLEAR, card_048)
         self.assertEqual(GlobalGameState.transport_check_drm, 0)
         self.assertEqual(GlobalGameState.supply_check_drm, 0)
         self.assertEqual(GlobalGameState.hitler_approval_check_drm, 0)

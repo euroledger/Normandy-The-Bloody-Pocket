@@ -2,9 +2,6 @@ import unittest
 from cards.card_43 import card as card_43
 from core.weather import get_weather_result
 from core.weather import ALL_JABOS_AVAILABLE
-from core.carpet_bombing import get_carpet_bombing_result
-from core.carpet_bombing import ATTACK_CANCELLED
-from core.card_utilities import calculate_attack_modifiers
 from tests.attack_strengths.attack_strength_test_utilities import assert_attack_strengths
 from core.card_utilities import get_armies
 

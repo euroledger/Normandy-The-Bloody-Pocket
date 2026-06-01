@@ -12,10 +12,14 @@ from core.conditions import *
 class AlliedArmy:
     name: str
     nation: Nation
+    location: Optional["MapSpace"] = None
     reverse_name: Optional[str] = None
     _strength: int = 0
     reverse_strength: int = 0
     flipped: bool = False
+
+    def __str__(self):
+        return self.display_name
 
     @property
     def display_name(self):
