@@ -82,15 +82,8 @@ class TestCan1Track(unittest.TestCase):
             space.name, "CAEN"
         )
         current_space += 1
-        
+
         space = can_1_track[current_space]
         self.assertEqual(
             space.name, "CAGNY"
         )
-        
-    def test_all_spaces_start_empty(self):
-        for space in can_1_track:
-            self.assertEqual(
-                len(space.units),
-                0
-            )

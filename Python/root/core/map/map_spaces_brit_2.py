@@ -11,7 +11,7 @@ brit_2_start_box = MapSpace(
 )
 
 gold_juno_sword_brit = MapSpace(
-    name="GOLD-JUNO-SWORD BEACH",
+    name="GOLD-JUNO-SWORD BEACH (BRITISH TRACK)",
     track=Nation.BRIT_2,
     terrain=TerrainType.BEACH,
     terrain_value=2,

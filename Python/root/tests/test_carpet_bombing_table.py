@@ -2,10 +2,15 @@ import unittest
 from core.carpet_bombing import get_carpet_bombing_result
 from core.carpet_bombing import CarpetBombingResultType
 from core.carpet_bombing import ATTACK_CANCELLED
+from core.military import get_carpet_bombing_modifier
+from core.weather import WEATHER_TABLE
+from cards.card_20 import card as card_020
+
 
 # =========================================================
 # TEST CARPET BOMBING
 # =========================================================
+
 
 class TestCarpetBombing(unittest.TestCase):
     def test_roll_1_no_drm(self):
@@ -57,3 +62,18 @@ class TestCarpetBombing(unittest.TestCase):
         result = get_carpet_bombing_result(6, 1)
         self.assertEqual(result.result_type, CarpetBombingResultType.CANCELLED)
         self.assertEqual(result.attack_modifier, ATTACK_CANCELLED)
+
+    def test_overcast_no_carpet_bombing(self):
+        weather = WEATHER_TABLE[1]  # OVERCAST
+        result = get_carpet_bombing_modifier(card=card_020, weather=weather, die_roll=1)
+        self.assertEqual(result, 0)
+
+    def test_partially_clear_applies_plus_one_drm(self):
+        weather = WEATHER_TABLE[3]  # PARTIALLY CLEAR
+        result = get_carpet_bombing_modifier(card=card_020, weather=weather, die_roll=4)
+        self.assertEqual(result, 1)
+
+    def test_clear_no_drm(self):
+        weather = WEATHER_TABLE[6]  # CLEAR
+        result = get_carpet_bombing_modifier(card=card_020, weather=weather, die_roll=3)
+        self.assertEqual(result, 2)

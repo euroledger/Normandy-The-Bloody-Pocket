@@ -1,7 +1,8 @@
-from core.allied_armies import BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_FIRST_ARMY, US_THIRD_ARMY
+from core.allied_armies import BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_FIRST_ARMY, US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS
 from core.enums import ModifierType, ResourceType
 from core.weather import ALL_JABOS_AVAILABLE
 from core.map.map_model import TerrainType, transport_track, supply_track, hitler_approval_track
+
 
 def print_modifiers(card):
     modifiers = card.get_action_modifiers()
@@ -9,45 +10,48 @@ def print_modifiers(card):
     print(f"\nMODIFIERS CARD {card.card_id} - {card.title}")
 
     for modifier in modifiers:
-        print(f"  "
-              f"{modifier['modifier_type'].name:<20} "
-              f"value={modifier['value']:<2} "
-              f"target={modifier['target']} "
-              f"label={modifier['label']}")
+        print(f"  {modifier['modifier_type'].name:<20} value={modifier['value']:<2} target={modifier['target']} label={modifier['label']}")
 
 
+def get_modifier_target(army):
+    if army in [US_VIII_CORPS, US_XV_CORPS]:
+        return US_THIRD_ARMY
+    return army
 
 
-
-def calculate_attack_modifiers(card,
-                               army,
-                               num_jabos=0,
-                               carpet_bombing=0,
-                               print_modifiers=False):
+def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_modifiers=False):
     modifiers = card.get_action_modifiers()
     total_attack_strength = 0
     attack_breakdown = []
+
+    modifier_target = get_modifier_target(army)
+
+    print("\n==============================")
+    print("CALCULATE ATTACK MODIFIERS")
+    print("==============================")
+    print("army =", army)
+    print("num_jabos =", num_jabos)
+    print("modifier_target =", modifier_target)
 
     # =========================================================
     # JABOS
     # =========================================================
 
     jabo_strength = 0
-
     if num_jabos > 0:
+
         # CLEAR WEATHER
         # ALL JABOS AVAILABLE
         if num_jabos == ALL_JABOS_AVAILABLE:
             for effect in card.air_power.effects:
-                if (effect.modifier_type == ModifierType.AIR_POWER
-                        and effect.target == army):
+                if effect.modifier_type == ModifierType.AIR_POWER and modifier_target == effect.target:
                     jabo_strength += effect.value
 
         # PARTLY CLEAR
         # ONLY ONE JABO AVAILABLE
-
         else:
             first_air_power_target = None
+
             for effect in card.air_power.effects:
                 if effect.modifier_type == ModifierType.AIR_POWER:
                     first_air_power_target = effect.target
@@ -77,7 +81,7 @@ def calculate_attack_modifiers(card,
         value = modifier["value"]
         label = modifier["label"]
 
-        if target != army:
+        if target != modifier_target:
             continue
 
         if modifier_type == ModifierType.ATTACK_STRENGTH:
@@ -88,33 +92,21 @@ def calculate_attack_modifiers(card,
             total_attack_strength += value
             attack_breakdown.append(f"{value:+} {label}")
 
-    has_air_support = (jabo_strength > 0 or carpet_bombing > 0)
+    has_air_support = jabo_strength > 0 or carpet_bombing > 0
 
     if print_modifiers:
-        print(f"{army.name} "
-              f"-> ATTACK STRENGTH: "
-              f"{total_attack_strength} "
-              f"({', '.join(attack_breakdown)}) "
-              f"; AIR SUPPORT={has_air_support}")
+        print(f"{army.name} -> ATTACK STRENGTH: {total_attack_strength} ({', '.join(attack_breakdown)}) ; AIR SUPPORT={has_air_support}")
 
-    return {
-        "attack_strength": total_attack_strength,
-        "has_air_support": has_air_support
-    }
+    return {"attack_strength": total_attack_strength, "has_air_support": has_air_support}
 
 
-def calculate_defense_modifiers(card,
-                                army,
-                                weather,
-                                print_modifiers=False):
+def calculate_defense_modifiers(card, army, weather, print_modifiers=False):
     modifiers = card.get_action_modifiers()
-    terrain_strength = (army.location.terrain_value)
-    army_strength = (army.strength)
+    terrain_strength = army.location.terrain_value
+    army_strength = army.strength
     num_jabos = weather.available_jabos
-    total_defense_strength = (terrain_strength + army_strength)
-    defense_breakdown = [
-        f"{terrain_strength:+} Terrain", f"{army_strength:+} Army"
-    ]
+    total_defense_strength = terrain_strength + army_strength
+    defense_breakdown = [f"{terrain_strength:+} Terrain", f"{army_strength:+} Army"]
 
     # =========================================================
     # JABOS
@@ -122,13 +114,14 @@ def calculate_defense_modifiers(card,
 
     jabo_strength = 0
 
+    modifier_target = get_modifier_target(army)
+
     if num_jabos > 0:
         # CLEAR WEATHER
         # ALL JABOS AVAILABLE
         if num_jabos == ALL_JABOS_AVAILABLE:
             for effect in card.air_power.effects:
-                if (effect.modifier_type == ModifierType.AIR_POWER
-                        and effect.target == army):
+                if effect.modifier_type == ModifierType.AIR_POWER and effect.target == modifier_target:
                     jabo_strength += effect.value
 
         # PARTLY CLEAR
@@ -151,7 +144,8 @@ def calculate_defense_modifiers(card,
     # CARD MODIFIERS
     # =========================================================
 
-    print(f"\n\n********** ARMY {army.name} modifier={modifiers}\n\n")
+    print("\nCARD MODIFIERS")
+    print("modifier_target =", modifier_target)
 
     for modifier in modifiers:
         modifier_type = modifier["modifier_type"]
@@ -159,13 +153,13 @@ def calculate_defense_modifiers(card,
         value = modifier["value"]
         label = modifier["label"]
 
-        print("id(target)=",id(target))
-        print("id(army)=",id(army))
-        # print(f"target={target}")
-        # print(f"army={army}")
-        # print(f"target == army ? {target == army}")
-        # print(f"target is army ? {target is army}")
-        if target != army:
+        # if target != army:
+        #     continue
+
+        print("modifier:", modifier_type, "target=", target, "value=", value)
+
+        if target != modifier_target:
+            print("SKIP")
             continue
 
         if modifier_type == ModifierType.DEFENSE_STRENGTH:
@@ -176,40 +170,45 @@ def calculate_defense_modifiers(card,
             total_defense_strength += value
             defense_breakdown.append(f"{value:+} {label}")
 
-    has_air_support = (jabo_strength > 0)
+    has_air_support = jabo_strength > 0
 
     if print_modifiers:
+        print(f"{army.name} -> DEFENSE STRENGTH: {total_defense_strength} ({', '.join(defense_breakdown)}) ; AIR SUPPORT={has_air_support}")
 
-        print(f"{army.name} "
-              f"-> DEFENSE STRENGTH: "
-              f"{total_defense_strength} "
-              f"({', '.join(defense_breakdown)}) "
-              f"; AIR SUPPORT={has_air_support}")
-
-    return {
-        "defense_strength": total_defense_strength,
-        "has_air_support": has_air_support
-    }
+    return {"defense_strength": total_defense_strength, "has_air_support": has_air_support}
 
 
 def get_armies_as_objects(card):
-    return card.military.formations
+    armies = []
+    for army in card.military.formations:
+        if army == US_THIRD_ARMY and not army.merged:
+            armies.extend([US_VIII_CORPS, US_XV_CORPS])
+        else:
+            armies.append(army)
+    return armies
+
+
+# def get_armies(card):
+#     armies = get_armies_as_objects(card)
+#     return [army.name for army in armies]
 
 
 def get_armies(card):
-    armies = get_armies_as_objects(card)
-    return [army.name for army in armies]
+    print("GET ARMIES!")
+    armies = []
+    for army in get_armies_as_objects(card):
+        print("ARMY:", army, "merged=", army.merged)
+        if army == US_THIRD_ARMY and not army.merged:
+            armies.extend([US_VIII_CORPS.name, US_XV_CORPS.name])
+        else:
+            armies.append(army.name)
+    return armies
 
 
 def get_all_defending_armies():
     armies = []
 
-    for army in [
-        US_FIRST_ARMY,
-        BRITISH_SECOND_ARMY,
-        CANADIAN_FIRST_ARMY,
-        US_THIRD_ARMY
-    ]:
+    for army in [US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_THIRD_ARMY]:
         if army.location is None:
             continue
 
@@ -219,6 +218,7 @@ def get_all_defending_armies():
         armies.append(army)
 
     return armies
+
 
 # def get_armies(card):
 #     return [
@@ -240,9 +240,7 @@ def adjust_resource_track(track, amount):
 
 def apply_resource_modifiers(card):
     for effect in card.resources.effects:
-        if effect.modifier_type not in [
-                ModifierType.RESOURCE_LOSS, ModifierType.RESOURCE_GAIN
-        ]:
+        if effect.modifier_type not in [ModifierType.RESOURCE_LOSS, ModifierType.RESOURCE_GAIN]:
             continue
 
         if effect.resource_type == ResourceType.TRANSPORT:

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from enum import auto
 from typing import List, Optional, Union
 from core.enums import *
 from core.conditions import *
@@ -17,6 +18,7 @@ class AlliedArmy:
     _strength: int = 0
     reverse_strength: int = 0
     flipped: bool = False
+    merged: bool = False
 
     def __str__(self):
         return self.display_name
@@ -40,7 +42,11 @@ class AlliedArmy:
     def flip(self):
         self.flipped = not self.flipped
 
-@dataclass(frozen=True)
+    def merge(self):
+        self.merged = not self.merged
+
+
+@dataclass
 class GermanUnit:
     type: ReinforcementType
     name: Optional[str] = None
@@ -106,7 +112,7 @@ class Effect:
             effect_name = "DRM"
 
         elif self.modifier_type == ModifierType.COMMANDER:
-            effect_name = (self.label if self.label else "Commander")
+            effect_name = self.label if self.label else "Commander"
 
         # Example:
         # +2 Attack Strength
@@ -182,7 +188,6 @@ class ActionSection:
 
 @dataclass
 class Card:
-
     card_id: int
     title: str
     military: MilitarySection = field(default_factory=MilitarySection)
@@ -225,8 +230,7 @@ class Card:
     def reinforcements(self):
         results = []
         for effect in self.resources.effects:
-            if (effect.modifier_type == ModifierType.REINFORCEMENT
-                    and effect.target):
+            if effect.modifier_type == ModifierType.REINFORCEMENT and effect.target:
                 results.append((effect.target, effect.value))
 
         return results
@@ -237,12 +241,7 @@ class Card:
     def get_action_modifiers(card):
         modifiers = []
         for effect in card.actions.effects:
-            modifiers.append({
-                "modifier_type": effect.modifier_type,
-                "value": effect.value,
-                "target": getattr(effect.target, "name", None),
-                "label": getattr(effect, "label", None)
-            })
+            modifiers.append({"modifier_type": effect.modifier_type, "value": effect.value, "target": effect.target, "label": getattr(effect, "label", None)})
         return modifiers
 
     # =====================================================
@@ -262,8 +261,7 @@ class Card:
         if self.military.display_text:
             print(f"  {self.military.display_text}")
         else:
-            if (not self.military.formations and not self.military.effects
-                    and not self.military.text):
+            if not self.military.formations and not self.military.effects and not self.military.text:
                 print("  None")
             for formation in self.military.formations:
                 print(f"  {formation.display_name} ({formation._strength})")
@@ -278,7 +276,7 @@ class Card:
         # -------------------------------------------------
 
         print("\nAIR POWER")
-        if (not self.air_power.effects and not self.air_power.text):
+        if not self.air_power.effects and not self.air_power.text:
             print("  N/A")
         for effect in self.air_power.effects:
             print(f"  {effect}")
@@ -300,8 +298,7 @@ class Card:
         # ACTIONS
         # -------------------------------------------------
         print("\nACTIONS")
-        print(f"  Actions Available: "
-              f"{self.actions.actions_available}")
+        print(f"  Actions Available: {self.actions.actions_available}")
         if self.actions.conditional_actions:
             print("  Conditional Actions:")
             for effect in self.actions.conditional_actions:
@@ -316,3 +313,8 @@ class Card:
 class UnitBox:
     name: str
     units: list = field(default_factory=list)
+
+
+class Strategy(Enum):
+    HUMAN = "HUMAN"
+    RANDOM = "RANDOM"

@@ -14,20 +14,27 @@ class TestDefenseStrengthsCard13(unittest.TestCase):
 
     def test_british_second_army_in_tilly_card_14(self):
         BRITISH_SECOND_ARMY.location = tilly
-        result = calculate_defense_modifiers(card=card_014, army=BRITISH_SECOND_ARMY, weather=self.weather, print_modifiers=True)
+        result = calculate_defense_modifiers(card=card_014, army=BRITISH_SECOND_ARMY, weather=self.weather)
+        self.assertEqual(result["defense_strength"], 6)
+
+    def test_canadian_first_army_in_lebisey_wood_card_14(self):
+        CANADIAN_FIRST_ARMY.location = lebisey_wood
+        result = calculate_defense_modifiers(card=card_014, army=CANADIAN_FIRST_ARMY, weather=self.weather)
+        self.assertEqual(result["defense_strength"], 4)
+
+    def test_british_second_army_in_tilly_card_14_with_air_support(self):
+        BRITISH_SECOND_ARMY.location = tilly
+        result = calculate_defense_modifiers(card=card_014, army=BRITISH_SECOND_ARMY, weather=WEATHER_TABLE[6])
+        self.assertEqual(result["defense_strength"], 7)
+
+    def test_canadian_first_army_in_lebisey_wood_card_14_with_air_support(self):
+        CANADIAN_FIRST_ARMY.location = lebisey_wood
+        result = calculate_defense_modifiers(card=card_014, army=CANADIAN_FIRST_ARMY, weather=WEATHER_TABLE[6])
         self.assertEqual(result["defense_strength"], 5)
 
-    # def test_canadian_first_army_in_lebisey_wood_card_14(self):
-    #     CANADIAN_FIRST_ARMY.location = lebisey_wood
-    #     result = calculate_defense_modifiers(card=card_014, army=CANADIAN_FIRST_ARMY, weather=self.weather)
-    #     self.assertEqual(result["defense_strength"], 4)
+    def test_us_first_army_in_cherbourg_card_14(self):
+        US_FIRST_ARMY.location = cherbourg
+        result = calculate_defense_modifiers(card=card_014, army=US_FIRST_ARMY, weather=self.weather)
+        self.assertEqual(result["defense_strength"], 4)
 
-    # def test_british_second_army_in_tilly_card_14_with_air_support(self):
-    #     BRITISH_SECOND_ARMY.location = tilly
-    #     result = calculate_defense_modifiers(card=card_014, army=BRITISH_SECOND_ARMY, weather=WEATHER_TABLE[6])
-    #     self.assertEqual(result["defense_strength"], 7)
-
-    # def test_canadian_first_army_in_lebisey_wood_card_14_with_air_support(self):
-    #     CANADIAN_FIRST_ARMY.location = lebisey_wood
-    #     result = calculate_defense_modifiers(card=card_014, army=CANADIAN_FIRST_ARMY, weather=WEATHER_TABLE[6])
-    #     self.assertEqual(result["defense_strength"], 5)
+        

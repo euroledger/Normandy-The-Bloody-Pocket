@@ -1,14 +1,13 @@
 import sys
 from random import shuffle, randint
 from cards.decks import draw_deck, mid_deck, late_deck
-from core.allied_armies import CANADIAN_FIRST_ARMY
+from core.military import do_military_phase
 from core.weather import get_weather_result
-from core.resources import do_resource_phase_drms
+from core.resources import do_resource_phase_drms, do_resource_phase_reinforcements
 from core.carpet_bombing import get_carpet_bombing_result, ATTACK_CANCELLED
 from core.map.map_utilities import do_opening_setup
 from core.game_summary import print_game_summary
 from core.card_utilities import calculate_attack_modifiers, get_all_defending_armies, get_armies_as_objects, calculate_defense_modifiers
-from core.siege import calculate_siege_drm, get_siege_result
 
 GREEN = "\033[92m"
 RED = "\033[91m"
@@ -73,8 +72,6 @@ def print_defense_strengths(card, weather):
         print()
         # turn 1 no defense strength
 
-    num_jabos = weather.available_jabos
-
     # get all armies except inactive US 3rd Army and any army in start box or on beach after turn 2
 
     armies = get_all_defending_armies()
@@ -82,81 +79,6 @@ def print_defense_strengths(card, weather):
     print("********** DEFENDING ARMIES=", armies)
     for army in armies:
         calculate_defense_modifiers(card=card, army=army, weather=weather, print_modifiers=True)
-
-
-def perform_canadian_siege_roll(card, weather, carpet_bombing, defense_stength):
-    global canada_1_army_cards
-
-    print(CYAN)
-    print()
-    print("========================================")
-    print("CANADIAN 1ST ARMY SIEGE ROLL")
-    print("========================================")
-    print()
-
-    armies = get_armies_as_objects(card)
-
-    if CANADIAN_FIRST_ARMY not in armies:
-        print("\t=>NO ROLL")
-        print(RESET)
-        return defense_strength
-
-    canada_1_army_cards += 1
-
-    siege_roll = randint(1, 6)
-    modified_roll = siege_roll
-
-    canadian_result = calculate_attack_modifiers(card=card, army=CANADIAN_FIRST_ARMY, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing)
-
-    canadian_attack_strength = canadian_result["attack_strength"]
-
-    has_air_support = canadian_result["has_air_support"]
-
-    drm_result = calculate_siege_drm(attack_strength=canadian_attack_strength, defense_strength=defense_strength, has_air_support=has_air_support)
-
-    modified_roll += drm_result.drm
-
-    print(f"DEFENSE-ATTACK DIFFERENTIAL: {defense_strength - canadian_attack_strength}")
-
-    for reason in drm_result.reasons:
-        print(f"DRM: {reason}")
-
-    modified_roll = max(1, min(6, modified_roll))
-
-    siege_result = get_siege_result(modified_roll)
-
-    print()
-    print(f"BASE ROLL: {siege_roll}")
-    print(f"MODIFIED ROLL: {modified_roll}")
-    print()
-    print(f"RESULT: {siege_result.result_type.value}")
-
-    if siege_result.combat_steps_eliminated > 0:
-        steps_elim = min(defense_strength - 4, siege_result.combat_steps_eliminated)
-
-        print(f"COMBAT STEPS ELIMINATED: {steps_elim}")
-
-        defense_strength -= siege_result.combat_steps_eliminated
-
-        defense_strength = max(4, defense_strength)
-
-    print()
-    print(f"\t=>DEFENSE STRENGTH: {defense_strength}")
-
-    if siege_result.space_captured:
-        avg_hits_per_attack = starting_combat_strength / canada_1_army_cards
-
-        print("SPACE CAPTURED - END OF SIEGE")
-
-        print(f"=> NUMBER OF ATTACKS NEEDED TO END SIEGE={canada_1_army_cards}")
-
-        print(f"=> HITS PER ATTACK={avg_hits_per_attack:.2f}")
-
-        sys.exit("Bye")
-
-    print(RESET)
-
-    return defense_strength
 
 
 while True:
@@ -167,10 +89,6 @@ while True:
     print()
 
     print(f"Cards Drawn: {cards_drawn}")
-
-    print(f"Defense Strength: {defense_strength}")
-
-    print(f"Canadian 1st Army Attacks: {canada_1_army_cards}")
 
     if drawn_cards:
         drawn_ids = [str(card.card_id) for card in drawn_cards]
@@ -193,22 +111,26 @@ while True:
         print(f"Current Weather: {current_weather.weather_type.value}")
 
     print()
-
     if current_step == 1:
         print(f"{GREEN}> Draw Card{RESET}")
     else:
         print(f"{RED}  Draw Card{RESET}")
-
     if current_step == 2:
         print(f"{GREEN}> Roll For Weather{RESET}")
     else:
         print(f"{RED}  Roll For Weather{RESET}")
-
     if current_step == 3:
         print(f"{GREEN}> Resource Phase{RESET}")
     else:
         print(f"{RED}  Resource Phase{RESET}")
-
+    if current_step == 4:
+        print(f"{GREEN}> Deploy Non Panzer Div Reinforcements{RESET}")
+    else:
+        print(f"{RED}  Deploy Non Panzer Div Reinforcements{RESET}")
+    if current_step == 5:
+        print(f"{GREEN}> Military Phase{RESET}")
+    else:
+        print(f"{RED}  Military Phase{RESET}")
     # if current_step == 5:
     #     print(f"{GREEN}> Canadian 1st Army Siege Roll{RESET}")
     # else:
@@ -358,27 +280,31 @@ while True:
         print(f"RESOURCE PHASE - weather is {current_weather.weather_type.value}\n")
 
         print_attack_strengths(current_card, current_weather, current_carpet_bombing)
-
         print_defense_strengths(current_card, current_weather)
 
-
+        print(CYAN)
+        do_resource_phase_reinforcements(current_card)
+        print(RESET)
         input("Press ENTER to continue...")
-
-        current_step = 1
+        current_step = 4
 
         continue
 
-    # if current_step == 5 and user_input == "":
+    if current_step == 4 and user_input == "":
+        # TBD will be used when we have Nebelwerfer, Flak or Kampfgruppen to deploy
+        print(CYAN)
+        print("NONE")
+        print(RESET)
 
-    #     defense_strength = perform_canadian_siege_roll(
-    #         card=current_card,
-    #         weather=current_weather,
-    #         carpet_bombing=current_carpet_bombing,
-    #         defense_strength=defense_strength
-    #     )
+        input("Press ENTER to continue...")
+        current_step = 5
+        continue
 
-    #     input("Press ENTER to continue...")
+    if current_step == 5 and user_input == "":
+        print(CYAN)
+        do_military_phase(current_card, current_weather)
+        print(RESET)
+        input("Press ENTER to continue...")
+        current_step = 1
+        continue
 
-    #     current_step = 1
-
-    #     continue

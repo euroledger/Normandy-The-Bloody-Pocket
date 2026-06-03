@@ -7,16 +7,16 @@ can_1_start_box = MapSpace(
     terrain=TerrainType.START_BOX,
     terrain_value=0,
     track_number=7,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
-gold_juno_sword = MapSpace(
-    name="GOLD-JUNO-SWORD BEACH",
+gold_juno_sword_can = MapSpace(
+    name="GOLD-JUNO-SWORD BEACH (CANADIAN TRACK)",
     track=Nation.CAN_1,
     terrain=TerrainType.BEACH,
     terrain_value=2,
     track_number=6,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
 lebisey_wood = MapSpace(
@@ -25,7 +25,7 @@ lebisey_wood = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=5,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 caen = MapSpace(
@@ -35,7 +35,7 @@ caen = MapSpace(
     terrain_value=4,
     track_number=4,
     controlling_player=SideType.GERMAN,
-    fortified=True
+    fortified=True,
 )
 
 cagny = MapSpace(
@@ -44,7 +44,7 @@ cagny = MapSpace(
     terrain=TerrainType.TOWN,
     terrain_value=1,
     track_number=3,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 bourguebus_ridge = MapSpace(
@@ -53,7 +53,7 @@ bourguebus_ridge = MapSpace(
     terrain=TerrainType.HILL,
     terrain_value=2,
     track_number=2,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 falaise = MapSpace(
@@ -62,18 +62,8 @@ falaise = MapSpace(
     terrain=TerrainType.TOWN,
     terrain_value=1,
     track_number=1,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 
-
-can_1_track = [
-    can_1_start_box,
-    gold_juno_sword,
-    lebisey_wood,
-    caen,
-    cagny,
-    bourguebus_ridge,
-    falaise,
-    falaise_gap
-]
+can_1_track = [can_1_start_box, gold_juno_sword_can, lebisey_wood, caen, cagny, bourguebus_ridge, falaise, falaise_gap]

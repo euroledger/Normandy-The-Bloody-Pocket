@@ -1,6 +1,8 @@
 from core.enums import ModifierType, ResourceType
 from core.global_game_state import GlobalGameState
 from core.weather import WeatherType
+from core.enums import ReinforcementType
+from core.map.map_model import in_transit_box, strategic_reserve_box
 
 
 def do_resource_phase_drms(weather_type, card):
@@ -28,16 +30,33 @@ def do_resource_phase_drms(weather_type, card):
         elif effect.resource_type == ResourceType.HITLER_APPROVAL:
             GlobalGameState.hitler_approval_check_drm += effect.value
 
+
 def do_resource_phase_reinforcements(card):
-    # Add Panzer Divisions to In Transit box
-    # Add Other units to Strategic Reserve box
+    print()
+    print("========================================")
+    print("REINFORCEMENTS")
+    print("========================================")
+    print()
+    reinforcements = card.reinforcements()
+    if not reinforcements:
+        print("NONE")
+        return
+
+    for unit, quantity in reinforcements:
+        for _ in range(quantity):
+            if unit.type == ReinforcementType.PZ_DIV:
+                in_transit_box.units.append(unit)
+                print(f"{unit} -> IN TRANSIT")
+
+            else:
+                strategic_reserve_box.units.append(unit)
+                print(f"{unit} -> STRATEGIC RESERVE")
+
     print()
 
 
 # If the die roll is > base level for that resource, increase the resource level by one
 # up to its maximum
-
-
 def do_resource_roll(track, die_roll, drm=0):
     # die_roll = randint(1, 6)
     modified_roll = die_roll + drm

@@ -7,12 +7,8 @@ from core.carpet_bombing import get_carpet_bombing_result
 from core.carpet_bombing import ATTACK_CANCELLED
 
 from core.card_utilities import calculate_attack_modifiers
-from core.card_utilities import get_armies
-
-from core.siege import (
-    calculate_siege_drm,
-    get_siege_result
-)
+from core.card_utilities import get_armies, get_armies_as_objects
+from core.siege import calculate_siege_drm, get_siege_result
 
 from cards.card_3 import card as card_003
 from cards.card_4 import card as card_004
@@ -100,7 +96,7 @@ draw_deck = [
     card_021,
     card_022,
     card_023,
-    card_024
+    card_024,
 ]
 
 
@@ -120,7 +116,7 @@ mid_deck = [
     card_035,
     card_036,
     card_037,
-    card_043
+    card_043,
 ]
 
 
@@ -140,7 +136,7 @@ late_deck = [
     card_045,
     card_046,
     card_047,
-    card_048
+    card_048,
 ]
 
 
@@ -170,11 +166,8 @@ current_step = 1
 # ATTACK STRENGTHS
 # =========================================================
 
-def print_attack_strengths(
-    card,
-    weather,
-    carpet_bombing
-):
+
+def print_attack_strengths(card, weather, carpet_bombing):
 
     print(CYAN)
 
@@ -194,13 +187,8 @@ def print_attack_strengths(
     num_jabos = weather.available_jabos
 
     for army in armies:
-
         result = calculate_attack_modifiers(
-            card=card,
-            army=army,
-            num_jabos=num_jabos,
-            carpet_bombing=carpet_bombing,
-            print_modifiers=True
+            card=card, army=army, num_jabos=num_jabos, carpet_bombing=carpet_bombing, print_modifiers=True
         )
 
         print(result)
@@ -212,23 +200,15 @@ def print_attack_strengths(
 # CANADIAN 1ST ARMY SIEGE ROLL
 # =========================================================
 
-def perform_canadian_siege_roll(
-    card,
-    weather,
-    carpet_bombing,
-    defense_strength
-):
 
+def perform_canadian_siege_roll(card, weather, carpet_bombing, defense_strength):
     global canada_1_army_cards
-
     print(CYAN)
-
     print()
     print("========================================")
     print("CANADIAN 1ST ARMY SIEGE ROLL")
     print("========================================")
     print()
-
     armies = get_armies(card)
 
     # =====================================================
@@ -236,7 +216,6 @@ def perform_canadian_siege_roll(
     # =====================================================
 
     if "1st CAN" not in armies:
-
         print("\t=>NO ROLL")
 
         print(RESET)
@@ -258,28 +237,19 @@ def perform_canadian_siege_roll(
     # =====================================================
 
     canadian_result = calculate_attack_modifiers(
-        card=card,
-        army=CANADIAN_FIRST_ARMY,
-        num_jabos=weather.available_jabos,
-        carpet_bombing=carpet_bombing
+        card=card, army=CANADIAN_FIRST_ARMY, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing
     )
 
-    canadian_attack_strength = (
-        canadian_result["attack_strength"]
-    )
+    canadian_attack_strength = canadian_result["attack_strength"]
 
-    has_air_support = (
-        canadian_result["has_air_support"]
-    )
+    has_air_support = canadian_result["has_air_support"]
 
     # =====================================================
     # CALCULATE DRM
     # =====================================================
 
     drm_result = calculate_siege_drm(
-        attack_strength=canadian_attack_strength,
-        defense_strength=defense_strength,
-        has_air_support=has_air_support
+        attack_strength=canadian_attack_strength, defense_strength=defense_strength, has_air_support=has_air_support
     )
 
     modified_roll += drm_result.drm
@@ -288,10 +258,7 @@ def perform_canadian_siege_roll(
     # DISPLAY DRMS
     # =====================================================
 
-    print(
-        f"DEFENSE-ATTACK DIFFERENTIAL: "
-        f"{defense_strength - canadian_attack_strength}"
-    )
+    print(f"DEFENSE-ATTACK DIFFERENTIAL: {defense_strength - canadian_attack_strength}")
 
     for reason in drm_result.reasons:
         print(f"DRM: {reason}")
@@ -311,45 +278,34 @@ def perform_canadian_siege_roll(
 
     print()
 
-    print(
-        f"RESULT: "
-        f"{siege_result.result_type.value}"
-    )
+    print(f"RESULT: {siege_result.result_type.value}")
 
     # =====================================================
     # APPLY COMBAT STEP LOSSES
     # =====================================================
 
     if siege_result.combat_steps_eliminated > 0:
-        steps_elim=min(defense_strength-4, siege_result.combat_steps_eliminated)
-        print(
-            f"COMBAT STEPS ELIMINATED: {steps_elim}"
-        )
+        steps_elim = min(defense_strength - 4, siege_result.combat_steps_eliminated)
+        print(f"COMBAT STEPS ELIMINATED: {steps_elim}")
 
-        defense_strength -= (
-            siege_result.combat_steps_eliminated
-        )
+        defense_strength -= siege_result.combat_steps_eliminated
 
         defense_strength = max(4, defense_strength)
 
     print()
 
-    print(
-        f"\t=>DEFENSE STRENGTH: "
-        f"{defense_strength}"
-    )
+    print(f"\t=>DEFENSE STRENGTH: {defense_strength}")
 
     # =====================================================
     # SPACE CAPTURED
     # =====================================================
 
     if siege_result.space_captured:
-        avg_hits_per_attack =  starting_combat_strength / canada_1_army_cards
+        avg_hits_per_attack = starting_combat_strength / canada_1_army_cards
         print("SPACE CAPTURED - END OF SIEGE")
         print(f"=> NUMBER OF ATTACKS NEEDED TO END SIEGE={canada_1_army_cards}")
         print(f"=> HITS PER ATTACK={avg_hits_per_attack:.2f}")
         sys.exit("Bye")
-        
 
     print(RESET)
 
@@ -361,7 +317,6 @@ def perform_canadian_siege_roll(
 # =========================================================
 
 while True:
-
     print()
     print("========================================")
     print("SIEGE TEST ENGINE")
@@ -371,22 +326,14 @@ while True:
     print(f"Cards Drawn: {cards_drawn}")
     print(f"Defense Strength: {defense_strength}")
 
-    print(
-        f"Canadian 1st Army Attacks: "
-        f"{canada_1_army_cards}"
-    )
+    print(f"Canadian 1st Army Attacks: {canada_1_army_cards}")
 
     if drawn_cards:
-
-        drawn_ids = [
-            str(card.card_id)
-            for card in drawn_cards
-        ]
+        drawn_ids = [str(card.card_id) for card in drawn_cards]
 
         print(f"List of Drawn Cards: ({', '.join(drawn_ids)})")
 
     else:
-
         print("Drawn Cards: NONE")
 
     print(f"Cards Remaining: {len(draw_deck)}")
@@ -397,11 +344,7 @@ while True:
         print(f"Current Card: {current_card.card_id}")
 
     if current_weather:
-
-        print(
-            f"Current Weather: "
-            f"{current_weather.weather_type.value}"
-        )
+        print(f"Current Weather: {current_weather.weather_type.value}")
 
     print()
 
@@ -441,7 +384,6 @@ while True:
     # =====================================================
 
     if user_input == "Q":
-
         print("Goodbye.")
         break
 
@@ -450,9 +392,7 @@ while True:
     # =====================================================
 
     if current_step == 1 and user_input == "":
-
         if not draw_deck:
-
             print()
             print("DRAW DECK EMPTY")
             continue
@@ -474,11 +414,7 @@ while True:
         # ADD MID DECK
         # =================================================
 
-        if (
-            drawn_card.card_id == 20
-            and not mid_deck_added
-        ):
-
+        if drawn_card.card_id == 20 and not mid_deck_added:
             draw_deck.extend(mid_deck)
 
             shuffle(draw_deck)
@@ -499,11 +435,7 @@ while True:
         # ADD LATE DECK
         # =================================================
 
-        if (
-            drawn_card.card_id == 37
-            and not late_deck_added
-        ):
-
+        if drawn_card.card_id == 37 and not late_deck_added:
             draw_deck.extend(late_deck)
 
             shuffle(draw_deck)
@@ -540,7 +472,6 @@ while True:
     # =====================================================
 
     if current_step == 2 and user_input == "":
-
         weather_roll = randint(1, 6)
 
         weather = get_weather_result(weather_roll)
@@ -564,11 +495,7 @@ while True:
         # CARPET BOMBING
         # =================================================
 
-        if (
-            current_weather.available_jabos > 0
-            and current_card.air_power.has_carpet_bombing()
-        ):
-
+        if current_weather.available_jabos > 0 and current_card.air_power.has_carpet_bombing():
             print()
             print("========================================")
             print("CARPET BOMBING")
@@ -577,41 +504,25 @@ while True:
 
             carpet_roll = randint(1, 6)
 
-            carpet_result = get_carpet_bombing_result(
-                die_roll=carpet_roll,
-                drm=current_weather.carpet_bombing_drm
-            )
+            carpet_result = get_carpet_bombing_result(die_roll=carpet_roll, drm=current_weather.carpet_bombing_drm)
 
             print(f"ROLL: {carpet_roll}")
 
             if current_weather.carpet_bombing_drm == 1:
-
                 print("DRM: +1")
 
             else:
-
                 print("DRM: 0")
 
-            if (
-                carpet_result.attack_modifier
-                == ATTACK_CANCELLED
-            ):
-
+            if carpet_result.attack_modifier == ATTACK_CANCELLED:
                 print("RESULT: ATTACK CANCELLED")
 
                 current_carpet_bombing = 0
 
             else:
+                current_carpet_bombing = carpet_result.attack_modifier
 
-                current_carpet_bombing = (
-                    carpet_result.attack_modifier
-                )
-
-                print(
-                    f"RESULT: "
-                    f"{current_carpet_bombing:+} "
-                    f"ATTACK STRENGTH"
-                )
+                print(f"RESULT: {current_carpet_bombing:+} ATTACK STRENGTH")
 
         print(RESET)
 
@@ -624,9 +535,7 @@ while True:
     # =====================================================
 
     if current_step == 3 and user_input == "":
-
         if current_card is None:
-
             print()
             print("NO CURRENT CARD")
             print()
@@ -634,18 +543,13 @@ while True:
             continue
 
         if current_weather is None:
-
             print()
             print("NO CURRENT WEATHER")
             print()
 
             continue
 
-        print_attack_strengths(
-            current_card,
-            current_weather,
-            current_carpet_bombing
-        )
+        print_attack_strengths(current_card, current_weather, current_carpet_bombing)
 
         current_step = 4
 
@@ -656,14 +560,11 @@ while True:
     # =====================================================
 
     if current_step == 4 and user_input == "":
-
-        defense_strength = (
-            perform_canadian_siege_roll(
-                card=current_card,
-                weather=current_weather,
-                carpet_bombing=current_carpet_bombing,
-                defense_strength=defense_strength
-            )
+        defense_strength = perform_canadian_siege_roll(
+            card=current_card,
+            weather=current_weather,
+            carpet_bombing=current_carpet_bombing,
+            defense_strength=defense_strength,
         )
 
         current_step = 1

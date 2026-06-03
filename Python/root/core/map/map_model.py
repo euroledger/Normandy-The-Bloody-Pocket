@@ -9,8 +9,6 @@ class TerrainType(Enum):
     HILL = ("Hill", 2)
     BEACH = ("Beach", 2)
     FORTRESS = ("Fortress", 4)
-    FORTIFIED_VILLAGE_1 = ("Fortified Village+1", 1)
-    FORTIFIED_VILLAGE_2 = ("Fortified Village+1", 2)
     FALAISE_GAP = ("Falaise Gap", 1)
     START_BOX = ("Start Box", 0)
 
@@ -27,6 +25,7 @@ class MapSpace:
     controlling_player: SideType
     terrain_value: int = 0
     track_number: int = 0
+    fortified_village_modifier: int = 0
     fortified: bool = False
     under_siege: bool = False
     units: list = field(default_factory=list)

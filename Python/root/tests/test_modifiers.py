@@ -26,22 +26,22 @@ class TestModifiers(unittest.TestCase):
         expected = [{
             "modifier_type": ModifierType.DEFENSE_STRENGTH,
             "value": 2,
-            "target": US_FIRST_ARMY.name,
+            "target": US_FIRST_ARMY,
             "label": None
         }, {
             "modifier_type": ModifierType.DEFENSE_STRENGTH,
             "value": 2,
-            "target": BRITISH_SECOND_ARMY.name,
+            "target": BRITISH_SECOND_ARMY,
             "label": None
         }, {
             "modifier_type": ModifierType.DEFENSE_STRENGTH,
             "value": 2,
-            "target": CANADIAN_FIRST_ARMY.name,
+            "target": CANADIAN_FIRST_ARMY,
             "label": None
         }, {
             "modifier_type": ModifierType.DEFENSE_STRENGTH,
             "value": 2,
-            "target": US_THIRD_ARMY.name,
+            "target": US_THIRD_ARMY,
             "label": None
         }]
 
@@ -54,17 +54,17 @@ class TestModifiers(unittest.TestCase):
         expected = [{
             "modifier_type": ModifierType.ATTACK_STRENGTH,
             "value": 1,
-            "target": BRITISH_SECOND_ARMY.name,
+            "target": BRITISH_SECOND_ARMY,
             "label": None
         }, {
             "modifier_type": ModifierType.ATTACK_STRENGTH,
             "value": 1,
-            "target": CANADIAN_FIRST_ARMY.name,
+            "target": CANADIAN_FIRST_ARMY,
             "label": None
         }, {
             "modifier_type": ModifierType.COMMANDER,
             "value": 2,
-            "target": BRITISH_SECOND_ARMY.name,
+            "target": BRITISH_SECOND_ARMY,
             "label": "Montgomery"
         }]
 

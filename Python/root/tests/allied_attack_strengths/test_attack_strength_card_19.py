@@ -1,0 +1,19 @@
+import unittest
+
+from cards.card_19 import card as card_19
+from tests.allied_attack_strengths.attack_strength_test_utilities import assert_attack_strengths
+from core.card_utilities import get_armies, get_armies_as_objects  # =========================================================
+# TEST ATTACK STRENGTH CARD 19
+# =========================================================
+
+
+class TestAttackStrengthCard19(unittest.TestCase):
+    def setUp(self):
+        self.armies = get_armies_as_objects(card_19)
+
+    def test_attack_strength(self):
+        print("\n  CARD 19 -> NO ARMIES OR AIR POWER")
+        print("  =================================")
+
+        expected_attack_strengths = {}
+        assert_attack_strengths(test_case=self, armies=self.armies, expected_attack_strengths=expected_attack_strengths, card=card_19)

@@ -79,7 +79,11 @@ us_viii_track = [
     st_malo,
     brest,
     lorient,
-    rennes
+    rennes,
+    le_mans,
+    alencon,
+    argentan,
+    falaise_gap
 ]
 
 us_xv_track = [
@@ -89,3 +93,4 @@ us_xv_track = [
     argentan,
     falaise_gap
 ]
+

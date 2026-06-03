@@ -31,7 +31,6 @@ def create_nebelwerfer():
                       "Nebelwerfer",
                       combat_value=1)
 
-
 def create_flak88():
     return GermanUnit(ReinforcementType.FLAK_88, "Flak 88", combat_value=2)
 
@@ -40,3 +39,4 @@ def create_kampfgruppe():
     return GermanUnit(ReinforcementType.KAMPFGRUPPE,
                       "Kampfgruppe",
                       combat_value=1)
+
