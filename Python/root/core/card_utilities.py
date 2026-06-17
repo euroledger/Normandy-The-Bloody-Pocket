@@ -30,7 +30,7 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
     print("CALCULATE ATTACK MODIFIERS")
     print("==============================")
     print("army =", army)
-    print("num_jabos =", num_jabos)
+    # print("num_jabos =", num_jabos)
     print("modifier_target =", modifier_target)
 
     # =========================================================

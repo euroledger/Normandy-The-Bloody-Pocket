@@ -38,14 +38,14 @@ def add_units_to_space(space, units):
         if isinstance(unit, AlliedArmy):
             unit.location = space
 
-
-# def german_defense_strength(space):
-#     terrain_value = space.terrain_value
-#     if space.terrain == TerrainType.BOCAGE:
-#         terrain_value += GlobalGameState.bocage_defense_modifier
-
-#     terrain_value += space.fortified_village_modifier
-#     return terrain_value + sum(unit.combat_value for unit in space.units)
+def remove_units_from_space(space, units):
+    if not isinstance(units, list):
+        units = [units]
+    for unit in units:
+        if (unit in space.units):
+            space.units.remove(unit)
+            if isinstance(unit, AlliedArmy):
+                unit.location = None
 
 def german_defense_strength(space):
     terrain_value = space.terrain_value

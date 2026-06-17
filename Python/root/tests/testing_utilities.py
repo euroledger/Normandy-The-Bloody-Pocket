@@ -1,5 +1,5 @@
 from core.global_game_state import GlobalGameState
-from core.map.map_utilities import add_units_to_space, reset_map
+from core.map.map_utilities import add_units_to_space, reset_german_panzer_divisions, reset_map
 from core.german_units import SS_9, create_flak88, create_kampfgruppe, create_nebelwerfer
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS
 from core.map.map_spaces_us_1 import avranches, mortain
@@ -22,6 +22,7 @@ def flip_all_allied_armies():
 def test_setup_units():
     reset_map()
     flip_all_allied_armies()
+    reset_german_panzer_divisions()
     GlobalGameState.bocage_defense_modifier = -1
 
 
@@ -43,6 +44,7 @@ def test_setup_units():
     add_units_to_space(mont_pincon, [create_nebelwerfer()])
     add_units_to_space(cagny, [SS_9, create_flak88()])
     add_units_to_space(brest, [create_kampfgruppe()])
+    add_units_to_space(caen, [create_kampfgruppe()])
     add_units_to_space(le_mans, [create_kampfgruppe()])
 
     # FORTIFIED VILLAGES IN MORTAIN AND CAGNY

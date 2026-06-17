@@ -12,7 +12,7 @@ from core.enums import Nation
 from core.map.map_spaces_us_1 import us_1_track
 from core.map.map_spaces_brit_2 import brit_2_track
 from core.map.map_spaces_can_1 import can_1_track
-from core.map.map_spaces_us_3 import us_viii_track, us_xv_track
+from core.map.map_spaces_us_3 import us_viii_track
 from core.siege import calculate_siege_drm, get_siege_result
 
 
@@ -99,7 +99,9 @@ def do_german_losses(space):
 
         selection = int(input("Select unit to take loss: "))
         casualty = german_units[selection - 1]
-
+    elif GlobalGameState.german_casualty_strategy == Strategy.UNIT_TEST:
+        # Always take first unit in list as loss for unit tests
+        casualty = german_units[0]
     elif GlobalGameState.german_casualty_strategy == Strategy.RANDOM:
         casualty = choice(german_units)
 
@@ -149,7 +151,6 @@ def get_carpet_bombing_modifier(card, weather, die_roll=None):
     if weather.available_jabos == 0:
         return 0
     actual_die_roll = die_roll if die_roll is not None else randint(1, 6)
-    print("QUACK drm=", weather.carpet_bombing_drm)
     result = get_carpet_bombing_result(die_roll=actual_die_roll, drm=weather.carpet_bombing_drm)
 
     if result.attack_modifier == ATTACK_CANCELLED:
@@ -248,6 +249,7 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
         if target_space.under_siege or (
             defense_strength - attack_strength >= 6 and target_space.terrain == TerrainType.FORTRESS
         ):
+            print("********* QUACK carpet_bombing=", carpet_bombing)
             target_space.under_siege = True
             do_siege_roll(
                 space=target_space,
@@ -298,4 +300,5 @@ def do_military_phase(card, weather):
     for army in armies:
         print(f" - {army}")
 
-    do_allied_attacks(armies, card, weather)
+    carpet_bombing = get_carpet_bombing_modifier(card, weather)
+    do_allied_attacks(armies, card, weather, carpet_bombing)

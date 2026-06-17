@@ -1,6 +1,7 @@
 import sys
 from random import shuffle, randint
 from cards.decks import draw_deck, mid_deck, late_deck
+from core.actions import do_action_phase
 from core.military import do_military_phase
 from core.weather import get_weather_result
 from core.resources import do_resource_phase_drms, do_resource_phase_reinforcements
@@ -131,6 +132,10 @@ while True:
         print(f"{GREEN}> Military Phase{RESET}")
     else:
         print(f"{RED}  Military Phase{RESET}")
+    if current_step == 6:
+        print(f"{GREEN}> Action Phase{RESET}")
+    else:
+        print(f"{RED}  Action Phase{RESET}")
     # if current_step == 5:
     #     print(f"{GREEN}> Canadian 1st Army Siege Roll{RESET}")
     # else:
@@ -234,6 +239,7 @@ while True:
         print("========================================")
         print()
 
+
         print(f"ROLL: {weather_roll}")
 
         print(f"RESULT: {weather.weather_type.value}")
@@ -305,6 +311,14 @@ while True:
         do_military_phase(current_card, current_weather)
         print(RESET)
         input("Press ENTER to continue...")
-        current_step = 1
+        current_step = 6
+        continue
+
+    if current_step == 6 and user_input == "":
+        print(CYAN)
+        do_action_phase(current_card, current_weather)
+        print(RESET)
+        input("Press ENTER to continue...")
+        current_step = 6
         continue
 

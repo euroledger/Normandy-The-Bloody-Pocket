@@ -1,5 +1,11 @@
 import unittest
 from cards.card_38 import card as card_038
+from cards.card_48 import card as card_048
+from cards.card_45 import card as card_045
+from cards.card_41 import card as card_041
+from cards.card_43 import card as card_043
+from cards.card_29 import card as card_029
+
 from core.allied_armies import US_VIII_CORPS
 from core.german_units import SS_1, SS_12
 from core.map.map_utilities import add_units_to_space
@@ -14,8 +20,9 @@ from tests.testing_utilities import test_setup_units
 class TestSiegeBrest(unittest.TestCase):
     def setUp(self):
         test_setup_units()
-        GlobalGameState.german_casualty_strategy = Strategy.RANDOM
+        GlobalGameState.german_casualty_strategy = Strategy.UNIT_TEST
         self.weather = WEATHER_TABLE[1]
+        brest.under_siege = False
         add_units_to_space(brest, [SS_1, SS_12])
 
     def test_us_viii_corps_begins_siege_of_brest(self):
@@ -29,5 +36,77 @@ class TestSiegeBrest(unittest.TestCase):
         self.assertEqual(US_VIII_CORPS.location, st_malo)
         self.assertEqual(len(brest.units), 3)
 
+    def test_us_viii_corps_begins_siege_of_brest_successive_die_rolls_6(self):
+        self.assertEqual(len(brest.units), 3)
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        self.assertFalse(brest.under_siege)
+
+        do_allied_attacks([US_VIII_CORPS], card_038, self.weather, die_roll=6)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        self.assertEqual(len(brest.units), 2)
+
+    def test_us_viii_corps_begins_siege_of_brest_with_air_power(self):
+        # clear weather - VIII Corps gets Air Support
+        self.weather = WEATHER_TABLE[6]
+        self.assertEqual(len(brest.units), 3)
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        self.assertFalse(brest.under_siege)
+
+        do_allied_attacks([US_VIII_CORPS], card_048, self.weather, die_roll=4)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        self.assertEqual(len(brest.units), 2)
+
+    def test_us_viii_corps_resolve_siege(self):
+        # clear weather - VIII Corps gets Air Support
+
+        # SIEGE FIRST ROUND
+        self.weather = WEATHER_TABLE[6]
+        self.assertEqual(len(brest.units), 3)
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        self.assertFalse(brest.under_siege)
+
+        do_allied_attacks([US_VIII_CORPS], card_038, self.weather, die_roll=6)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        # One combat units eliminated by modified die roll of 4
+        self.assertEqual(len(brest.units), 2)
+
+        # SIEGE SECOND ROUND
+        self.assertTrue(brest.under_siege)
+        do_allied_attacks([US_VIII_CORPS], card_045, self.weather, die_roll=3)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        # No Combat Units Eliminated by modified die roll of 1
+        self.assertEqual(len(brest.units), 2)
+
+        # SIEGE THIRD ROUND
+        self.assertTrue(brest.under_siege)
+        do_allied_attacks([US_VIII_CORPS], card_041, self.weather, die_roll=6)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        # No Combat Units Eliminated
+        self.assertEqual(len(brest.units), 1)
+
+        # SIEGE FOURTH ROUND
+        self.assertTrue(brest.under_siege)
+        do_allied_attacks([US_VIII_CORPS], card_043, self.weather, die_roll=4)
+        self.assertTrue(brest.under_siege)
+
+        self.assertEqual(US_VIII_CORPS.location, st_malo)
+        # 3 Combat Units Eliminated, None left in Fortress
+        self.assertEqual(len(brest.units), 0)
+
+        # SIEGE FIFTH ROUND -Brest Falls
+        self.assertTrue(brest.under_siege)
+        do_allied_attacks([US_VIII_CORPS], card_029, self.weather, die_roll=6)
+        self.assertFalse(brest.under_siege)
+        self.assertEqual(US_VIII_CORPS.location, brest)
 
 

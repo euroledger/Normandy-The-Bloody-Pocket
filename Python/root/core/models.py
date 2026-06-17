@@ -316,5 +316,6 @@ class UnitBox:
 
 
 class Strategy(Enum):
+    UNIT_TEST = "TEST"
     HUMAN = "HUMAN"
     RANDOM = "RANDOM"

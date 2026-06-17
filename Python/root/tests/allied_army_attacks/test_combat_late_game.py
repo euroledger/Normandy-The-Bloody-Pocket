@@ -16,7 +16,6 @@ class TestCombatLateGame(unittest.TestCase):
         GlobalGameState.german_casualty_strategy = Strategy.RANDOM
         self.weather = WEATHER_TABLE[1]
 
-    @unittest.skip
     def test_us_first_army_attack_mortain_natural_6(self):
         self.assertEqual(US_FIRST_ARMY.location, avranches)
         self.assertEqual(len(mortain.units), 2)
