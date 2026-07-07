@@ -4,8 +4,8 @@ from cards.card_3 import card as card_003
 
 from core.weather import WEATHER_TABLE
 from core.military import do_allied_attacks, advance_army_one_space
-from core.map.map_utilities import do_opening_setup
-from core.map.map_spaces_us_1 import utah_omaha, carentan
+from core.map.map_utilities import add_units_to_space, do_opening_setup
+from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes, us_1_track
 from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux
 from core.map.map_spaces_can_1 import gold_juno_sword_can, lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
@@ -75,7 +75,6 @@ class TestAlliedAttacks(unittest.TestCase):
         self.assertEqual(BRITISH_SECOND_ARMY.location, bayeux)
         self.assertEqual(len(bayeux.units), 1)
 
-
     def test_british_second_army_attack_bayeux_natural_1(self):
         advance_army_one_space(BRITISH_SECOND_ARMY)
 
@@ -96,7 +95,6 @@ class TestAlliedAttacks(unittest.TestCase):
         self.assertEqual(bayeux.units[1].combat_value, 1)
         self.assertEqual(bayeux.units[2].combat_value, 1)
         self.assertEqual(bayeux.units[3].combat_value, 2)
-
 
     def test_canadian_first_army_attack_lebisey_wood_natural_6(self):
         advance_army_one_space(CANADIAN_FIRST_ARMY)
@@ -123,3 +121,13 @@ class TestAlliedAttacks(unittest.TestCase):
         self.assertEqual(lebisey_wood.units[0].combat_value, 1)
         self.assertEqual(lebisey_wood.units[1].combat_value, 1)
         self.assertEqual(lebisey_wood.units[2].combat_value, 2)
+
+    def test_us_first_army_advance_updates_front_line_space(self):
+        add_units_to_space(carentan, US_FIRST_ARMY)
+        advance_army_one_space(US_FIRST_ARMY)
+
+        self.assertEqual(US_FIRST_ARMY.location, valognes)
+        self.assertEqual(GlobalGameState.us_1_front_line, valognes.track_number)
+
+        front_line_space = next(space for space in us_1_track if space.track_number == GlobalGameState.us_1_front_line)
+        self.assertEqual(front_line_space, valognes)

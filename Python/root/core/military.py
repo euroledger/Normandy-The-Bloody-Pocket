@@ -1,6 +1,13 @@
 from core.card_utilities import get_armies_as_objects
 from random import randint
-from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
+from core.allied_armies import (
+    US_FIRST_ARMY,
+    BRITISH_SECOND_ARMY,
+    CANADIAN_FIRST_ARMY,
+    US_THIRD_ARMY,
+    US_VIII_CORPS,
+    US_XV_CORPS,
+)
 from core.carpet_bombing import ATTACK_CANCELLED, get_carpet_bombing_result
 from core.map.map_model import TerrainType, eliminated_units_box
 from core.card_utilities import calculate_attack_modifiers
@@ -12,7 +19,7 @@ from core.enums import Nation
 from core.map.map_spaces_us_1 import us_1_track
 from core.map.map_spaces_brit_2 import brit_2_track
 from core.map.map_spaces_can_1 import can_1_track
-from core.map.map_spaces_us_3 import us_viii_track
+from core.map.map_spaces_us_3 import us_viii_track, us_xv_track
 from core.siege import calculate_siege_drm, get_siege_result
 
 
@@ -25,15 +32,61 @@ def get_track_for(army):
         track = can_1_track
     elif army.nation == Nation.US_3:
         track = us_viii_track
+    elif army.nation == Nation.US_VIII:
+        track = us_viii_track
+    elif army.nation == Nation.US_XV:
+        track = us_xv_track
     else:
         raise ValueError(f"Unknown army nation: {army.nation}")
     return track
 
 
+def update_front_line_for_army(army, track_number):
+    if army == US_FIRST_ARMY:
+        GlobalGameState.us_1_front_line = track_number
+    elif army == BRITISH_SECOND_ARMY:
+        GlobalGameState.brit_2_front_line = track_number
+    elif army == CANADIAN_FIRST_ARMY:
+        GlobalGameState.can_1_front_line = track_number
+    elif army == US_THIRD_ARMY:
+        GlobalGameState.us_3_front_line = track_number
+    elif army == US_VIII_CORPS:
+        GlobalGameState.us_viii_front_line = track_number
+    elif army == US_XV_CORPS:
+        GlobalGameState.us_xv_front_line = track_number
+    else:
+        raise ValueError(f"Unknown army: {army}")
+
+def get_front_line_space(army):
+    track = get_track_for(army)
+
+    if army == US_FIRST_ARMY:
+        front_line = GlobalGameState.us_1_front_line
+    elif army == BRITISH_SECOND_ARMY:
+        front_line = GlobalGameState.brit_2_front_line
+    elif army == CANADIAN_FIRST_ARMY:
+        front_line = GlobalGameState.can_1_front_line
+    elif army == US_THIRD_ARMY:
+        front_line = GlobalGameState.us_3_front_line
+    elif army == US_VIII_CORPS:
+        front_line = GlobalGameState.us_viii_front_line
+    elif army == US_XV_CORPS:
+        front_line = GlobalGameState.us_xv_front_line
+    else:
+        raise ValueError(f"Unknown army: {army}")
+
+    return next(
+        space for space in track
+        if space.track_number == front_line
+    )
+
 def advance_army_one_space(army):
     track = get_track_for(army)
     current_space = army.location
-    next_space = next((space for space in track if space.track_number == current_space.track_number - 1), None)
+    next_space = next(
+        (space for space in track if space.track_number == current_space.track_number - 1),
+        None
+    )
 
     if next_space is None:
         return
@@ -41,6 +94,9 @@ def advance_army_one_space(army):
     current_space.units.remove(army)
     next_space.units.append(army)
     army.location = next_space
+
+    update_front_line_for_army(army, next_space.track_number)
+
     print(f"\nALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
 
 
@@ -249,7 +305,6 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
         if target_space.under_siege or (
             defense_strength - attack_strength >= 6 and target_space.terrain == TerrainType.FORTRESS
         ):
-            print("********* QUACK carpet_bombing=", carpet_bombing)
             target_space.under_siege = True
             do_siege_roll(
                 space=target_space,

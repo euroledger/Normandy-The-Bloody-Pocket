@@ -20,6 +20,8 @@ class SideType(Enum):
 class Nation(Enum):
     US_1 = "US FIRST ARMY"
     US_3 = "US THIRD ARMY"
+    US_VIII = "US EIGHTH CORPS"
+    US_XV = "US_XV_CORPS"
     BRIT_2 = "BRIT SECOND ARMY"
     CAN_1 = "CANADIAN FIRST ARMY"
     GER = "GERMAN SEVENTH ARMY"

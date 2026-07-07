@@ -56,9 +56,8 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
                 if effect.modifier_type == ModifierType.AIR_POWER:
                     first_air_power_target = effect.target
                     break
-            if army == first_air_power_target:
+            if modifier_target == first_air_power_target:
                 jabo_strength = num_jabos
-
     if jabo_strength > 0:
         total_attack_strength += jabo_strength
         attack_breakdown.append(f"{jabo_strength:+} Jabo")
@@ -132,8 +131,7 @@ def calculate_defense_modifiers(card, army, weather, print_modifiers=False):
                 if effect.modifier_type == ModifierType.AIR_POWER:
                     first_air_power_target = effect.target
                     break
-
-            if army == first_air_power_target:
+            if modifier_target == first_air_power_target:
                 jabo_strength = num_jabos
 
     if jabo_strength > 0:

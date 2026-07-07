@@ -19,8 +19,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
 
         print("\n  OVERCAST -> NO AIR POWER")
         print("  =================================")
-        expected_attack_strengths = {"US 1st ARMY": 0, "US 3rd ARMY": 2}
-        expected_has_air_support = {"US 1st ARMY": False, "US 3rd ARMY": False}
+        expected_attack_strengths = {
+            "US 1st ARMY": 0,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": False,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+        }
 
         assert_attack_strengths(
             test_case=self,
@@ -39,8 +49,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
         carpet_bombing = get_carpet_bombing_result(die_roll=1, drm=weather.carpet_bombing_drm)
         self.assertEqual(carpet_bombing.attack_modifier, 2)
 
-        expected_attack_strengths = {"US 1st ARMY": 3, "US 3rd ARMY": 4}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": True}
+        expected_attack_strengths = {
+            "US 1st ARMY": 3,
+            "US 3rd ARMY": 4,
+            "US VIII CORPS": 4,
+            "US XV CORPS": 4,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": True,
+            "US VIII CORPS": True,
+            "US XV CORPS": True,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,
@@ -56,9 +76,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
         print("  =================================")
         carpet_bombing = get_carpet_bombing_result(die_roll=4, drm=weather.carpet_bombing_drm)
         self.assertEqual(carpet_bombing.attack_modifier, 1)
-        expected_attack_strengths = {"US 1st ARMY": 2, "US 3rd ARMY": 3}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": True}
-
+        expected_attack_strengths = {
+            "US 1st ARMY": 2,
+            "US 3rd ARMY": 3,
+            "US VIII CORPS": 3,
+            "US XV CORPS": 3,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": True,
+            "US VIII CORPS": True,
+            "US XV CORPS": True,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,
@@ -74,8 +103,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
 
         print("\n  PARTLY CLEAR -> NO CARPET BOMBING")
         print("  =================================")
-        expected_attack_strengths = {"US 1st ARMY": 1, "US 3rd ARMY": 2}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": False}
+        expected_attack_strengths = {
+            "US 1st ARMY": 1,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,
@@ -97,8 +136,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
         print("  ==========================")
 
         self.assertEqual(carpet_bombing.attack_modifier, 2)
-        expected_attack_strengths = {"US 1st ARMY": 3, "US 3rd ARMY": 4}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": True}
+        expected_attack_strengths = {
+            "US 1st ARMY": 3,
+            "US 3rd ARMY": 4,
+            "US VIII CORPS": 4,
+            "US XV CORPS": 4,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": True,
+            "US VIII CORPS": True,
+            "US XV CORPS": True,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,
@@ -115,8 +164,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
         self.assertEqual(carpet_bombing.attack_modifier, 1)
         print("\n  CLEAR -> +1 CARPET BOMBING")
         print("  ==========================")
-        expected_attack_strengths = {"US 1st ARMY": 2, "US 3rd ARMY": 3}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": True}
+        expected_attack_strengths = {
+            "US 1st ARMY": 2,
+            "US 3rd ARMY": 3,
+            "US VIII CORPS": 3,
+            "US XV CORPS": 3,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": True,
+            "US VIII CORPS": True,
+            "US XV CORPS": True,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,
@@ -133,9 +192,18 @@ class TestAttackStrengthCard31(unittest.TestCase):
 
         print("\n  CLEAR -> NO CARPET BOMBING")
         print("  ==========================")
-
-        expected_attack_strengths = {"US 1st ARMY": 1, "US 3rd ARMY": 2}
-        expected_has_air_support = {"US 1st ARMY": True, "US 3rd ARMY": False}
+        expected_attack_strengths = {
+            "US 1st ARMY": 1,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": True,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+        }
         assert_attack_strengths(
             test_case=self,
             armies=self.armies,

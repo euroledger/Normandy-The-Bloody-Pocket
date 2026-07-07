@@ -12,6 +12,12 @@ class TestGermanUnits(unittest.TestCase):
         carentan.units.clear()
         bayeux.units.clear()
         lebisey_wood.units.clear()
+
+        carentan.model_modifier = 0
+        bayeux.model_modifier = 0
+        lebisey_wood.model_modifier = 0
+        tilly.model_modifier = 0
+
         do_opening_setup()
 
     def test_carentan(self):
@@ -31,3 +37,8 @@ class TestGermanUnits(unittest.TestCase):
     def test_tilly(self):
         self.assertEqual(len(tilly.units), 0)
         self.assertEqual(german_defense_strength(tilly), 2)
+
+    def test_model_adds_one_to_german_defense(self):
+        carentan.model_modifier = 1
+        self.assertEqual(german_defense_strength(carentan), 4)
+        carentan.model_modifier = 0

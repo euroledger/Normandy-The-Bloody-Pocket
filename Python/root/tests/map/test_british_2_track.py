@@ -2,9 +2,13 @@ import unittest
 from core.map.map_spaces_brit_2 import brit_2_track
 from core.enums import SideType
 from core.map.map_model import TerrainType
+from core.map.map_utilities import do_opening_setup
 
 
 class TestBrit2Track(unittest.TestCase):
+    def setUp(self):
+        do_opening_setup()
+
     def test_track_has_8_spaces(self):
         self.assertEqual(len(brit_2_track), 8)
 

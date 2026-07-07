@@ -22,9 +22,9 @@ US_FIRST_ARMY = AlliedArmy(name="US 1st ARMY",
                            reverse_strength=4)
 
 US_VIII_CORPS = AlliedArmy(name="US VIII CORPS",
-                           nation=Nation.US_3,
+                           nation=Nation.US_VIII,
                            _strength=2)
 
-US_XV_CORPS = AlliedArmy(name="US XV CORPS", nation=Nation.US_3, _strength=2)
+US_XV_CORPS = AlliedArmy(name="US XV CORPS", nation=Nation.US_XV, _strength=2)
 
 US_THIRD_ARMY = AlliedArmy(name="US 3rd ARMY", nation=Nation.US_3, _strength=4, merged=True)

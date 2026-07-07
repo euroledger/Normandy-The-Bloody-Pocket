@@ -79,9 +79,8 @@ class TestResourcesAndReinforcements(unittest.TestCase):
         self.assertEqual(quantity, 1)
 
 
-def test_card_25_has_no_reinforcements(self):
-
-    self.assertEqual(card_25.reinforcements(), [])
+    def test_card_25_has_no_reinforcements(self):
+        self.assertEqual(card_25.reinforcements(), [])
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@ class GlobalGameState:
     brit_2_front_line = 7
     can_1_front_line = 7
     us_3_front_line = 8
+    us_viii_front_line = 7
+    us_xv_front_line = 4
 
     # RESOURCE ROLL DRMs
     transport_roll_drm = 0
@@ -21,3 +23,17 @@ class GlobalGameState:
 
     # HUMAN/AI TOGGLES
     german_casualty_strategy = Strategy.HUMAN
+
+    actions_left_this_turn = 0
+
+    # CARD/DECK STATE
+    cards_drawn = 0
+    drawn_cards = []
+    mid_deck_added = False
+    late_deck_added = False
+
+    current_card = None
+    current_weather = None
+    current_carpet_bombing = 0
+    current_step = 1
+    

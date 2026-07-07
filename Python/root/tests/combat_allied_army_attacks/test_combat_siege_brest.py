@@ -14,12 +14,12 @@ from core.military import do_allied_attacks
 from core.map.map_spaces_us_3 import st_malo, brest
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
-from tests.testing_utilities import test_setup_units
+from tests.core_mechanics.testing_utilities import setup_units_for_tests
 
 
 class TestSiegeBrest(unittest.TestCase):
     def setUp(self):
-        test_setup_units()
+        setup_units_for_tests()
         GlobalGameState.german_casualty_strategy = Strategy.UNIT_TEST
         self.weather = WEATHER_TABLE[1]
         brest.under_siege = False
@@ -108,5 +108,3 @@ class TestSiegeBrest(unittest.TestCase):
         do_allied_attacks([US_VIII_CORPS], card_029, self.weather, die_roll=6)
         self.assertFalse(brest.under_siege)
         self.assertEqual(US_VIII_CORPS.location, brest)
-
-

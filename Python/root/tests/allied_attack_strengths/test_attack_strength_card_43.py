@@ -17,8 +17,22 @@ class TestAttackStrengthCard43(unittest.TestCase):
 
         print("\n  OVERCAST -> NO AIR POWER")
         print("  =================================")
-        expected_attack_strengths = {"US 1st ARMY": 2, "US 3rd ARMY": 2, "BRITISH XXX CORPS": 2, "BRITISH I CORPS": 2}
-        expected_has_air_support = {"US 1st ARMY": False, "US 3rd ARMY": False, "BRITISH XXX CORPS": False, "BRITISH I CORPS": False}
+        expected_attack_strengths = {
+            "US 1st ARMY": 2,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+            "BRITISH XXX CORPS": 2,
+            "BRITISH I CORPS": 2,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": False,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+            "BRITISH XXX CORPS": False,
+            "BRITISH I CORPS": False,
+        }
 
         assert_attack_strengths(test_case=self, armies=self.armies, expected_attack_strengths=expected_attack_strengths, card=card_43, expected_has_air_support=expected_has_air_support)
 
@@ -27,8 +41,22 @@ class TestAttackStrengthCard43(unittest.TestCase):
         self.assertEqual(weather.available_jabos, 1)
         print("\n  PARTLY CLEAR")
         print("  ============")
-        expected_attack_strengths = {"US 1st ARMY": 2, "US 3rd ARMY": 2, "BRITISH XXX CORPS": 2, "BRITISH I CORPS": 3}
-        expected_has_air_support = {"US 1st ARMY": False, "US 3rd ARMY": False, "BRITISH XXX CORPS": False, "BRITISH I CORPS": True}
+        expected_attack_strengths = {
+            "US 1st ARMY": 2,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+            "BRITISH XXX CORPS": 2,
+            "BRITISH I CORPS": 3,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": False,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+            "BRITISH XXX CORPS": False,
+            "BRITISH I CORPS": True,
+        }
         assert_attack_strengths(test_case=self, armies=self.armies, expected_attack_strengths=expected_attack_strengths, card=card_43, num_jabos=weather.available_jabos, expected_has_air_support=expected_has_air_support)
 
     def test_03_attack_strength_clear(self):
@@ -39,6 +67,20 @@ class TestAttackStrengthCard43(unittest.TestCase):
         print("\n  CLEAR")
         print("  =====")
 
-        expected_attack_strengths = {"US 1st ARMY": 2, "US 3rd ARMY": 2, "BRITISH XXX CORPS": 3, "BRITISH I CORPS": 3}
-        expected_has_air_support = {"US 1st ARMY": False, "US 3rd ARMY": False, "BRITISH XXX CORPS": True, "BRITISH I CORPS": True}
+        expected_attack_strengths = {
+            "US 1st ARMY": 2,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
+            "BRITISH XXX CORPS": 3,
+            "BRITISH I CORPS": 3,
+        }
+        expected_has_air_support = {
+            "US 1st ARMY": False,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
+            "BRITISH XXX CORPS": True,
+            "BRITISH I CORPS": True,
+        }
         assert_attack_strengths(test_case=self, armies=self.armies, expected_attack_strengths=expected_attack_strengths, card=card_43, num_jabos=weather.available_jabos, expected_has_air_support=expected_has_air_support)

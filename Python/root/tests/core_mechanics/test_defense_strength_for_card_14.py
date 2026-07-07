@@ -3,14 +3,18 @@ from cards.card_14 import card as card_014
 from core.card_utilities import calculate_defense_modifiers
 from core.map.map_spaces_us_1 import cherbourg
 from core.map.map_spaces_brit_2 import tilly
-from core.map.map_spaces_can_1 import caen, lebisey_wood
+from core.map.map_spaces_can_1 import lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.weather import WEATHER_TABLE
 
 
-class TestDefenseStrengthsCard13(unittest.TestCase):
+class TestDefenseStrengthsForCard14(unittest.TestCase):
     def setUp(self):
         self.weather = WEATHER_TABLE[1]
+
+        BRITISH_SECOND_ARMY.flipped = False
+        CANADIAN_FIRST_ARMY.flipped = False
+        US_FIRST_ARMY.flipped = False
 
     def test_british_second_army_in_tilly_card_14(self):
         BRITISH_SECOND_ARMY.location = tilly

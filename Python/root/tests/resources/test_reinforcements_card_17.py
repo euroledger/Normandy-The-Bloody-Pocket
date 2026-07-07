@@ -11,11 +11,11 @@ class TestReinforcements(unittest.TestCase):
         strategic_reserve_box.units.clear()
 
 
-def test_card_17_reinforcements(self):
-    do_resource_phase_reinforcements(card_017)
+    def test_card_17_reinforcements(self):
+        do_resource_phase_reinforcements(card_017)
 
-    self.assertEqual(len(in_transit_box.units), 0)
-    self.assertEqual(len(strategic_reserve_box.units), 3)
-    self.assertEqual(strategic_reserve_box.units[0].type, ReinforcementType.NEBELWERFER)
-    self.assertEqual(strategic_reserve_box.units[1].type, ReinforcementType.NEBELWERFER)
-    self.assertEqual(strategic_reserve_box.units[2].type, ReinforcementType.NEBELWERFER)
+        self.assertEqual(len(in_transit_box.units), 0)
+        self.assertEqual(len(strategic_reserve_box.units), 3)
+        self.assertEqual(strategic_reserve_box.units[0].type, ReinforcementType.NEBELWERFER)
+        self.assertEqual(strategic_reserve_box.units[1].type, ReinforcementType.NEBELWERFER)
+        self.assertEqual(strategic_reserve_box.units[2].type, ReinforcementType.NEBELWERFER)

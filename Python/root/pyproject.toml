@@ -4,3 +4,22 @@ line-length = 120
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = [
+    "tests/action_tests",
+    "tests/allied_attack_strengths",
+    "tests/allied_defense_strengths",
+    "tests/combat_allied_army_attacks",
+    "tests/core_mechanics",
+    "tests/german_attack_and_defense_strengths",
+    "tests/map",
+    "tests/military",
+    "tests/resources"
+]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+

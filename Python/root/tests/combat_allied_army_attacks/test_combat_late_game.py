@@ -7,12 +7,13 @@ from core.allied_armies import US_FIRST_ARMY, US_VIII_CORPS
 from core.map.map_spaces_us_1 import avranches, mortain, flers
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
-from tests.testing_utilities import test_setup_units
+from tests.core_mechanics.testing_utilities import setup_units_for_tests
 from core.map.map_spaces_us_3 import st_malo, brest
+
 
 class TestCombatLateGame(unittest.TestCase):
     def setUp(self):
-        test_setup_units()
+        setup_units_for_tests()
         GlobalGameState.german_casualty_strategy = Strategy.RANDOM
         self.weather = WEATHER_TABLE[1]
 
@@ -33,7 +34,6 @@ class TestCombatLateGame(unittest.TestCase):
         self.assertEqual(len(flers.units), 0)
 
     # AIR SUPPORT APPLIED - ALLIED VICTORY WITH ROLL OF 5
-    # @unittest.skip
     def test_us_first_army_attack_mortain_clear_die_roll_5(self):
         self.weather = WEATHER_TABLE[6]
         self.assertEqual(US_FIRST_ARMY.location, avranches)

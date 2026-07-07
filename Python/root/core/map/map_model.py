@@ -27,6 +27,7 @@ class MapSpace:
     track_number: int = 0
     fortified_village_modifier: int = 0
     fortified: bool = False
+    model_modifier: int = 0
     under_siege: bool = False
     units: list = field(default_factory=list)
 

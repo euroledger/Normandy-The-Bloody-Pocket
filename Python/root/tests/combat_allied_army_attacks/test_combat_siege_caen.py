@@ -13,12 +13,12 @@ from core.military import do_allied_attacks, get_carpet_bombing_modifier
 from core.map.map_spaces_can_1 import lebisey_wood, caen
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
-from tests.testing_utilities import test_setup_units
+from tests.core_mechanics.testing_utilities import setup_units_for_tests
 
 
 class TestSiegeCaen(unittest.TestCase):
     def setUp(self):
-        test_setup_units()
+        setup_units_for_tests()
         remove_units_from_space(caen, CANADIAN_FIRST_ARMY)
         add_units_to_space(lebisey_wood, CANADIAN_FIRST_ARMY)
         GlobalGameState.german_casualty_strategy = Strategy.UNIT_TEST
@@ -26,7 +26,6 @@ class TestSiegeCaen(unittest.TestCase):
         caen.under_siege = False
         add_units_to_space(caen, [SS_1, SS_12])
 
-    @unittest.skip
     def test_no_siege_caen(self):
         # Not > 6 differential - normal attack
         remove_units_from_space(caen, [SS_1, SS_12])
@@ -38,7 +37,6 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertFalse(caen.under_siege)
         self.assertEqual(CANADIAN_FIRST_ARMY.location, caen)
 
-    @unittest.skip
     def test_canadian_first_army_begins_siege_of_caen(self):
         self.assertEqual(len(caen.units), 3)
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
@@ -50,7 +48,6 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
         self.assertEqual(len(caen.units), 3)
 
-    @unittest.skip
     def test_canadian_first_army_begins_siege_of_caen_successive_die_rolls_6(self):
         self.assertEqual(len(caen.units), 3)
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
@@ -62,7 +59,6 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
         self.assertEqual(len(caen.units), 2)
 
-    @unittest.skip
     def test_canadian_first_army_begins_siege_of_caen_with_air_power(self):
         # clear weather - Canadian First Army gets Air Support
         self.weather = WEATHER_TABLE[6]
@@ -76,7 +72,6 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
         self.assertEqual(len(caen.units), 2)
 
-    @unittest.skip
     def test_canadian_first_army_resolve_siege(self):
         # clear weather - Canadian First Army gets Air Support
 
