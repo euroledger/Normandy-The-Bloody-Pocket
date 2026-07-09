@@ -14,6 +14,7 @@ from core.card_utilities import calculate_attack_modifiers
 from core.map.map_utilities import german_defense_strength
 from random import choice
 from core.global_game_state import GlobalGameState
+from core.map.map_utilities import update_front_line_for_army
 from core.models import Strategy
 from core.enums import Nation
 from core.map.map_spaces_us_1 import us_1_track
@@ -41,22 +42,6 @@ def get_track_for(army):
     return track
 
 
-def update_front_line_for_army(army, track_number):
-    if army == US_FIRST_ARMY:
-        GlobalGameState.us_1_front_line = track_number
-    elif army == BRITISH_SECOND_ARMY:
-        GlobalGameState.brit_2_front_line = track_number
-    elif army == CANADIAN_FIRST_ARMY:
-        GlobalGameState.can_1_front_line = track_number
-    elif army == US_THIRD_ARMY:
-        GlobalGameState.us_3_front_line = track_number
-    elif army == US_VIII_CORPS:
-        GlobalGameState.us_viii_front_line = track_number
-    elif army == US_XV_CORPS:
-        GlobalGameState.us_xv_front_line = track_number
-    else:
-        raise ValueError(f"Unknown army: {army}")
-
 def get_front_line_space(army):
     track = get_track_for(army)
 
@@ -75,18 +60,13 @@ def get_front_line_space(army):
     else:
         raise ValueError(f"Unknown army: {army}")
 
-    return next(
-        space for space in track
-        if space.track_number == front_line
-    )
+    return next(space for space in track if space.track_number == front_line)
+
 
 def advance_army_one_space(army):
     track = get_track_for(army)
     current_space = army.location
-    next_space = next(
-        (space for space in track if space.track_number == current_space.track_number - 1),
-        None
-    )
+    next_space = next((space for space in track if space.track_number == current_space.track_number - 1), None)
 
     if next_space is None:
         return
@@ -97,7 +77,7 @@ def advance_army_one_space(army):
 
     update_front_line_for_army(army, next_space.track_number)
 
-    print(f"\nALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
+    print(f"\nAFTER AUTO ADVANCE -> ALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
 
 
 def dday_landings_first_wave():
@@ -138,8 +118,11 @@ def dday_landings_second_wave(card, weather):
         do_allied_attacks(attacking_armies, card, weather)
 
 
-def do_german_losses(space):
-    german_units = space.units
+def do_german_losses(space, selected_units = None):
+    if selected_units is None:
+        german_units = space.units
+    else:
+        german_units = selected_units
 
     if not german_units:
         print("NO UNITS IN SPACE - NO LOSSES")
@@ -149,6 +132,7 @@ def do_german_losses(space):
     print("GERMAN LOSSES")
     print("=============")
 
+    print(">>>> GlobalGameState.german_casualty_strategy=", GlobalGameState.german_casualty_strategy)
     if GlobalGameState.german_casualty_strategy == Strategy.HUMAN:
         for i, unit in enumerate(german_units, start=1):
             print(f"{i}. {unit} ({unit.combat_value})")
@@ -162,7 +146,9 @@ def do_german_losses(space):
         casualty = choice(german_units)
 
     else:
-        raise ValueError(f"Unknown strategy: {GlobalGameState.german_casualty_strategy}")
+        raise ValueError(
+            f"Strategy.HUMAN={Strategy.HUMAN} Unknown strategy: {GlobalGameState.german_casualty_strategy}"
+        )
 
     if casualty.combat_value > 1:
         casualty.combat_value -= 1
@@ -277,6 +263,12 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
     print()
 
     for army in armies:
+
+        if army.location.terrain == TerrainType.START_BOX:
+            advance_army_one_space(army)
+            print(f"{army.display_name} -> {army.location.name}")
+            continue
+
         target_space = next(
             (space for space in get_track_for(army) if space.track_number == army.location.track_number - 1), None
         )

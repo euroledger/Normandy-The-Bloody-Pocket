@@ -76,6 +76,7 @@ argentan = MapSpace(
 )
 
 us_viii_track = [
+    us_3_start_box,
     st_malo,
     brest,
     lorient,
@@ -87,6 +88,7 @@ us_viii_track = [
 ]
 
 us_xv_track = [
+    us_3_start_box,
     rennes,
     le_mans,
     alencon,

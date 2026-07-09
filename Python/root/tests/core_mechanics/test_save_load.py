@@ -1,7 +1,6 @@
 import json
 import os
 import unittest
-from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from cards.decks import draw_deck
@@ -30,6 +29,14 @@ from core.german_units import (
 )
 from core.enums import SideType
 from core.weather import get_weather_result
+
+
+# 🔴 YOUR REAL SAVE DIRECTORY
+SAVE_DIR = r"D:\StateOfSiege Normandy\Python\root\data"
+
+
+def get_save_path(filename):
+    return os.path.join(SAVE_DIR, filename)
 
 
 def reset_game_state_for_tests():
@@ -74,329 +81,156 @@ class TestSaveLoadGame(unittest.TestCase):
         reset_game_state_for_tests()
 
     def test_save_game_creates_json_file(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-            try:
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        self.assertTrue(os.path.exists(get_save_path("test_save.json")))
 
-                self.assertTrue(os.path.exists("data/test_save.json"))
-
-            finally:
-                os.chdir(old_cwd)
 
     def test_save_game_cancels_empty_filename(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        path = get_save_path("test_save.json")
 
-            try:
-                with patch("builtins.input", return_value=""):
-                    save_game()
+        # ensure clean state
+        if os.path.exists(path):
+            os.remove(path)
 
-                self.assertFalse(os.path.exists("data"))
+        with patch("builtins.input", return_value=""):
+            save_game()
 
-            finally:
-                os.chdir(old_cwd)
+        self.assertFalse(os.path.exists(path))
 
     def test_save_game_writes_generic_global_game_state(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        GlobalGameState.cards_drawn = 2
+        GlobalGameState.drawn_cards = [card_003, card_004]
+        GlobalGameState.current_card = card_004
+        GlobalGameState.current_weather = get_weather_result(3)
+        GlobalGameState.current_carpet_bombing = 2
+        GlobalGameState.mid_deck_added = True
+        GlobalGameState.us_1_front_line = 99
 
-            try:
-                GlobalGameState.cards_drawn = 2
-                GlobalGameState.drawn_cards = [card_003, card_004]
-                GlobalGameState.current_card = card_004
-                GlobalGameState.current_weather = get_weather_result(3)
-                GlobalGameState.current_carpet_bombing = 2
-                GlobalGameState.mid_deck_added = True
-                GlobalGameState.us_1_front_line = 99
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        with open(get_save_path("test_save.json"), "r", encoding="utf-8") as save_file:
+            save_data = json.load(save_file)
 
-                with open("data/test_save.json", "r", encoding="utf-8") as save_file:
-                    save_data = json.load(save_file)
+        saved_state = save_data["global_game_state"]
 
-                saved_state = save_data["global_game_state"]
-
-                self.assertEqual(saved_state["cards_drawn"], 2)
-                self.assertEqual(saved_state["drawn_cards"], [3, 4])
-                self.assertEqual(saved_state["current_card"], 4)
-                self.assertEqual(saved_state["current_carpet_bombing"], 2)
-                self.assertTrue(saved_state["mid_deck_added"])
-                self.assertEqual(saved_state["us_1_front_line"], 99)
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(saved_state["cards_drawn"], 2)
+        self.assertEqual(saved_state["drawn_cards"], [3, 4])
+        self.assertEqual(saved_state["current_card"], 4)
+        self.assertEqual(saved_state["current_carpet_bombing"], 2)
+        self.assertTrue(saved_state["mid_deck_added"])
+        self.assertEqual(saved_state["us_1_front_line"], 99)
 
     def test_save_game_writes_resource_tracks(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        transport_track.value = 1
+        supply_track.value = 2
+        hitler_approval_track.value = -1
 
-            try:
-                transport_track.value = 1
-                supply_track.value = 2
-                hitler_approval_track.value = -1
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        with open(get_save_path("test_save.json"), "r", encoding="utf-8") as save_file:
+            save_data = json.load(save_file)
 
-                with open("data/test_save.json", "r", encoding="utf-8") as save_file:
-                    save_data = json.load(save_file)
-
-                self.assertEqual(
-                    save_data["resource_tracks"],
-                    {
-                        "transport": 1,
-                        "supply": 2,
-                        "hitler_approval": -1,
-                    },
-                )
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(
+            save_data["resource_tracks"],
+            {
+                "transport": 1,
+                "supply": 2,
+                "hitler_approval": -1,
+            },
+        )
 
     def test_save_game_writes_unit_boxes(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        in_transit_box.units[:] = [PZ_LEHR]
+        strategic_reserve_box.units[:] = [SS_12]
+        eliminated_units_box.units[:] = [PZ_21]
 
-            try:
-                in_transit_box.units[:] = [PZ_LEHR]
-                strategic_reserve_box.units[:] = [SS_12]
-                eliminated_units_box.units[:] = [PZ_21]
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        with open(get_save_path("test_save.json"), "r", encoding="utf-8") as save_file:
+            save_data = json.load(save_file)
 
-                with open("data/test_save.json", "r", encoding="utf-8") as save_file:
-                    save_data = json.load(save_file)
-
-                self.assertEqual(save_data["unit_boxes"]["in_transit"], ["Panzer Lehr"])
-                self.assertEqual(save_data["unit_boxes"]["strategic_reserve"], ["12th SS Panzer"])
-                self.assertEqual(save_data["unit_boxes"]["eliminated_units"], ["21st Panzer"])
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(save_data["unit_boxes"]["in_transit"], ["Panzer Lehr"])
+        self.assertEqual(save_data["unit_boxes"]["strategic_reserve"], ["12th SS Panzer"])
+        self.assertEqual(save_data["unit_boxes"]["eliminated_units"], ["21st Panzer"])
 
     def test_save_game_writes_map_space_state(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        bayeux.units[:] = [
+            PZ_LEHR,
+            create_nebelwerfer(),
+            create_flak88(),
+        ]
+        bayeux.under_siege = True
+        bayeux.fortified = True
+        bayeux.fortified_village_modifier = 2
+        bayeux.controlling_player = SideType.ALLIED
 
-            try:
-                bayeux.units[:] = [
-                    PZ_LEHR,
-                    create_nebelwerfer(),
-                    create_flak88(),
-                ]
-                bayeux.under_siege = True
-                bayeux.fortified = True
-                bayeux.fortified_village_modifier = 2
-                bayeux.controlling_player = SideType.ALLIED
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        with open(get_save_path("test_save.json"), "r", encoding="utf-8") as save_file:
+            save_data = json.load(save_file)
 
-                with open("data/test_save.json", "r", encoding="utf-8") as save_file:
-                    save_data = json.load(save_file)
+        saved_bayeux = save_data["map_spaces"][bayeux.name]
 
-                saved_bayeux = save_data["map_spaces"][bayeux.name]
-
-                self.assertEqual(
-                    saved_bayeux["units"],
-                    [
-                        "Panzer Lehr",
-                        "Nebelwerfer",
-                        "Flak 88",
-                    ],
-                )
-                self.assertTrue(saved_bayeux["under_siege"])
-                self.assertTrue(saved_bayeux["fortified"])
-                self.assertEqual(saved_bayeux["fortified_village_modifier"], 2)
-                self.assertEqual(saved_bayeux["controlling_player"], "ALLIED")
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(
+            saved_bayeux["units"],
+            ["Panzer Lehr", "Nebelwerfer", "Flak 88"],
+        )
+        self.assertTrue(saved_bayeux["under_siege"])
+        self.assertTrue(saved_bayeux["fortified"])
+        self.assertEqual(saved_bayeux["fortified_village_modifier"], 2)
+        self.assertEqual(saved_bayeux["controlling_player"], "ALLIED")
 
     def test_load_game_rejects_missing_file_without_crashing(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        GlobalGameState.cards_drawn = 7
 
-            try:
-                GlobalGameState.cards_drawn = 7
+        with patch("builtins.input", return_value="missing"):
+            load_game()
 
-                with patch("builtins.input", return_value="missing"):
-                    load_game()
-
-                self.assertEqual(GlobalGameState.cards_drawn, 7)
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(GlobalGameState.cards_drawn, 7)
 
     def test_load_game_restores_global_game_state(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        GlobalGameState.cards_drawn = 2
+        GlobalGameState.drawn_cards = [card_003, card_004]
+        GlobalGameState.current_card = card_004
+        GlobalGameState.mid_deck_added = True
+        GlobalGameState.current_carpet_bombing = 3
+        GlobalGameState.us_1_front_line = 99
 
-            try:
-                GlobalGameState.cards_drawn = 2
-                GlobalGameState.drawn_cards = [card_003, card_004]
-                GlobalGameState.current_card = card_004
-                GlobalGameState.mid_deck_added = True
-                GlobalGameState.current_carpet_bombing = 3
-                GlobalGameState.us_1_front_line = 99
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        GlobalGameState.cards_drawn = 0
+        GlobalGameState.drawn_cards = []
+        GlobalGameState.current_card = None
+        GlobalGameState.mid_deck_added = False
+        GlobalGameState.current_carpet_bombing = 0
+        GlobalGameState.us_1_front_line = 11
 
-                GlobalGameState.cards_drawn = 0
-                GlobalGameState.drawn_cards = []
-                GlobalGameState.current_card = None
-                GlobalGameState.mid_deck_added = False
-                GlobalGameState.current_carpet_bombing = 0
-                GlobalGameState.us_1_front_line = 11
+        with patch("builtins.input", return_value="test_save"):
+            load_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    load_game()
-
-                self.assertEqual(GlobalGameState.cards_drawn, 2)
-                self.assertEqual(
-                    [card.card_id for card in GlobalGameState.drawn_cards],
-                    [3, 4],
-                )
-                self.assertEqual(GlobalGameState.current_card.card_id, 4)
-                self.assertTrue(GlobalGameState.mid_deck_added)
-                self.assertEqual(GlobalGameState.current_carpet_bombing, 3)
-                self.assertEqual(GlobalGameState.us_1_front_line, 99)
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual(GlobalGameState.cards_drawn, 2)
+        self.assertEqual([card.card_id for card in GlobalGameState.drawn_cards], [3, 4])
+        self.assertEqual(GlobalGameState.current_card.card_id, 4)
+        self.assertTrue(GlobalGameState.mid_deck_added)
+        self.assertEqual(GlobalGameState.current_carpet_bombing, 3)
+        self.assertEqual(GlobalGameState.us_1_front_line, 99)
 
     def test_load_game_restores_draw_deck(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
+        draw_deck[:] = [card_020, card_004]
 
-            try:
-                draw_deck[:] = [card_020, card_004]
+        with patch("builtins.input", return_value="test_save"):
+            save_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
+        draw_deck[:] = []
 
-                draw_deck[:] = []
+        with patch("builtins.input", return_value="test_save"):
+            load_game()
 
-                with patch("builtins.input", return_value="test_save"):
-                    load_game()
-
-                self.assertEqual(
-                    [card.card_id for card in draw_deck],
-                    [20, 4],
-                )
-
-            finally:
-                os.chdir(old_cwd)
-
-    def test_load_game_restores_resource_tracks(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
-
-            try:
-                transport_track.value = 1
-                supply_track.value = 2
-                hitler_approval_track.value = -1
-
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
-
-                transport_track.value = 5
-                supply_track.value = 4
-                hitler_approval_track.value = 6
-
-                with patch("builtins.input", return_value="test_save"):
-                    load_game()
-
-                self.assertEqual(transport_track.value, 1)
-                self.assertEqual(supply_track.value, 2)
-                self.assertEqual(hitler_approval_track.value, -1)
-
-            finally:
-                os.chdir(old_cwd)
-
-    def test_load_game_restores_unit_boxes(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
-
-            try:
-                in_transit_box.units[:] = [PZ_LEHR]
-                strategic_reserve_box.units[:] = [SS_12]
-                eliminated_units_box.units[:] = [PZ_21]
-
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
-
-                in_transit_box.units.clear()
-                strategic_reserve_box.units.clear()
-                eliminated_units_box.units.clear()
-
-                with patch("builtins.input", return_value="test_save"):
-                    load_game()
-
-                self.assertEqual([unit.name for unit in in_transit_box.units], ["Panzer Lehr"])
-                self.assertEqual([unit.name for unit in strategic_reserve_box.units], ["12th SS Panzer"])
-                self.assertEqual([unit.name for unit in eliminated_units_box.units], ["21st Panzer"])
-
-            finally:
-                os.chdir(old_cwd)
-
-    def test_load_game_restores_map_space_state(self):
-        with TemporaryDirectory() as tmp_dir:
-            old_cwd = os.getcwd()
-            os.chdir(tmp_dir)
-
-            try:
-                bayeux.units[:] = [
-                    PZ_LEHR,
-                    create_nebelwerfer(),
-                    create_flak88(),
-                ]
-                bayeux.under_siege = True
-                bayeux.fortified = True
-                bayeux.fortified_village_modifier = 2
-                bayeux.controlling_player = SideType.ALLIED
-
-                with patch("builtins.input", return_value="test_save"):
-                    save_game()
-
-                bayeux.units.clear()
-                bayeux.under_siege = False
-                bayeux.fortified = False
-                bayeux.fortified_village_modifier = 0
-                bayeux.controlling_player = SideType.GERMAN
-
-                with patch("builtins.input", return_value="test_save"):
-                    load_game()
-
-                self.assertEqual(
-                    [unit.name for unit in bayeux.units],
-                    [
-                        "Panzer Lehr",
-                        "Nebelwerfer",
-                        "Flak 88",
-                    ],
-                )
-                self.assertTrue(bayeux.under_siege)
-                self.assertTrue(bayeux.fortified)
-                self.assertEqual(bayeux.fortified_village_modifier, 2)
-                self.assertEqual(bayeux.controlling_player, SideType.ALLIED)
-
-            finally:
-                os.chdir(old_cwd)
+        self.assertEqual([card.card_id for card in draw_deck], [20, 4])

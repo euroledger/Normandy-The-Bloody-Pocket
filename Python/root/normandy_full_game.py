@@ -64,7 +64,7 @@ def print_defense_strengths(card, weather):
     print(CYAN)
     print()
     print("========================================")
-    print("DEFENSE STRENGTHS")
+    print("DEFENSE STRENGTHS (ALLIED ARMIES)")
     print("========================================")
     print()
 
@@ -74,8 +74,6 @@ def print_defense_strengths(card, weather):
         print()
 
     armies = get_all_defending_armies()
-
-    print("********** DEFENDING ARMIES=", armies)
 
     for army in armies:
         calculate_defense_modifiers(
@@ -231,9 +229,12 @@ while True:
         continue
 
     if GlobalGameState.current_step == 2 and user_input == "":
-        weather_roll = randint(1, 6)
-
-        weather = get_weather_result(weather_roll)
+        if GlobalGameState.current_card == 13: # Great Storm
+            weather = get_weather_result(1)
+            weather_roll = "N/A"
+        else:
+            weather_roll = randint(1, 6)
+            weather = get_weather_result(weather_roll)
 
         GlobalGameState.current_weather = weather
         GlobalGameState.current_carpet_bombing = 0
@@ -335,4 +336,5 @@ while True:
         print(RESET)
         input("Press ENTER to continue...")
         GlobalGameState.current_step = 1
+        GlobalGameState.counter_attacked_armies.clear()
         continue

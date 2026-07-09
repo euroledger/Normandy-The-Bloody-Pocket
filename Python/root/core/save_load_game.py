@@ -1,6 +1,6 @@
 import json
 import os
-
+from pathlib import Path
 from cards.decks import draw_deck, mid_deck, late_deck
 
 from core.enums import SideType
@@ -49,16 +49,14 @@ from core.map.map_spaces_us_3 import (
     us_viii_track,
     us_xv_track,
 )
+from core.models import Strategy
 
 
 # ---------------------------------------------------------
 # CARD LOOKUP
 # ---------------------------------------------------------
 
-CARDS_BY_ID = {
-    card.card_id: card
-    for card in draw_deck + mid_deck + late_deck
-}
+CARDS_BY_ID = {card.card_id: card for card in draw_deck + mid_deck + late_deck}
 
 
 # ---------------------------------------------------------
@@ -113,14 +111,13 @@ def get_unit_by_save_name(unit_name):
     if unit_name == "Kampfgruppe":
         return create_kampfgruppe()
 
-    raise ValueError(
-        f"Unknown unit in save file: {unit_name}"
-    )
+    raise ValueError(f"Unknown unit in save file: {unit_name}")
 
 
 # ---------------------------------------------------------
 # MAP HELPERS
 # ---------------------------------------------------------
+
 
 def get_all_map_spaces():
     spaces = []
@@ -146,6 +143,7 @@ def clear_all_units_from_map():
 # GLOBAL GAME STATE SERIALIZATION
 # ---------------------------------------------------------
 
+
 def serialize_value(value):
 
     if value is None:
@@ -155,10 +153,7 @@ def serialize_value(value):
         return value.card_id
 
     if isinstance(value, list):
-        return [
-            serialize_value(item)
-            for item in value
-        ]
+        return [serialize_value(item) for item in value]
 
     if hasattr(value, "weather_type"):
         return {
@@ -178,33 +173,23 @@ def save_global_game_state():
     return {
         name: serialize_value(value)
         for name, value in GlobalGameState.__dict__.items()
-        if not name.startswith("_")
-        and not callable(value)
+        if not name.startswith("_") and not callable(value) and name != "counter_attacked_armies"   
+
     }
 
 
 def load_global_game_state(saved_state):
 
     for name, saved_value in saved_state.items():
-
         if name == "current_card":
-            value = (
-                None
-                if saved_value is None
-                else CARDS_BY_ID[saved_value]
-            )
-
+            value = None if saved_value is None else CARDS_BY_ID[saved_value]
         elif name == "drawn_cards":
-            value = [
-                CARDS_BY_ID[card_id]
-                for card_id in saved_value
-            ]
-
-        elif (
-            isinstance(saved_value, dict)
-            and saved_value.get("__type__") == "WeatherResult"
-        ):
+            value = [CARDS_BY_ID[card_id] for card_id in saved_value]
+        elif isinstance(saved_value, dict) and saved_value.get("__type__") == "WeatherResult":
             value = None
+        elif name == "german_casualty_strategy":
+            value = Strategy[saved_value]
+            print(f"SETTING GLOBAL GAME STATE saved_value={saved_value} -> name={name} value={value}")
 
         else:
             value = saved_value
@@ -220,6 +205,10 @@ def load_global_game_state(saved_state):
 # SAVE
 # ---------------------------------------------------------
 
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent   # goes up from /core → /root
+DATA_DIR = BASE_DIR / "data"
 def save_game():
 
     print("SAVE GAME")
@@ -234,70 +223,35 @@ def save_game():
     if not save_file_name.endswith(".json"):
         save_file_name += ".json"
 
-    os.makedirs(
-        "data",
-        exist_ok=True,
-    )
+    # ensure directory exists
+    DATA_DIR.mkdir(exist_ok=True)
 
-    save_path = os.path.join(
-        "data",
-        save_file_name,
-    )
-
+    save_path = DATA_DIR / save_file_name
 
     save_data = {
-        "draw_deck": [
-            card.card_id
-            for card in draw_deck
-        ],
-
-        "global_game_state":
-            save_global_game_state(),
-
+        "draw_deck": [card.card_id for card in draw_deck],
+        "global_game_state": save_global_game_state(),
         "resource_tracks": {
             "transport": transport_track.value,
             "supply": supply_track.value,
             "hitler_approval": hitler_approval_track.value,
         },
-
         "unit_boxes": {
-            "in_transit": [
-                unit.name
-                for unit in in_transit_box.units
-            ],
-            "strategic_reserve": [
-                unit.name
-                for unit in strategic_reserve_box.units
-            ],
-            "eliminated_units": [
-                unit.name
-                for unit in eliminated_units_box.units
-            ],
+            "in_transit": [unit.name for unit in in_transit_box.units],
+            "strategic_reserve": [unit.name for unit in strategic_reserve_box.units],
+            "eliminated_units": [unit.name for unit in eliminated_units_box.units],
         },
-
         "map_spaces": {
             space.name: {
-                "controlling_player":
-                    space.controlling_player.name,
-
-                "fortified_village_modifier":
-                    space.fortified_village_modifier,
-
-                "fortified":
-                    space.fortified,
-
-                "under_siege":
-                    space.under_siege,
-
-                "units": [
-                    unit.name
-                    for unit in space.units
-                ],
+                "controlling_player": space.controlling_player.name,
+                "fortified_village_modifier": space.fortified_village_modifier,
+                "fortified": space.fortified,
+                "under_siege": space.under_siege,
+                "units": [unit.name for unit in space.units],
             }
             for space in get_all_map_spaces()
         },
     }
-
 
     with open(
         save_path,
@@ -318,6 +272,7 @@ def save_game():
 # LOAD
 # ---------------------------------------------------------
 
+
 def load_game():
 
     print("LOAD GAME")
@@ -332,15 +287,11 @@ def load_game():
     if not save_file_name.endswith(".json"):
         save_file_name += ".json"
 
-    save_path = os.path.join(
-        "data",
-        save_file_name,
-    )
 
+    save_path = DATA_DIR / save_file_name
     if not os.path.exists(save_path):
         print(f"SAVE FILE NOT FOUND: {save_path}")
         return
-
 
     with open(
         save_path,
@@ -349,17 +300,9 @@ def load_game():
     ) as file:
         save_data = json.load(file)
 
+    draw_deck[:] = [CARDS_BY_ID[card_id] for card_id in save_data["draw_deck"]]
 
-    draw_deck[:] = [
-        CARDS_BY_ID[card_id]
-        for card_id in save_data["draw_deck"]
-    ]
-
-
-    load_global_game_state(
-        save_data["global_game_state"]
-    )
-
+    load_global_game_state(save_data["global_game_state"])
 
     resources = save_data["resource_tracks"]
 
@@ -367,59 +310,25 @@ def load_game():
     supply_track.value = resources["supply"]
     hitler_approval_track.value = resources["hitler_approval"]
 
-
     clear_all_units_from_map()
 
-
     boxes = save_data["unit_boxes"]
-
-    in_transit_box.units[:] = [
-        get_unit_by_save_name(unit)
-        for unit in boxes["in_transit"]
-    ]
-
-    strategic_reserve_box.units[:] = [
-        get_unit_by_save_name(unit)
-        for unit in boxes["strategic_reserve"]
-    ]
-
-    eliminated_units_box.units[:] = [
-        get_unit_by_save_name(unit)
-        for unit in boxes["eliminated_units"]
-    ]
-
-
-    spaces = {
-        space.name: space
-        for space in get_all_map_spaces()
-    }
-
+    in_transit_box.units[:] = [get_unit_by_save_name(unit) for unit in boxes["in_transit"]]
+    strategic_reserve_box.units[:] = [get_unit_by_save_name(unit) for unit in boxes["strategic_reserve"]]
+    eliminated_units_box.units[:] = [get_unit_by_save_name(unit) for unit in boxes["eliminated_units"]]
+    spaces = {space.name: space for space in get_all_map_spaces()}
 
     for name, saved_space in save_data["map_spaces"].items():
-
         space = spaces[name]
-
-        space.controlling_player = SideType[
-            saved_space["controlling_player"]
-        ]
-
-        space.fortified_village_modifier = (
-            saved_space["fortified_village_modifier"]
-        )
-
+        space.controlling_player = SideType[saved_space["controlling_player"]]
+        space.fortified_village_modifier = saved_space["fortified_village_modifier"]
         space.fortified = saved_space["fortified"]
-
         space.under_siege = saved_space["under_siege"]
-
-        space.units[:] = [
-            get_unit_by_save_name(unit)
-            for unit in saved_space["units"]
-        ]
+        space.units[:] = [get_unit_by_save_name(unit) for unit in saved_space["units"]]
 
         for unit in space.units:
             if hasattr(unit, "location"):
                 unit.location = space
-
 
     print()
     print(f"GAME LOADED: {save_path}")

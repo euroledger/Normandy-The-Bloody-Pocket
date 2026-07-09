@@ -1,9 +1,9 @@
 import unittest
 from cards.card_14 import card as card_014
-from core.card_utilities import calculate_defense_modifiers, get_all_defending_armies
+from core.card_utilities import calculate_defense_modifiers
 from core.map.map_spaces_us_1 import cherbourg
 from core.map.map_spaces_brit_2 import tilly
-from core.map.map_spaces_can_1 import caen, lebisey_wood
+from core.map.map_spaces_can_1 import lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.map.map_utilities import do_opening_setup
 from core.weather import WEATHER_TABLE

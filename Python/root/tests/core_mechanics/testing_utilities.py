@@ -36,6 +36,7 @@ def setup_units_for_tests():
     add_units_to_space(st_malo, US_VIII_CORPS)
     add_units_to_space(rennes, US_XV_CORPS)
 
+
     # =========================================================
     # TEST SETUP - GERMANS
     # =========================================================

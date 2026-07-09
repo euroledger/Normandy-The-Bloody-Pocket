@@ -22,3 +22,4 @@ class TestDefenseStrengthsCard29(unittest.TestCase):
         self.weather = WEATHER_TABLE[6]
         result = calculate_defense_modifiers(card=card_029, army=US_VIII_CORPS, weather=self.weather)
         self.assertEqual(result["defense_strength"], 6)
+

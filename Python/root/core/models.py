@@ -57,6 +57,9 @@ class GermanUnit:
             return self.name
         return self.type.value
 
+    def is_panzer(self):
+        return self.type in [ReinforcementType.PZ_DIV, ReinforcementType.KAMPFGRUPPE]
+
 
 # =========================================================
 # EFFECTS

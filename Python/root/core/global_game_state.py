@@ -1,4 +1,4 @@
-from core.models import Strategy
+from core.models import AlliedArmy, Strategy
 
 
 class GlobalGameState:
@@ -22,7 +22,7 @@ class GlobalGameState:
     bocage_defense_modifier = 0
 
     # HUMAN/AI TOGGLES
-    german_casualty_strategy = Strategy.HUMAN
+    german_casualty_strategy = Strategy.RANDOM
 
     actions_left_this_turn = 0
 
@@ -36,4 +36,6 @@ class GlobalGameState:
     current_weather = None
     current_carpet_bombing = 0
     current_step = 1
-    
+
+    # TRACK ATTACKED ARMIES THIS TURN
+    counter_attacked_armies = set()

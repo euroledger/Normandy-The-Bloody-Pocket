@@ -1,0 +1,308 @@
+{
+    "draw_deck": [
+        3,
+        4,
+        20
+    ],
+    "global_game_state": {
+        "us_1_front_line": 11,
+        "brit_2_front_line": 7,
+        "can_1_front_line": 7,
+        "us_3_front_line": 8,
+        "us_viii_front_line": 7,
+        "us_xv_front_line": 4,
+        "transport_roll_drm": 0,
+        "supply_roll_drm": 0,
+        "transport_check_drm": 0,
+        "supply_check_drm": 0,
+        "hitler_approval_check_drm": 0,
+        "bocage_defense_modifier": 0,
+        "german_casualty_strategy": "UNIT_TEST",
+        "actions_left_this_turn": 0,
+        "cards_drawn": 0,
+        "drawn_cards": [],
+        "mid_deck_added": false,
+        "late_deck_added": false,
+        "current_card": null,
+        "current_weather": null,
+        "current_carpet_bombing": 0,
+        "current_step": 1
+    },
+    "resource_tracks": {
+        "transport": 5,
+        "supply": 4,
+        "hitler_approval": 6
+    },
+    "unit_boxes": {
+        "in_transit": [
+            "Panzer Lehr"
+        ],
+        "strategic_reserve": [
+            "12th SS Panzer"
+        ],
+        "eliminated_units": [
+            "21st Panzer"
+        ]
+    },
+    "map_spaces": {
+        "1ST US START BOX": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "US 1st ARMY"
+            ]
+        },
+        "UTAH-OMAHA BEACH": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "CARENTAN": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "Nebelwerfer"
+            ]
+        },
+        "VALOGNES": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "CHERBOURG": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "COUTANCES": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "ST. LO": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "AVRANCHES": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "MORTAIN": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "FLERS": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "CHAMBOIS": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "FALAISE GAP": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "2ND BRIT START BOX": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "BRITISH XXX CORPS"
+            ]
+        },
+        "GOLD-JUNO-SWORD BEACH (BRITISH TRACK)": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "BAYEUX": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": true,
+            "under_siege": false,
+            "units": [
+                "21st Panzer",
+                "Nebelwerfer",
+                "Nebelwerfer",
+                "Flak 88"
+            ]
+        },
+        "TILLY": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "VILLERS-BOCAGE": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "MONT PINCON": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "VIRE": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "1ST CAN START BOX": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "BRITISH I CORPS"
+            ]
+        },
+        "GOLD-JUNO-SWORD BEACH (CANADIAN TRACK)": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "LEBISEY WOOD": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "Nebelwerfer",
+                "Nebelwerfer",
+                "Flak 88"
+            ]
+        },
+        "CAEN": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": true,
+            "under_siege": false,
+            "units": []
+        },
+        "CAGNY": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "BOURGUEBUS RIDGE": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "FALAISE": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "3RD US START BOX": {
+            "controlling_player": "ALLIED",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": [
+                "US 3rd ARMY",
+                "US VIII CORPS",
+                "US XV CORPS"
+            ]
+        },
+        "ST. MALO": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "BREST": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": true,
+            "under_siege": false,
+            "units": []
+        },
+        "LORIENT": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": true,
+            "under_siege": false,
+            "units": []
+        },
+        "RENNES": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "LE MANS": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "ALENCON": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        },
+        "ARGENTAN": {
+            "controlling_player": "GERMAN",
+            "fortified_village_modifier": 0,
+            "fortified": false,
+            "under_siege": false,
+            "units": []
+        }
+    }
+}
