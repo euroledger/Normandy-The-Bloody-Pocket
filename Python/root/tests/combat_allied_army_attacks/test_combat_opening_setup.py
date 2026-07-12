@@ -2,15 +2,17 @@ import unittest
 
 from cards.card_3 import card as card_003
 
+from core.enums import SideType
 from core.weather import WEATHER_TABLE
 from core.military import do_allied_attacks, advance_army_one_space
 from core.map.map_utilities import add_units_to_space, do_opening_setup
-from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes, us_1_track
+from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes
 from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux
 from core.map.map_spaces_can_1 import gold_juno_sword_can, lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
+from core.map.map_model import hitler_approval_track
 
 
 class TestAlliedAttacks(unittest.TestCase):
@@ -32,14 +34,12 @@ class TestAlliedAttacks(unittest.TestCase):
         self.assertEqual(len(carentan.units), 1)
 
     def test_us_first_army_attack_carentan_natural_1(self):
-        self.assertEqual(US_FIRST_ARMY.location, utah_omaha)
-        self.assertEqual(len(carentan.units), 1)
+        self.assertEqual(carentan.controlling_player, SideType.GERMAN)
 
         do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=1)
 
         self.assertEqual(US_FIRST_ARMY.location, utah_omaha)
-        self.assertEqual(len(carentan.units), 1)
-        self.assertEqual(carentan.units[0].combat_value, 1)
+        self.assertEqual(carentan.controlling_player, SideType.GERMAN)
 
     # Allied Defeat
 
@@ -56,24 +56,22 @@ class TestAlliedAttacks(unittest.TestCase):
     # Allied Victory
 
     def test_us_first_army_attack_carentan_roll_3(self):
-        self.assertEqual(US_FIRST_ARMY.location, utah_omaha)
-        self.assertEqual(len(carentan.units), 1)
+        self.assertEqual(carentan.controlling_player, SideType.GERMAN)
 
         do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=3)
 
         self.assertEqual(US_FIRST_ARMY.location, carentan)
-        self.assertEqual(len(carentan.units), 1)
+        self.assertEqual(carentan.controlling_player, SideType.ALLIED)
 
     def test_british_second_army_attack_bayeux_natural_6(self):
         advance_army_one_space(BRITISH_SECOND_ARMY)
 
-        self.assertEqual(BRITISH_SECOND_ARMY.location, gold_juno_sword_brit)
-        self.assertEqual(len(bayeux.units), 4)
+        self.assertEqual(bayeux.controlling_player, SideType.GERMAN)
 
         do_allied_attacks([BRITISH_SECOND_ARMY], card_003, self.weather, die_roll=6)
 
         self.assertEqual(BRITISH_SECOND_ARMY.location, bayeux)
-        self.assertEqual(len(bayeux.units), 1)
+        self.assertEqual(bayeux.controlling_player, SideType.ALLIED)
 
     def test_british_second_army_attack_bayeux_natural_1(self):
         advance_army_one_space(BRITISH_SECOND_ARMY)
@@ -124,10 +122,55 @@ class TestAlliedAttacks(unittest.TestCase):
 
     def test_us_first_army_advance_updates_front_line_space(self):
         add_units_to_space(carentan, US_FIRST_ARMY)
+
+        self.assertEqual(valognes.controlling_player, SideType.GERMAN)
+
         advance_army_one_space(US_FIRST_ARMY)
 
         self.assertEqual(US_FIRST_ARMY.location, valognes)
         self.assertEqual(GlobalGameState.us_1_front_line, valognes.track_number)
+        self.assertEqual(valognes.controlling_player, SideType.ALLIED)
 
-        front_line_space = next(space for space in us_1_track if space.track_number == GlobalGameState.us_1_front_line)
-        self.assertEqual(front_line_space, valognes)
+    def test_us_first_army_attack_carentan_roll_3_no_panzer_no_hitler_approval_loss(self):
+        hitler_approval_track.value = 6
+
+        self.assertEqual(carentan.controlling_player, SideType.GERMAN)
+
+        do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=3)
+
+        self.assertEqual(US_FIRST_ARMY.location, carentan)
+        self.assertEqual(carentan.controlling_player, SideType.ALLIED)
+        self.assertEqual(hitler_approval_track.value, 6)
+
+    def test_british_second_army_attack_bayeux_natural_6_panzer_defense_lowers_hitler_approval(self):
+        hitler_approval_track.value = 6
+
+        advance_army_one_space(BRITISH_SECOND_ARMY)
+
+        self.assertEqual(bayeux.controlling_player, SideType.GERMAN)
+
+        do_allied_attacks([BRITISH_SECOND_ARMY], card_003, self.weather, die_roll=6)
+
+        self.assertEqual(BRITISH_SECOND_ARMY.location, bayeux)
+        self.assertEqual(bayeux.controlling_player, SideType.ALLIED)
+        self.assertEqual(hitler_approval_track.value, 5)
+
+    def test_canadian_first_army_attack_lebisey_wood_natural_6_no_panzer_no_hitler_approval_loss(self):
+        hitler_approval_track.value = 6
+
+        advance_army_one_space(CANADIAN_FIRST_ARMY)
+
+        do_allied_attacks([CANADIAN_FIRST_ARMY], card_003, self.weather, die_roll=6)
+
+        self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
+        self.assertEqual(hitler_approval_track.value, 6)
+
+    def test_british_second_army_attack_bayeux_natural_1_panzer_present_but_no_german_loss_no_hitler_approval_loss(self):
+        hitler_approval_track.value = 6
+
+        advance_army_one_space(BRITISH_SECOND_ARMY)
+
+        do_allied_attacks([BRITISH_SECOND_ARMY], card_003, self.weather, die_roll=1)
+
+        self.assertEqual(BRITISH_SECOND_ARMY.location, gold_juno_sword_brit)
+        self.assertEqual(hitler_approval_track.value, 6)

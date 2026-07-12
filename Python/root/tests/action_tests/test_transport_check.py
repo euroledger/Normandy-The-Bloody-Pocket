@@ -1,6 +1,6 @@
 import unittest
 
-from core.actions import do_panzer_transport_check
+from core.actions.actions_menu import do_panzer_transport_check
 from core.global_game_state import GlobalGameState
 from core.german_units import PZ_LEHR
 from core.map.map_model import (

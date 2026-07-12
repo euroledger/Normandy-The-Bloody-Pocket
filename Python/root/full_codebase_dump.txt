@@ -980,8 +980,12 @@ while True:
         GlobalGameState.current_step = 2
         continue
     if GlobalGameState.current_step == 2 and user_input == "":
-        weather_roll = randint(1, 6)
-        weather = get_weather_result(weather_roll)
+        if GlobalGameState.current_card == 13: 
+            weather = get_weather_result(1)
+            weather_roll = "N/A"
+        else:
+            weather_roll = randint(1, 6)
+            weather = get_weather_result(weather_roll)
         GlobalGameState.current_weather = weather
         GlobalGameState.current_carpet_bombing = 0
         print(CYAN)
@@ -3698,7 +3702,7 @@ def do_post_combat(result, selected_option, selected_units):
     else:
         print("GERMAN DEFEAT")
         if selected_units:
-            do_german_losses(attacking_space)
+            do_german_losses(attacking_space, selected_units)
         else:
             print("NO GERMAN UNITS ENGAGED - NO LOSSES APPLIED")
 def do_counter_attack():
@@ -4294,7 +4298,7 @@ def advance_army_one_space(army):
     next_space.units.append(army)
     army.location = next_space
     update_front_line_for_army(army, next_space.track_number)
-    print(f"\nALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
+    print(f"\nAFTER AUTO ADVANCE -> ALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
 def dday_landings_first_wave():
     print()
     print("D-DAY LANDINGS FIRST WAVE")
@@ -4325,8 +4329,11 @@ def dday_landings_second_wave(card, weather):
             attacking_armies.append(army)
     if attacking_armies:
         do_allied_attacks(attacking_armies, card, weather)
-def do_german_losses(space):
-    german_units = space.units
+def do_german_losses(space, selected_units = None):
+    if selected_units is None:
+        german_units = space.units
+    else:
+        german_units = selected_units
     if not german_units:
         print("NO UNITS IN SPACE - NO LOSSES")
         return
@@ -4424,6 +4431,10 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
     print("==============")
     print()
     for army in armies:
+        if army.location.terrain == TerrainType.START_BOX:
+            advance_army_one_space(army)
+            print(f"{army.display_name} -> {army.location.name}")
+            continue
         target_space = next(
             (space for space in get_track_for(army) if space.track_number == army.location.track_number - 1), None
         )

@@ -1,6 +1,6 @@
 from random import shuffle, randint
 from cards.decks import draw_deck, mid_deck, late_deck
-from core.actions import do_action_phase
+from core.actions.actions_menu import do_action_phase
 from core.military import do_military_phase
 from core.save_load_game import load_game, save_game
 from core.weather import get_weather_result

@@ -1,37 +1,37 @@
 {
     "draw_deck": [
-        18,
-        16,
-        13,
-        7,
-        9,
-        15,
-        23,
-        19,
-        6,
-        3,
-        21,
-        24,
-        14,
-        17,
-        20,
-        11,
-        5,
         12,
+        24,
+        9,
+        23,
+        17,
+        18,
+        7,
+        5,
+        20,
+        15,
+        11,
+        3,
         8,
-        4,
         22,
-        10
+        21,
+        19,
+        10,
+        13,
+        6,
+        16,
+        4,
+        14
     ],
     "global_game_state": {
         "us_1_front_line": 9,
-        "brit_2_front_line": 7,
+        "brit_2_front_line": 6,
         "can_1_front_line": 7,
         "us_3_front_line": 8,
-        "us_viii_front_line": 7,
-        "us_xv_front_line": 4,
-        "transport_roll_drm": 0,
-        "supply_roll_drm": 0,
+        "us_viii_front_line": 8,
+        "us_xv_front_line": 8,
+        "transport_roll_drm": 1,
+        "supply_roll_drm": 1,
         "transport_check_drm": 0,
         "supply_check_drm": 0,
         "hitler_approval_check_drm": -1,
@@ -48,25 +48,25 @@
         "current_card": 2,
         "current_weather": {
             "__type__": "WeatherResult",
-            "weather_type": "PARTLY_CLEAR",
-            "available_jabos": 1,
-            "carpet_bombing_drm": 1
+            "weather_type": "OVERCAST",
+            "available_jabos": 0,
+            "carpet_bombing_drm": -999
         },
         "current_carpet_bombing": 0,
         "current_step": 1
     },
     "resource_tracks": {
         "transport": 5,
-        "supply": 3,
+        "supply": 2,
         "hitler_approval": 6
     },
     "unit_boxes": {
         "in_transit": [],
         "strategic_reserve": [
-            "Panzer Lehr",
             "12th SS Panzer"
         ],
         "eliminated_units": [
+            "Nebelwerfer",
             "Nebelwerfer"
         ]
     },
@@ -86,7 +86,7 @@
             "units": []
         },
         "CARENTAN": {
-            "controlling_player": "GERMAN",
+            "controlling_player": "ALLIED",
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
@@ -99,7 +99,9 @@
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
-            "units": []
+            "units": [
+                "Panzer Lehr"
+            ]
         },
         "CHERBOURG": {
             "controlling_player": "GERMAN",
@@ -162,16 +164,16 @@
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
-            "units": [
-                "BRITISH XXX CORPS"
-            ]
+            "units": []
         },
         "GOLD-JUNO-SWORD BEACH (BRITISH TRACK)": {
             "controlling_player": "ALLIED",
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
-            "units": []
+            "units": [
+                "BRITISH XXX CORPS"
+            ]
         },
         "BAYEUX": {
             "controlling_player": "GERMAN",
@@ -180,7 +182,6 @@
             "under_siege": false,
             "units": [
                 "21st Panzer",
-                "Nebelwerfer",
                 "Nebelwerfer",
                 "Flak 88"
             ]
@@ -273,7 +274,11 @@
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
-            "units": []
+            "units": [
+                "US 3rd ARMY",
+                "US VIII CORPS",
+                "US XV CORPS"
+            ]
         },
         "ST. MALO": {
             "controlling_player": "GERMAN",

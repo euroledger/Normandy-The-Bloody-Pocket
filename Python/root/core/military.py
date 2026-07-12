@@ -9,14 +9,14 @@ from core.allied_armies import (
     US_XV_CORPS,
 )
 from core.carpet_bombing import ATTACK_CANCELLED, get_carpet_bombing_result
-from core.map.map_model import TerrainType, eliminated_units_box
+from core.map.map_model import TerrainType, eliminated_units_box, hitler_approval_track
 from core.card_utilities import calculate_attack_modifiers
 from core.map.map_utilities import german_defense_strength
 from random import choice
 from core.global_game_state import GlobalGameState
 from core.map.map_utilities import update_front_line_for_army
-from core.models import Strategy
-from core.enums import Nation
+from core.models import GermanUnit, Strategy
+from core.enums import Nation, SideType
 from core.map.map_spaces_us_1 import us_1_track
 from core.map.map_spaces_brit_2 import brit_2_track
 from core.map.map_spaces_can_1 import can_1_track
@@ -66,6 +66,7 @@ def get_front_line_space(army):
 def advance_army_one_space(army):
     track = get_track_for(army)
     current_space = army.location
+
     next_space = next((space for space in track if space.track_number == current_space.track_number - 1), None)
 
     if next_space is None:
@@ -74,6 +75,9 @@ def advance_army_one_space(army):
     current_space.units.remove(army)
     next_space.units.append(army)
     army.location = next_space
+
+    if hasattr(next_space, "controlling_player"):
+        next_space.controlling_player = SideType.ALLIED
 
     update_front_line_for_army(army, next_space.track_number)
 
@@ -118,7 +122,9 @@ def dday_landings_second_wave(card, weather):
         do_allied_attacks(attacking_armies, card, weather)
 
 
-def do_german_losses(space, selected_units = None):
+def do_german_losses(space, selected_units=None):
+    panzer_present_before_losses = any(isinstance(unit, GermanUnit) and unit.is_panzer() for unit in space.units)
+
     if selected_units is None:
         german_units = space.units
     else:
@@ -127,6 +133,10 @@ def do_german_losses(space, selected_units = None):
     if not german_units:
         print("NO UNITS IN SPACE - NO LOSSES")
         return
+
+    if panzer_present_before_losses:
+        hitler_approval_track.value = max(0, hitler_approval_track.value - 1)
+        print(f"HITLER APPROVAL -1 → {hitler_approval_track.value}")
 
     print()
     print("GERMAN LOSSES")
@@ -263,7 +273,6 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
     print()
 
     for army in armies:
-
         if army.location.terrain == TerrainType.START_BOX:
             advance_army_one_space(army)
             print(f"{army.display_name} -> {army.location.name}")

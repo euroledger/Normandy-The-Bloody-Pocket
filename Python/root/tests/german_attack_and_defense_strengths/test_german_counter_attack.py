@@ -1,5 +1,6 @@
 import unittest
 
+from core.enums import SideType
 from core.german_units import create_kampfgruppe
 from core.global_game_state import GlobalGameState
 from core.map.map_utilities import (
@@ -8,7 +9,7 @@ from core.map.map_utilities import (
     get_eligible_german_units,
     add_units_to_space
 )
-from core.actions import (
+from core.actions.counter_attack_action import (
     get_counter_attack_options,
     print_counter_attack_options,
     resolve_counter_attack,
@@ -255,6 +256,48 @@ class TestGermanPostCombat(unittest.TestCase):
 
         for unit in selected_units:
             self.assertNotIn(unit, utah_omaha.units)
+
+    def test_german_win_does_not_change_beach_space_to_german_control(self):
+        army = US_FIRST_ARMY
+
+        self.assertEqual(army.location, utah_omaha)
+        self.assertEqual(utah_omaha.controlling_player, SideType.ALLIED)
+
+        result = {"result": "WIN"}
+
+        selected_option = {
+            "army": army,
+            "target_space": army.location,
+            "attacking_space": carentan,
+        }
+
+        selected_units = carentan.units.copy()
+
+        do_post_combat(result, selected_option, selected_units)
+        self.assertEqual(utah_omaha.controlling_player, SideType.ALLIED)
+
+    def test_german_win_recaptures_non_beach_space(self):
+        army = US_FIRST_ARMY
+
+        # US already captured Carentan
+        advance_army_one_space(army)
+
+        self.assertEqual(army.location, carentan)
+        self.assertEqual(carentan.controlling_player, SideType.ALLIED)
+
+        result = {"result": "WIN"}
+
+        selected_option = {
+            "army": army,
+            "target_space": carentan,
+            "attacking_space": carentan,
+        }
+
+        selected_units = carentan.units.copy()
+
+        do_post_combat(result, selected_option, selected_units)
+
+        self.assertEqual(carentan.controlling_player, SideType.GERMAN)
 
 
 
