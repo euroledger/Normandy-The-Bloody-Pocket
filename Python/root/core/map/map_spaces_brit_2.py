@@ -7,7 +7,7 @@ brit_2_start_box = MapSpace(
     terrain=TerrainType.START_BOX,
     terrain_value=0,
     track_number=7,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
 gold_juno_sword_brit = MapSpace(
@@ -16,7 +16,7 @@ gold_juno_sword_brit = MapSpace(
     terrain=TerrainType.BEACH,
     terrain_value=2,
     track_number=6,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
 bayeux = MapSpace(
@@ -25,7 +25,7 @@ bayeux = MapSpace(
     terrain=TerrainType.TOWN,
     terrain_value=1,
     track_number=5,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 tilly = MapSpace(
@@ -34,7 +34,7 @@ tilly = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=4,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 villers_bocage = MapSpace(
     name="VILLERS-BOCAGE",
@@ -42,7 +42,7 @@ villers_bocage = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=3,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 mont_pincon = MapSpace(
@@ -51,25 +51,25 @@ mont_pincon = MapSpace(
     terrain=TerrainType.HILL,
     terrain_value=2,
     track_number=2,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
-vire = MapSpace(
-    name="VIRE",
+thury_harcourt = MapSpace(
+    name="THURY HARCOURT",
     track=Nation.BRIT_2,
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=1,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
-brit_2_track=[
+brit_2_track = [
     brit_2_start_box,
     gold_juno_sword_brit,
     bayeux,
     tilly,
     villers_bocage,
     mont_pincon,
-    vire,
-    falaise_gap
+    thury_harcourt,
+    falaise_gap,
 ]

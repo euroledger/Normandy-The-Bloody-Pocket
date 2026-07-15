@@ -7,7 +7,7 @@ us_1_start_box = MapSpace(
     terrain=TerrainType.START_BOX,
     terrain_value=0,
     track_number=11,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
 utah_omaha = MapSpace(
@@ -16,7 +16,7 @@ utah_omaha = MapSpace(
     terrain=TerrainType.BEACH,
     terrain_value=2,
     track_number=10,
-    controlling_player=SideType.ALLIED
+    controlling_player=SideType.ALLIED,
 )
 
 carentan = MapSpace(
@@ -25,7 +25,7 @@ carentan = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=9,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 valognes = MapSpace(
@@ -34,7 +34,7 @@ valognes = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=8,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 cherbourg = MapSpace(
@@ -43,7 +43,7 @@ cherbourg = MapSpace(
     terrain=TerrainType.TOWN,
     terrain_value=1,
     track_number=7,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 coutances = MapSpace(
@@ -52,7 +52,7 @@ coutances = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=6,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 st_lo = MapSpace(
@@ -61,7 +61,7 @@ st_lo = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=5,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 avranches = MapSpace(
@@ -70,7 +70,7 @@ avranches = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=4,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 mortain = MapSpace(
@@ -79,7 +79,7 @@ mortain = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=3,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 flers = MapSpace(
@@ -88,16 +88,16 @@ flers = MapSpace(
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
     track_number=2,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
-chambois = MapSpace(
-    name="CHAMBOIS",
+vire = MapSpace(
+    name="VIRE",
     track=Nation.US_1,
     terrain=TerrainType.TOWN,
     terrain_value=1,
     track_number=1,
-    controlling_player=SideType.GERMAN
+    controlling_player=SideType.GERMAN,
 )
 
 
@@ -112,6 +112,6 @@ us_1_track = [
     avranches,
     mortain,
     flers,
-    chambois,
-    falaise_gap
+    vire,
+    falaise_gap,
 ]

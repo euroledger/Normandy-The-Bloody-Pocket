@@ -119,7 +119,7 @@
             "under_siege": false,
             "units": []
         },
-        "CHAMBOIS": {
+        "VIRE": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,
@@ -182,7 +182,7 @@
             "under_siege": false,
             "units": []
         },
-        "VIRE": {
+        "THURY HARCOURT": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,

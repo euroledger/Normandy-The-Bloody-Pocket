@@ -45,7 +45,7 @@ class TestSiegeBrest(unittest.TestCase):
         self.assertTrue(brest.under_siege)
 
         self.assertEqual(US_VIII_CORPS.location, st_malo)
-        self.assertEqual(len(brest.units), 2)
+        self.assertEqual(len(brest.units), 1)
 
     def test_us_viii_corps_begins_siege_of_brest_with_air_power(self):
         # clear weather - VIII Corps gets Air Support
@@ -73,8 +73,8 @@ class TestSiegeBrest(unittest.TestCase):
         self.assertTrue(brest.under_siege)
 
         self.assertEqual(US_VIII_CORPS.location, st_malo)
-        # One combat units eliminated by modified die roll of 4
-        self.assertEqual(len(brest.units), 2)
+        # Two combat units eliminated by modified die roll of 4
+        self.assertEqual(len(brest.units), 1)
 
         # SIEGE SECOND ROUND
         self.assertTrue(brest.under_siege)
@@ -83,7 +83,7 @@ class TestSiegeBrest(unittest.TestCase):
 
         self.assertEqual(US_VIII_CORPS.location, st_malo)
         # No Combat Units Eliminated by modified die roll of 1
-        self.assertEqual(len(brest.units), 2)
+        self.assertEqual(len(brest.units), 1)
 
         # SIEGE THIRD ROUND
         self.assertTrue(brest.under_siege)
@@ -91,8 +91,8 @@ class TestSiegeBrest(unittest.TestCase):
         self.assertTrue(brest.under_siege)
 
         self.assertEqual(US_VIII_CORPS.location, st_malo)
-        # No Combat Units Eliminated
-        self.assertEqual(len(brest.units), 1)
+        # One Combat Unit Eliminated
+        self.assertEqual(len(brest.units), 0)
 
         # SIEGE FOURTH ROUND
         self.assertTrue(brest.under_siege)

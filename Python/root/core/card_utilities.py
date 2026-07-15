@@ -35,12 +35,12 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
 
     modifier_target = get_modifier_target(army)
 
-    print("\n==============================")
-    print("CALCULATE ATTACK MODIFIERS")
-    print("==============================")
-    print("army =", army)
-    # print("num_jabos =", num_jabos)
-    # print("modifier_target =", modifier_target)
+    # REMOVED FOR SIEGE TEST
+    # print("\n==============================")
+    # print("CALCULATE ATTACK MODIFIERS")
+    # print("==============================")
+    # print("army =", army)
+
 
     # =========================================================
     # JABOS

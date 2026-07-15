@@ -36,31 +36,9 @@ class TestSiegeTable(unittest.TestCase):
     # ROLL 2
     # =====================================================
 
-    def test_roll_2_no_effect(self):
+    def test_roll_2_eliminate_1_step(self):
 
         result = get_siege_result(2)
-
-        self.assertEqual(
-            result.result_type,
-            SiegeResultType.NO_EFFECT
-        )
-
-        self.assertEqual(
-            result.combat_steps_eliminated,
-            0
-        )
-
-        self.assertFalse(
-            result.space_captured
-        )
-
-    # =====================================================
-    # ROLL 3
-    # =====================================================
-
-    def test_roll_3_eliminate_1_step(self):
-
-        result = get_siege_result(3)
 
         self.assertEqual(
             result.result_type,
@@ -77,12 +55,12 @@ class TestSiegeTable(unittest.TestCase):
         )
 
     # =====================================================
-    # ROLL 4
+    # ROLL 3
     # =====================================================
 
-    def test_roll_4_eliminate_2_steps(self):
+    def test_roll_3_eliminate_2_steps(self):
 
-        result = get_siege_result(4)
+        result = get_siege_result(3)
 
         self.assertEqual(
             result.result_type,
@@ -92,6 +70,28 @@ class TestSiegeTable(unittest.TestCase):
         self.assertEqual(
             result.combat_steps_eliminated,
             2
+        )
+
+        self.assertFalse(
+            result.space_captured
+        )
+
+    # =====================================================
+    # ROLL 4
+    # =====================================================
+
+    def test_roll_4_eliminate_3_steps(self):
+
+        result = get_siege_result(4)
+
+        self.assertEqual(
+            result.result_type,
+            SiegeResultType.ELIMINATE_3_STEPS
+        )
+
+        self.assertEqual(
+            result.combat_steps_eliminated,
+            3
         )
 
         self.assertFalse(

@@ -32,7 +32,7 @@ class SiegeDrmResult:
 # SIEGE TABLE
 # =========================================================
 def get_siege_result(die_roll: int) -> SiegeResult:
-    return SIEGE_TABLE[die_roll]
+    return SIEGE_TABLE_MARK_3[die_roll]
 
 # =========================================================
 # SIEGE DRM
@@ -68,13 +68,31 @@ def calculate_siege_drm(attack_strength: int, defense_strength: int, has_air_sup
     return SiegeDrmResult(drm=drm, reasons=reasons)
 
 
-SIEGE_TABLE = {
+# SIEGE_TABLE = {
+#     1: SiegeResult(result_type=SiegeResultType.NO_EFFECT, combat_steps_eliminated=0, space_captured=False),
+#     2: SiegeResult(result_type=SiegeResultType.NO_EFFECT, combat_steps_eliminated=0, space_captured=False),
+#     3: SiegeResult(result_type=SiegeResultType.ELIMINATE_1_STEP, combat_steps_eliminated=1, space_captured=False),
+#     4: SiegeResult(result_type=SiegeResultType.ELIMINATE_2_STEPS, combat_steps_eliminated=2, space_captured=False),
+#     5: SiegeResult(result_type=SiegeResultType.ELIMINATE_3_STEPS, combat_steps_eliminated=3, space_captured=False),
+#     6: SiegeResult(result_type=SiegeResultType.SPACE_CAPTURED, combat_steps_eliminated=0, space_captured=True),
+# }
+
+
+# SIEGE_TABLE_MARK_2 = {
+#     1: SiegeResult(result_type=SiegeResultType.NO_EFFECT, combat_steps_eliminated=0, space_captured=False),
+#     2: SiegeResult(result_type=SiegeResultType.ELIMINATE_1_STEP, combat_steps_eliminated=1, space_captured=False),
+#     3: SiegeResult(result_type=SiegeResultType.ELIMINATE_2_STEPS, combat_steps_eliminated=2, space_captured=False),
+#     4: SiegeResult(result_type=SiegeResultType.ELIMINATE_3_STEPS, combat_steps_eliminated=3, space_captured=False),
+#     5: SiegeResult(result_type=SiegeResultType.SPACE_CAPTURED, combat_steps_eliminated=3, space_captured=True),
+#     6: SiegeResult(result_type=SiegeResultType.SPACE_CAPTURED, combat_steps_eliminated=0, space_captured=True),
+# }
+
+SIEGE_TABLE_MARK_3= {
     1: SiegeResult(result_type=SiegeResultType.NO_EFFECT, combat_steps_eliminated=0, space_captured=False),
-    2: SiegeResult(result_type=SiegeResultType.NO_EFFECT, combat_steps_eliminated=0, space_captured=False),
-    3: SiegeResult(result_type=SiegeResultType.ELIMINATE_1_STEP, combat_steps_eliminated=1, space_captured=False),
-    4: SiegeResult(result_type=SiegeResultType.ELIMINATE_2_STEPS, combat_steps_eliminated=2, space_captured=False),
+    2: SiegeResult(result_type=SiegeResultType.ELIMINATE_1_STEP, combat_steps_eliminated=1, space_captured=False),
+    3: SiegeResult(result_type=SiegeResultType.ELIMINATE_2_STEPS, combat_steps_eliminated=2, space_captured=False),
+    4: SiegeResult(result_type=SiegeResultType.ELIMINATE_3_STEPS, combat_steps_eliminated=3, space_captured=False),
     5: SiegeResult(result_type=SiegeResultType.ELIMINATE_3_STEPS, combat_steps_eliminated=3, space_captured=False),
     6: SiegeResult(result_type=SiegeResultType.SPACE_CAPTURED, combat_steps_eliminated=0, space_captured=True),
 }
-
 

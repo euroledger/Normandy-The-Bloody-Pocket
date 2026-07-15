@@ -67,7 +67,8 @@ from cards.card_48 import card as card_048
 
 NUM_RUNS = 100000
 
-DEFENSE_STRENGTHS = [4, 8, 11, 13, 15]
+# DEFENSE_STRENGTHS = [4, 8, 11, 13, 15]
+# DEFENSE_STRENGTHS = [11]
 
 # =========================================================
 # MID DECK
@@ -307,6 +308,7 @@ def run_monte_carlo(starting_defense_strength):
 # RUN SIMULATIONS
 # =========================================================
 
+
 results_4 = run_monte_carlo(4)
 
 results_8 = run_monte_carlo(8)
@@ -317,6 +319,8 @@ results_13 = run_monte_carlo(13)
 
 results_15 = run_monte_carlo(15)
 
+results_21 = run_monte_carlo(21
+                             )
 # =========================================================
 # SUBPLOTS
 # =========================================================
@@ -329,7 +333,7 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 14))
 
 all_attacks = (results_4["attacks_needed"] + results_8["attacks_needed"] +
                results_11["attacks_needed"] + results_13["attacks_needed"] +
-               results_15["attacks_needed"])
+               results_15["attacks_needed"] + results_21["attacks_needed"])
 
 attack_bins = range(min(all_attacks), max(all_attacks) + 2)
 
@@ -358,6 +362,11 @@ ax1.hist(results_15["attacks_needed"],
          alpha=0.5,
          label="Defense 15")
 
+ax1.hist(results_21["attacks_needed"],
+         bins=attack_bins,
+         alpha=0.5,
+         label="Defense 21")
+
 mode_4 = max(set(results_4["attacks_needed"]),
              key=results_4["attacks_needed"].count)
 
@@ -373,9 +382,12 @@ mode_13 = max(set(results_13["attacks_needed"]),
 mode_15 = max(set(results_15["attacks_needed"]),
               key=results_15["attacks_needed"].count)
 
-attack_mode_x = [mode_4, mode_8, mode_11, mode_13, mode_15]
+mode_21 = max(set(results_21["attacks_needed"]),
+              key=results_21["attacks_needed"].count)
 
-attack_mode_y = [1000, 2000, 3000, 4000, 5000]
+attack_mode_x = [mode_4, mode_8, mode_11, mode_13, mode_15, mode_21]
+
+attack_mode_y = [1000, 2000, 3000, 4000, 5000, 6000]
 
 ax1.plot(attack_mode_x,
          attack_mode_y,
@@ -397,7 +409,7 @@ ax1.legend()
 
 all_cards_drawn = (results_4["cards_drawn"] + results_8["cards_drawn"] +
                    results_11["cards_drawn"] + results_13["cards_drawn"] +
-                   results_15["cards_drawn"])
+                   results_15["cards_drawn"] + results_21["cards_drawn"])
 
 cards_bins = range(min(all_cards_drawn), max(all_cards_drawn) + 2)
 
@@ -426,6 +438,11 @@ ax2.hist(results_15["cards_drawn"],
          alpha=0.5,
          label="Defense 15")
 
+ax2.hist(results_21["cards_drawn"],
+         bins=cards_bins,
+         alpha=0.5,
+         label="Defense 21")
+
 mode_4 = max(set(results_4["cards_drawn"]), key=results_4["cards_drawn"].count)
 
 mode_8 = max(set(results_8["cards_drawn"]), key=results_8["cards_drawn"].count)
@@ -439,9 +456,12 @@ mode_13 = max(set(results_13["cards_drawn"]),
 mode_15 = max(set(results_15["cards_drawn"]),
               key=results_15["cards_drawn"].count)
 
-cards_mode_x = [mode_4, mode_8, mode_11, mode_13, mode_15]
+mode_21 = max(set(results_21["cards_drawn"]),
+              key=results_21["cards_drawn"].count)
 
-cards_mode_y = [1000, 2000, 3000, 4000, 5000]
+cards_mode_x = [mode_4, mode_8, mode_11, mode_13, mode_15, mode_21]
+
+cards_mode_y = [1000, 2000, 3000, 4000, 5000, 6000]
 
 ax2.plot(cards_mode_x,
          cards_mode_y,
@@ -460,3 +480,5 @@ ax2.legend()
 plt.tight_layout()
 
 plt.show()
+mode_15 = max(set(results_15["cards_drawn"]),
+              key=results_15["cards_drawn"].count)

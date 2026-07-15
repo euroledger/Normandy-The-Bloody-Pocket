@@ -57,7 +57,7 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertTrue(caen.under_siege)
 
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
-        self.assertEqual(len(caen.units), 2)
+        self.assertEqual(len(caen.units), 1)
 
     def test_canadian_first_army_begins_siege_of_caen_with_air_power(self):
         # clear weather - Canadian First Army gets Air Support
@@ -85,8 +85,8 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertTrue(caen.under_siege)
 
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
-        # One combat units eliminated by modified die roll of 4
-        self.assertEqual(len(caen.units), 2)
+        # Two combat units eliminated by modified die roll of 4
+        self.assertEqual(len(caen.units), 1)
 
         # SIEGE SECOND ROUND - +1 Attack Strength to 1st CAN
         self.assertTrue(caen.under_siege)
@@ -94,8 +94,8 @@ class TestSiegeCaen(unittest.TestCase):
         self.assertTrue(caen.under_siege)
 
         self.assertEqual(CANADIAN_FIRST_ARMY.location, lebisey_wood)
-        # No Combat Units Eliminated by modified die roll of 1
-        self.assertEqual(len(caen.units), 2)
+        # One Combat Units Eliminated by modified die roll of 1
+        self.assertEqual(len(caen.units), 1)
 
         # SIEGE THIRD ROUND
         self.assertTrue(caen.under_siege)
