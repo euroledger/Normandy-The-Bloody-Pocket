@@ -3,11 +3,6 @@ from core.enums import *
 from core.german_units import create_nebelwerfer
 from core.allied_armies import (US_FIRST_ARMY, BRITISH_SECOND_ARMY)
 
-# =========================================================
-# CARD #17
-# NEBELWERFERS
-# =========================================================
-
 card = Card(card_id=17, title="Nebelwerfers")
 
 # =========================================================

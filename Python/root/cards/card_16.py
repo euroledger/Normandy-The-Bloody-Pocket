@@ -3,11 +3,6 @@ from core.enums import *
 from core.german_units import PZ_116
 from core.allied_armies import US_FIRST_ARMY
 
-# =========================================================
-# CARD #16
-# BATTLE OF THE BOCAGE
-# =========================================================
-
 card = Card(card_id=16, title="Battle of the Bocage")
 
 # =========================================================

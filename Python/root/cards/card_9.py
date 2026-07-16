@@ -49,7 +49,3 @@ card.resources.effects.extend([
 
 card.actions.actions_available = 3
 
-card.actions.effects.append(
-    Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
-           value=1,
-           target=BRITISH_SECOND_ARMY))

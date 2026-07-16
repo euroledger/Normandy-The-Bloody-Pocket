@@ -2,11 +2,6 @@ from core.models import *
 from core.enums import *
 from core.allied_armies import (BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY)
 
-# =========================================================
-# CARD #18
-# OPERATION CHARNWOOD
-# =========================================================
-
 card = Card(card_id=18, title="Operation Charnwood")
 
 # =========================================================

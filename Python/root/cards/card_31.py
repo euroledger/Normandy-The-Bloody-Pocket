@@ -3,12 +3,7 @@ from core.enums import *
 from core.german_units import create_flak88
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY)
 
-# =========================================================
-# CARD #31
-# BRITTANY OFFENSIVE II
-# =========================================================
-
-card = Card(card_id=31, title="Brittany Offensive II")
+card = Card(card_id=31, title="US Third Army Elan")
 
 # =========================================================
 # MILITARY
