@@ -1,0 +1,96 @@
+{
+  "GUID": "511b04",
+  "Name": "Die_6",
+  "Transform": {
+    "posX": -19.70096,
+    "posY": 1.82611561,
+    "posZ": -2.20695662,
+    "rotX": 89.6556549,
+    "rotY": 175.6893,
+    "rotZ": 7.952176,
+    "scaleX": 1.6499995,
+    "scaleY": 1.6499995,
+    "scaleZ": 1.6499995
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": 0,
+  "LuaScript": "function onScriptingButtonDown(index, playerColor)\n    if index == 1 then\n        self.randomize()\n    end\nend",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "RotationValues": [
+    {
+      "Value": "1",
+      "Rotation": {
+        "x": -90,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Value": "2",
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Value": "3",
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -90
+      }
+    },
+    {
+      "Value": "4",
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      }
+    },
+    {
+      "Value": "5",
+      "Rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -180
+      }
+    },
+    {
+      "Value": "6",
+      "Rotation": {
+        "x": 90,
+        "y": 0,
+        "z": 0
+      }
+    }
+  ]
+}
