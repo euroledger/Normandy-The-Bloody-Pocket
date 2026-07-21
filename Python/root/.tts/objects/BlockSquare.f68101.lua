@@ -18,8 +18,8 @@ lateDeckGUID = "46e30b"
 
 card1GUID  = "fbe6b6"
 card2GUID  = "18a65f"
-card20GUID = "034dde"
-card37GUID = "7dd4b3"
+card20GUID = "8778ed"
+card37GUID = "7f6a42"
 dummy1GUID = "321021"
 dummy2GUID = "e1ab05"
 

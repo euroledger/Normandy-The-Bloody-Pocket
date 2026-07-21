@@ -2,12 +2,12 @@
   "GUID": "511b04",
   "Name": "Die_6",
   "Transform": {
-    "posX": -19.70096,
-    "posY": 1.82611561,
-    "posZ": -2.20695662,
-    "rotX": 89.6556549,
-    "rotY": 175.6893,
-    "rotZ": 7.952176,
+    "posX": -8.277099,
+    "posY": 1.79442954,
+    "posZ": 3.96671939,
+    "rotX": 0.33435747,
+    "rotY": 340.855377,
+    "rotZ": 179.911926,
     "scaleX": 1.6499995,
     "scaleY": 1.6499995,
     "scaleZ": 1.6499995
@@ -40,7 +40,7 @@
   "HideWhenFaceDown": false,
   "Hands": false,
   "MaterialIndex": 0,
-  "LuaScript": "function onScriptingButtonDown(index, playerColor)\n    if index == 1 then\n        self.randomize()\n    end\nend",
+  "LuaScript": "whiteDie = getObjectFromGUID(\"511b04\")\r\ngreenDie = getObjectFromGUID(\"7d7f52\")\r\n\r\nfunction onScriptingButtonDown(index, playerColor)\r\n    if index == 1 then\r\n        whiteDie.randomize()\r\n    elseif index == 2 then\r\n        greenDie.randomize()\r\n    end\r\nend",
   "LuaScriptState": "",
   "XmlUI": "",
   "RotationValues": [
