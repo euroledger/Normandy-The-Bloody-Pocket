@@ -12,3 +12,8 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Microsoft Word temporary files
+*.tmp
+~*.tmp
+~$*
