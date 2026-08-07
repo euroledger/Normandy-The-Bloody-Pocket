@@ -2,7 +2,7 @@
 
 import unittest
 
-from core.siege import (
+from core.tables.siege import (
     get_siege_result,
     SiegeResultType
 )
@@ -146,7 +146,7 @@ class TestSiegeTable(unittest.TestCase):
 # SIEGE DRM
 # =====================================================
 
-from core.siege import (
+from core.tables.siege import (
     calculate_siege_drm
 )
 

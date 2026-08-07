@@ -1,8 +1,8 @@
 import unittest
 
-from core.weather import get_weather_result
-from core.weather import WeatherType
-from core.weather import ALL_JABOS_AVAILABLE, CARPET_BOMBING_UNAVAILABLE
+from core.tables.weather import get_weather_result
+from core.tables.weather import WeatherType
+from core.tables.weather import ALL_JABOS_AVAILABLE, CARPET_BOMBING_UNAVAILABLE
 
 # =========================================================
 # TEST WEATHER

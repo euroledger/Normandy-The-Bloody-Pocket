@@ -1,6 +1,6 @@
 import unittest
 from core.map.map_utilities import do_opening_setup
-from core.military import advance_army_one_space
+from core.allied_advances_phase import advance_army_one_space
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.map.map_spaces_us_1 import utah_omaha, carentan
 from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux

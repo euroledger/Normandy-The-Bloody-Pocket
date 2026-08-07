@@ -3,33 +3,31 @@ import os
 import unittest
 from unittest.mock import patch
 
-from cards.decks import draw_deck
 from cards.card_3 import card as card_003
 from cards.card_4 import card as card_004
 from cards.card_20 import card as card_020
-
-from core.save_load_game import save_game, load_game
-from core.global_game_state import GlobalGameState
-from core.map.map_utilities import do_opening_setup
-from core.map.map_model import (
-    transport_track,
-    supply_track,
-    hitler_approval_track,
-    in_transit_box,
-    strategic_reserve_box,
-    eliminated_units_box,
-)
-from core.map.map_spaces_brit_2 import bayeux
+from cards.decks import draw_deck
+from core.enums import SideType
 from core.german_units import (
-    PZ_LEHR,
     PZ_21,
+    PZ_LEHR,
     SS_12,
     create_flak88,
     create_nebelwerfer,
 )
-from core.enums import SideType
-from core.weather import get_weather_result
-
+from core.global_game_state import GlobalGameState
+from core.map.map_model import (
+    eliminated_units_box,
+    hitler_approval_track,
+    in_transit_box,
+    strategic_reserve_box,
+    supply_track,
+    transport_track,
+)
+from core.map.map_spaces_brit_2 import bayeux
+from core.save_load_game import load_game, save_game
+from core.tables.weather import get_weather_result
+from tests.core_mechanics.testing_utilities import reset_game_state_for_tests
 
 # 🔴 YOUR REAL SAVE DIRECTORY
 SAVE_DIR = r"D:\StateOfSiege Normandy\Python\root\data"
@@ -37,40 +35,6 @@ SAVE_DIR = r"D:\StateOfSiege Normandy\Python\root\data"
 
 def get_save_path(filename):
     return os.path.join(SAVE_DIR, filename)
-
-
-def reset_game_state_for_tests():
-    do_opening_setup()
-
-    draw_deck[:] = [
-        card_003,
-        card_004,
-        card_020,
-    ]
-
-    GlobalGameState.cards_drawn = 0
-    GlobalGameState.drawn_cards = []
-    GlobalGameState.mid_deck_added = False
-    GlobalGameState.late_deck_added = False
-    GlobalGameState.current_card = None
-    GlobalGameState.current_weather = None
-    GlobalGameState.current_carpet_bombing = 0
-    GlobalGameState.current_step = 1
-
-    GlobalGameState.us_1_front_line = 11
-    GlobalGameState.brit_2_front_line = 7
-    GlobalGameState.can_1_front_line = 7
-    GlobalGameState.us_3_front_line = 8
-    GlobalGameState.us_viii_front_line = 7
-    GlobalGameState.us_xv_front_line = 4
-
-    transport_track.value = 5
-    supply_track.value = 4
-    hitler_approval_track.value = 6
-
-    in_transit_box.units.clear()
-    strategic_reserve_box.units.clear()
-    eliminated_units_box.units.clear()
 
 
 class TestSaveLoadGame(unittest.TestCase):
@@ -85,7 +49,6 @@ class TestSaveLoadGame(unittest.TestCase):
             save_game()
 
         self.assertTrue(os.path.exists(get_save_path("test_save.json")))
-
 
     def test_save_game_cancels_empty_filename(self):
         path = get_save_path("test_save.json")

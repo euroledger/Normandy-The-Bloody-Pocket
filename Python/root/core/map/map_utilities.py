@@ -88,7 +88,7 @@ def can_counter_attack(space):
     # Cannot attack Start Box spaces (ever)
     if space.terrain == TerrainType.START_BOX:
         return False
-    
+
     # Cannot attack beach after turn 3
     if space.terrain == TerrainType.BEACH and GlobalGameState.cards_drawn >= 3:
         return False

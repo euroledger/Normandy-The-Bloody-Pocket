@@ -6,7 +6,7 @@ from core.map.map_spaces_brit_2 import tilly
 from core.map.map_spaces_can_1 import lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.map.map_utilities import do_opening_setup
-from core.weather import WEATHER_TABLE
+from core.tables.weather import WEATHER_TABLE
 
 
 class TestDefenseStrengthsCard14(unittest.TestCase):

@@ -1,8 +1,8 @@
 import unittest
 from cards.card_48 import card as card_48
 from core.allied_armies import US_THIRD_ARMY
-from core.weather import get_weather_result
-from core.weather import ALL_JABOS_AVAILABLE
+from core.tables.weather import get_weather_result
+from core.tables.weather import ALL_JABOS_AVAILABLE
 from tests.allied_attack_strengths.attack_strength_test_utilities import assert_attack_strengths
 from core.card_utilities import get_armies, get_armies_as_objects
 

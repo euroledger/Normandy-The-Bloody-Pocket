@@ -46,8 +46,8 @@ cherbourg = MapSpace(
     controlling_player=SideType.GERMAN,
 )
 
-coutances = MapSpace(
-    name="COUTANCES",
+st_lo = MapSpace(
+    name="ST. LO",
     track=Nation.US_1,
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
@@ -55,8 +55,8 @@ coutances = MapSpace(
     controlling_player=SideType.GERMAN,
 )
 
-st_lo = MapSpace(
-    name="ST. LO",
+coutances = MapSpace(
+    name="COUTANCES",
     track=Nation.US_1,
     terrain=TerrainType.BOCAGE,
     terrain_value=2,
@@ -107,8 +107,8 @@ us_1_track = [
     carentan,
     valognes,
     cherbourg,
-    coutances,
     st_lo,
+    coutances,
     avranches,
     mortain,
     flers,

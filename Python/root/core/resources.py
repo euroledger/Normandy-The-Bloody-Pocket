@@ -1,8 +1,42 @@
-from core.enums import ModifierType, ResourceType
+from core.enums import ModifierType, ReinforcementType, ResourceType
 from core.global_game_state import GlobalGameState
-from core.weather import WeatherType
-from core.enums import ReinforcementType
-from core.map.map_model import in_transit_box, strategic_reserve_box
+from core.map.map_model import (
+    hitler_approval_track,
+    in_transit_box,
+    strategic_reserve_box,
+    supply_track,
+    transport_track,
+)
+from core.tables.weather import WeatherType
+
+
+def do_resource_phase_adjustments(card):
+    print()
+    print("RESOURCE ADJUSTMENTS")
+
+    for effect in card.resources.effects:
+        if effect.modifier_type not in (
+            ModifierType.RESOURCE_LOSS,
+            ModifierType.RESOURCE_GAIN,
+        ):
+            continue
+
+        action = "GAIN" if effect.value > 0 else "LOSE"
+
+        if effect.resource_type == ResourceType.HITLER_APPROVAL:
+            old_value = hitler_approval_track.value
+            hitler_approval_track.value = max(-2, min(6, hitler_approval_track.value + effect.value))
+            print(f"Hitler Approval: {action} {abs(effect.value)} ({old_value} -> {hitler_approval_track.value})")
+
+        elif effect.resource_type == ResourceType.SUPPLY:
+            old_value = supply_track.value
+            supply_track.value = max(0, min(6, supply_track.value + effect.value))
+            print(f"Supply: {action} {abs(effect.value)} ({old_value} -> {supply_track.value})")
+
+        elif effect.resource_type == ResourceType.TRANSPORT:
+            old_value = transport_track.value
+            transport_track.value = max(0, min(6, transport_track.value + effect.value))
+            print(f"Transport: {action} {abs(effect.value)} ({old_value} -> {transport_track.value})")
 
 
 def do_resource_phase_drms(weather_type, card):

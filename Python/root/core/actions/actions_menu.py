@@ -1,8 +1,10 @@
 from random import randint
 
 from core.actions.counter_attack_action import do_counter_attack
-from core.actions.strategic_reserve_actions import do_move_panzer_from_strategic_reserve
+from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, do_move_panzer_from_strategic_reserve, do_move_panzer_to_strategic_reserve, get_panzer_divisions_in_strategic_reserve
 from core.enums import ReinforcementType
+from core.game_summary import print_game_summary
+from core.german_units import TIGER_101
 from core.global_game_state import GlobalGameState
 from core.map.map_model import (
     in_transit_box,
@@ -11,6 +13,7 @@ from core.map.map_model import (
 )
 
 YELLOW = "\033[33m"
+GREEN = "\033[32m"
 RESET = "\033[0m"
 
 
@@ -18,6 +21,11 @@ def list_user_actions():
     print(YELLOW)
     print("AVAILABLE ACTIONS")
     print(f"ACTIONS REMAINING: {GlobalGameState.actions_left_this_turn}")
+    print()
+
+    if TIGER_101 in strategic_reserve_box.units:
+        print(f"{GREEN}*** 101st TIGER BN AVAILABLE ***{YELLOW}")
+
     print()
 
     print("1. Counter-Attack (1)")
@@ -29,17 +37,10 @@ def list_user_actions():
     print("7. Move Unit One Space (1)")
     print("8. Refit Panzer Division (1)")
     print("9. Move Action Point to Strategic Reserve (1)")
+    print("G. Game Summary")
 
     print(RESET)
 
-
-def do_move_panzer_to_strategic_reserve():
-    print("MOVE PANZER DIVISION TO STRATEGIC RESERVE")
-
-
-# this will need to be moved to its own file; can also be called in other phases
-def do_move_other_unit_from_strategic_reserve():
-    print("MOVE OTHER UNIT FROM STRATEGIC RESERVE")
 
 
 def do_resource_augmentation_roll():
@@ -68,9 +69,9 @@ def choose_user_action():
     if choice == "1":
         do_counter_attack()
     elif choice == "2":
-        do_move_panzer_from_strategic_reserve()
+        do_move_panzer_from_strategic_reserve(randint(1, 6))
     elif choice == "3":
-        do_move_panzer_to_strategic_reserve()
+        do_move_panzer_to_strategic_reserve(randint(1,6))
     elif choice == "4":
         do_move_other_unit_from_strategic_reserve()
     elif choice == "5":
@@ -83,6 +84,10 @@ def choose_user_action():
         do_refit_panzer_division()
     elif choice == "9":
         do_move_action_point_to_strategic_reserve()
+    elif choice == "G" or choice == "g":
+        print_game_summary()
+        print()
+        input("Press ENTER to continue...")
     else:
         print("INVALID ACTION")
 

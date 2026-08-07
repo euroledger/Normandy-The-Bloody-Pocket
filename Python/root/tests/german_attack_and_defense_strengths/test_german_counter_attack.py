@@ -25,12 +25,12 @@ from core.allied_armies import (
     US_XV_CORPS,
     US_VIII_CORPS
 )
-from core.military import advance_army_one_space
+from core.allied_advances_phase import advance_army_one_space
 from core.map.map_model import hitler_approval_track, TerrainType
 from core.models import Strategy
 from cards.card_2 import card as card_002
 from cards.card_37 import card as card_037
-from core.weather import WEATHER_TABLE
+from core.tables.weather import WEATHER_TABLE
 from tests.core_mechanics.testing_utilities import setup_units_for_tests
 from core.map.map_spaces_us_3 import us_3_start_box, st_malo, rennes
 

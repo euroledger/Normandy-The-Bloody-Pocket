@@ -32,6 +32,11 @@ card.air_power.effects.append(
 card.resources.effects.append(
     Effect(modifier_type=ModifierType.REINFORCEMENT, value=1, target=PZ_2))
 
+card.actions.effects.append(
+    # +1 Meyer for 12th SS only
+    Effect(modifier_type=ModifierType.COMMANDER, value=1, label="Meyer")
+)
+
 # =========================================================
 # ACTIONS
 # =========================================================

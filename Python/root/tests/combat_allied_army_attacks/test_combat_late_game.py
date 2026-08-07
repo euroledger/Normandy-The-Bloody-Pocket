@@ -1,6 +1,6 @@
 import unittest
-from core.weather import WEATHER_TABLE
-from core.military import do_allied_attacks
+from core.tables.weather import WEATHER_TABLE
+from core.allied_advances_phase import do_allied_attacks
 from cards.card_46 import card as card_046
 from cards.card_37 import card as card_037
 from core.allied_armies import US_FIRST_ARMY, US_VIII_CORPS
@@ -14,7 +14,7 @@ from core.map.map_spaces_us_3 import st_malo, brest
 class TestCombatLateGame(unittest.TestCase):
     def setUp(self):
         setup_units_for_tests()
-        GlobalGameState.german_casualty_strategy = Strategy.RANDOM
+        GlobalGameState.german_casualty_strategy = Strategy.UNIT_TEST
         self.weather = WEATHER_TABLE[1]
 
     def test_us_first_army_attack_mortain_natural_6(self):
@@ -28,9 +28,8 @@ class TestCombatLateGame(unittest.TestCase):
         self.assertEqual(US_FIRST_ARMY.location, avranches)
         do_allied_attacks([US_FIRST_ARMY], card_046, self.weather, die_roll=1)
         self.assertEqual(US_FIRST_ARMY.location, avranches)
-        self.assertEqual(len(mortain.units), 2)
-        self.assertEqual(mortain.units[0].name, "Kampfgruppe")
-        self.assertEqual(mortain.units[1].name, "Flak 88")
+        self.assertEqual(len(mortain.units), 1)
+        self.assertEqual(mortain.units[0].name, "Flak 88")
         self.assertEqual(len(flers.units), 0)
 
     # AIR SUPPORT APPLIED - ALLIED VICTORY WITH ROLL OF 5

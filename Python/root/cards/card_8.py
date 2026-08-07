@@ -2,14 +2,14 @@ from core.models import *
 from core.enums import *
 from core.german_units import SS_1
 from core.allied_armies import BRITISH_SECOND_ARMY
-                                
+
 
 # =========================================================
 # CARD #8
-# VILLERS-BOCAGE
+# ROMMEL
 # =========================================================
 
-card = Card(card_id=8, title="Villers-Bocage")
+card = Card(card_id=8, title="Rommel")
 
 # =========================================================
 # MILITARY
@@ -33,4 +33,8 @@ card.air_power.effects.append(
 card.resources.effects.append(
     Effect(modifier_type=ModifierType.REINFORCEMENT, value=1, target=SS_1))
 
+card.actions.effects.append(
+    # +2 Rommel
+    Effect(modifier_type=ModifierType.COMMANDER, value=2, label="Rommel")
+)
 # =========================================================

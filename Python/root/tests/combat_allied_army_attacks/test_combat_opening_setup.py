@@ -3,10 +3,10 @@ import unittest
 from cards.card_3 import card as card_003
 
 from core.enums import SideType
-from core.weather import WEATHER_TABLE
-from core.military import do_allied_attacks, advance_army_one_space
+from core.tables.weather import WEATHER_TABLE
+from core.allied_advances_phase import do_allied_attacks, advance_army_one_space
 from core.map.map_utilities import add_units_to_space, do_opening_setup
-from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes
+from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes, cherbourg
 from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux
 from core.map.map_spaces_can_1 import gold_juno_sword_can, lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
@@ -19,7 +19,7 @@ class TestAlliedAttacks(unittest.TestCase):
     def setUp(self):
         do_opening_setup()
 
-        GlobalGameState.german_casualty_strategy = Strategy.RANDOM
+        GlobalGameState.german_casualty_strategy = Strategy.UNIT_TEST
 
         advance_army_one_space(US_FIRST_ARMY)
         self.weather = WEATHER_TABLE[1]
@@ -50,8 +50,7 @@ class TestAlliedAttacks(unittest.TestCase):
         do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=2)
 
         self.assertEqual(US_FIRST_ARMY.location, utah_omaha)
-        self.assertEqual(len(carentan.units), 1)
-        self.assertEqual(carentan.units[0].combat_value, 1)
+        self.assertEqual(len(carentan.units), 0)
 
     # Allied Victory
 
@@ -89,7 +88,7 @@ class TestAlliedAttacks(unittest.TestCase):
         self.assertEqual(bayeux.units[2].name, "Nebelwerfer")
         self.assertEqual(bayeux.units[3].name, "Flak 88")
 
-        self.assertEqual(bayeux.units[0].combat_value, 2)
+        self.assertEqual(bayeux.units[0].combat_value, 1)
         self.assertEqual(bayeux.units[1].combat_value, 1)
         self.assertEqual(bayeux.units[2].combat_value, 1)
         self.assertEqual(bayeux.units[3].combat_value, 2)
@@ -114,11 +113,10 @@ class TestAlliedAttacks(unittest.TestCase):
         do_allied_attacks([CANADIAN_FIRST_ARMY], card_003, self.weather, die_roll=1)
 
         self.assertEqual(CANADIAN_FIRST_ARMY.location, gold_juno_sword_can)
-        self.assertEqual(len(lebisey_wood.units), 3)
+        self.assertEqual(len(lebisey_wood.units), 2)
 
         self.assertEqual(lebisey_wood.units[0].combat_value, 1)
-        self.assertEqual(lebisey_wood.units[1].combat_value, 1)
-        self.assertEqual(lebisey_wood.units[2].combat_value, 2)
+        self.assertEqual(lebisey_wood.units[1].combat_value, 2)
 
     def test_us_first_army_advance_updates_front_line_space(self):
         add_units_to_space(carentan, US_FIRST_ARMY)
@@ -153,7 +151,7 @@ class TestAlliedAttacks(unittest.TestCase):
 
         self.assertEqual(BRITISH_SECOND_ARMY.location, bayeux)
         self.assertEqual(bayeux.controlling_player, SideType.ALLIED)
-        self.assertEqual(hitler_approval_track.value, 5)
+        self.assertEqual(hitler_approval_track.value, 6)
 
     def test_canadian_first_army_attack_lebisey_wood_natural_6_no_panzer_no_hitler_approval_loss(self):
         hitler_approval_track.value = 6
@@ -174,3 +172,46 @@ class TestAlliedAttacks(unittest.TestCase):
 
         self.assertEqual(BRITISH_SECOND_ARMY.location, gold_juno_sword_brit)
         self.assertEqual(hitler_approval_track.value, 6)
+
+    def test_us_first_army_captures_cherbourg_lowers_hitler_approval_once(self):
+        hitler_approval_track.value = 6
+        GlobalGameState.cherbourg_captured = False
+
+        # Move US First Army to Valognes
+        advance_army_one_space(US_FIRST_ARMY)
+        advance_army_one_space(US_FIRST_ARMY)
+
+        self.assertEqual(US_FIRST_ARMY.location, valognes)
+        self.assertEqual(cherbourg.controlling_player, SideType.GERMAN)
+
+        # First capture of Cherbourg
+        do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=3)
+
+        self.assertEqual(US_FIRST_ARMY.location, cherbourg)
+        self.assertEqual(cherbourg.controlling_player, SideType.ALLIED)
+        self.assertEqual(hitler_approval_track.value, 5)
+        self.assertTrue(GlobalGameState.cherbourg_captured)
+
+        # Reset the game state
+        do_opening_setup()
+        cherbourg.controlling_player=SideType.GERMAN
+
+        # GlobalGameState.cherbourg_captured = True
+        hitler_approval_track.value = 5
+
+        advance_army_one_space(US_FIRST_ARMY)
+        advance_army_one_space(US_FIRST_ARMY)
+        advance_army_one_space(US_FIRST_ARMY)
+
+        self.assertEqual(US_FIRST_ARMY.location, valognes)
+        self.assertEqual(cherbourg.controlling_player, SideType.GERMAN)
+
+        # Capture Cherbourg again
+        do_allied_attacks([US_FIRST_ARMY], card_003, self.weather, die_roll=3)
+
+        self.assertEqual(US_FIRST_ARMY.location, cherbourg)
+        self.assertEqual(cherbourg.controlling_player, SideType.ALLIED)
+
+        # Hitler Approval should not be reduced a second time
+        self.assertEqual(hitler_approval_track.value, 5)
+        self.assertTrue(GlobalGameState.cherbourg_captured)

@@ -48,10 +48,9 @@ from cards.card_45 import card as card_045
 from cards.card_46 import card as card_046
 from cards.card_47 import card as card_047
 from cards.card_48 import card as card_048
-
-from core.resources import do_resource_phase_drms
 from core.global_game_state import GlobalGameState
-from core.weather import WeatherType
+from core.resources import do_resource_phase_drms
+from core.tables.weather import WeatherType
 
 
 class TestResourcePhase(unittest.TestCase):

@@ -2,6 +2,9 @@ from core.models import AlliedArmy, Strategy
 
 
 class GlobalGameState:
+    # MODE if monte_carlo certain things disabled (eg auto save)
+    monte_carlo = False
+
     us_1_front_line = 11
     brit_2_front_line = 7
     can_1_front_line = 7
@@ -18,8 +21,10 @@ class GlobalGameState:
     supply_check_drm = 0
     hitler_approval_check_drm = 0
 
-    # BOCAGE MODIFIER, -1 ONCE EVENT CARD DRAWN FOR GERMAN DEFENSE ONLY
-    bocage_defense_modifier = 0
+    # RESOURCE (AUGMENATION) BASE LEVELS
+    transport_base_level = 3
+    supply_base_level = 3
+    hitler_approval_base_level = 3
 
     # HUMAN/AI TOGGLES
     german_casualty_strategy = Strategy.RANDOM
@@ -39,3 +44,17 @@ class GlobalGameState:
 
     # TRACK ATTACKED ARMIES THIS TURN
     counter_attacked_armies = set()
+
+    # MISC GAME EVENTS
+    cherbourg_captured = False
+    us_third_army_activated = False
+
+    # BOCAGE MODIFIER, -1 ONCE EVENT CARD DRAWN FOR GERMAN DEFENSE ONLY
+    bocage_defense_modifier = 0
+
+    # MODEL IN COMMAND
+    model_in_command = False
+
+    # HITLER ASSASSINATION
+    hitler_assassination = False
+

@@ -3,7 +3,7 @@ from cards.card_29 import card as card_029
 from core.card_utilities import calculate_defense_modifiers
 from core.map.map_spaces_us_3 import st_malo
 from core.allied_armies import US_VIII_CORPS
-from core.weather import WEATHER_TABLE
+from core.tables.weather import WEATHER_TABLE
 
 
 class TestDefenseStrengthsCard29(unittest.TestCase):

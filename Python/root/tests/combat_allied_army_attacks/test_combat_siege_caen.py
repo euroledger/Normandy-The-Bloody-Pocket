@@ -8,10 +8,11 @@ from cards.card_18 import card as card_018
 from core.allied_armies import CANADIAN_FIRST_ARMY
 from core.german_units import SS_1, SS_12
 from core.map.map_utilities import add_units_to_space, remove_units_from_space
-from core.weather import WEATHER_TABLE
-from core.military import do_allied_attacks, get_carpet_bombing_modifier
+from core.tables.weather import WEATHER_TABLE
+from core.allied_advances_phase import do_allied_attacks, get_carpet_bombing_modifier
 from core.map.map_spaces_can_1 import lebisey_wood, caen
 from core.global_game_state import GlobalGameState
+from core.map.map_model import hitler_approval_track
 from core.models import Strategy
 from tests.core_mechanics.testing_utilities import setup_units_for_tests
 
@@ -110,6 +111,9 @@ class TestSiegeCaen(unittest.TestCase):
         do_allied_attacks([CANADIAN_FIRST_ARMY], card_018, self.weather, die_roll=5)
         self.assertFalse(caen.under_siege)
         self.assertEqual(CANADIAN_FIRST_ARMY.location, caen)
+
+        # Caen capture costs 1 Hitler Approval
+        self.assertEqual(hitler_approval_track.value, 5)
 
     def test_canadian_first_army_carpet_bombing_counts_as_air_support(self):
         self.weather = WEATHER_TABLE[3]  # PARTLY CLEAR

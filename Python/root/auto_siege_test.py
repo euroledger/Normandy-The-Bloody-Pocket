@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from core.allied_armies import CANADIAN_FIRST_ARMY
 
-from core.weather import get_weather_result
-from core.carpet_bombing import get_carpet_bombing_result
-from core.carpet_bombing import ATTACK_CANCELLED
+from core.tables.weather import get_weather_result
+from core.tables.carpet_bombing import get_carpet_bombing_result
+from core.tables.carpet_bombing import ATTACK_CANCELLED
 
 from core.card_utilities import calculate_attack_modifiers, get_armies_as_objects
 
-from core.siege import (calculate_siege_drm, get_siege_result)
+from core.tables.siege import (calculate_siege_drm, get_siege_result)
 
 from cards.card_3 import card as card_003
 from cards.card_4 import card as card_004

@@ -1,9 +1,9 @@
 import unittest
-from core.carpet_bombing import get_carpet_bombing_result
-from core.carpet_bombing import CarpetBombingResultType
-from core.carpet_bombing import ATTACK_CANCELLED
-from core.military import get_carpet_bombing_modifier
-from core.weather import WEATHER_TABLE
+from core.tables.carpet_bombing import get_carpet_bombing_result
+from core.tables.carpet_bombing import CarpetBombingResultType
+from core.tables.carpet_bombing import ATTACK_CANCELLED
+from core.allied_advances_phase import get_carpet_bombing_modifier
+from core.tables.weather import WEATHER_TABLE
 from cards.card_20 import card as card_020
 
 

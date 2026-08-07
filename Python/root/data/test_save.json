@@ -5,6 +5,7 @@
         20
     ],
     "global_game_state": {
+        "monte_carlo": false,
         "us_1_front_line": 11,
         "brit_2_front_line": 7,
         "can_1_front_line": 7,
@@ -16,9 +17,11 @@
         "transport_check_drm": 0,
         "supply_check_drm": 0,
         "hitler_approval_check_drm": 0,
-        "bocage_defense_modifier": 0,
+        "transport_base_level": 3,
+        "supply_base_level": 3,
+        "hitler_approval_base_level": 3,
         "german_casualty_strategy": "UNIT_TEST",
-        "actions_left_this_turn": 0,
+        "actions_left_this_turn": 1,
         "cards_drawn": 0,
         "drawn_cards": [],
         "mid_deck_added": false,
@@ -26,7 +29,12 @@
         "current_card": null,
         "current_weather": null,
         "current_carpet_bombing": 0,
-        "current_step": 1
+        "current_step": 1,
+        "cherbourg_captured": true,
+        "us_third_army_activated": false,
+        "bocage_defense_modifier": 0,
+        "model_in_command": false,
+        "hitler_assassination": false
     },
     "resource_tracks": {
         "transport": 5,
@@ -84,14 +92,14 @@
             "under_siege": false,
             "units": []
         },
-        "COUTANCES": {
+        "ST. LO": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
             "units": []
         },
-        "ST. LO": {
+        "COUTANCES": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,

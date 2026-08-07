@@ -15,7 +15,7 @@ from core.map.map_utilities import (
     get_eligible_german_units,
     update_front_line_for_army,
 )
-from core.military import get_front_line_space, get_track_for, do_german_losses
+from core.allied_advances_phase import get_front_line_space, get_track_for, do_german_losses
 from core.models import GermanUnit
 
 def choose_attacking_units(units):
@@ -140,6 +140,7 @@ def resolve_counter_attack(attack, defense, selected_units, die_roll):
     print("RESOLVING COUNTER-ATTACK")
     print(f"Attack Strength: {attack}")
     print(f"Defense Strength: {defense}")
+    print()
     print(f"Die Roll: {die_roll}")
 
     # --- Supply consumption (ANY Panzer unit) ---
@@ -192,14 +193,6 @@ def do_post_combat(result, selected_option, selected_units):
     if result["result"] == "WIN":
         print("GERMAN VICTORY")
 
-        # --- Allied Retreat ---
-        # track = get_track_for(army)
-        # current_space = army.location
-
-        # retreat_space = next(
-        #     (s for s in track if s.track_number == current_space.track_number + 1),
-        #     None
-        # )
         track = get_track_for(army)
         current_space = army.location
 

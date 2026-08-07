@@ -9,9 +9,10 @@ from cards.card_29 import card as card_029
 from core.allied_armies import US_VIII_CORPS
 from core.german_units import SS_1, SS_12
 from core.map.map_utilities import add_units_to_space
-from core.weather import WEATHER_TABLE
-from core.military import do_allied_attacks
+from core.tables.weather import WEATHER_TABLE
+from core.allied_advances_phase import do_allied_attacks
 from core.map.map_spaces_us_3 import st_malo, brest
+from core.map.map_model import hitler_approval_track
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
 from tests.core_mechanics.testing_utilities import setup_units_for_tests
@@ -108,3 +109,6 @@ class TestSiegeBrest(unittest.TestCase):
         do_allied_attacks([US_VIII_CORPS], card_029, self.weather, die_roll=6)
         self.assertFalse(brest.under_siege)
         self.assertEqual(US_VIII_CORPS.location, brest)
+
+        # Brest capture costs 2 Hitler Approval
+        self.assertEqual(hitler_approval_track.value, 4)

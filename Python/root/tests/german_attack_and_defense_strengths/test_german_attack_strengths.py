@@ -12,11 +12,11 @@ from core.map.map_utilities import (
 from core.map.map_spaces_us_1 import carentan, utah_omaha
 from core.map.map_spaces_brit_2 import bayeux, gold_juno_sword_brit
 from core.map.map_spaces_can_1 import lebisey_wood, gold_juno_sword_can
-from core.military import get_front_line_space
+from core.allied_advances_phase import get_front_line_space
 from core.actions.counter_attack_action import get_counter_attack_options
 from cards.card_2 import card as card_002
 
-from core.weather import WEATHER_TABLE
+from core.tables.weather import WEATHER_TABLE
 
 
 class TestGermanAttackStrengths(unittest.TestCase):

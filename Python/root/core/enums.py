@@ -14,8 +14,9 @@ class ModifierType(Enum):
 
 
 class SideType(Enum):
-    ALLIED = "ALLIED",
+    ALLIED = ("ALLIED",)
     GERMAN = "GERMAN"
+
 
 class Nation(Enum):
     US_1 = "US FIRST ARMY"
@@ -30,18 +31,16 @@ class Nation(Enum):
 class ReinforcementType(Enum):
     PZ_DIV = "PANZER"
     MARKER = "MARKER"
+    TIGER_BN = "TIGER"
     NEBELWERFER = "NEBELWERFER"
+    FALLSCHIRMJAGER = "FALLSCHIRMJAGER"
     FLAK_88 = "FLAK 88"
     KAMPFGRUPPE = "KAMPFGRUPPE"
     FORTIFIED_VILLAGE_1 = "FORTIFIED VILLAGE +1"
     FORTIFIED_VILLAGE_2 = "FORTIFIED VILLAGE +2"
 
 
-
 class ResourceType(Enum):
     TRANSPORT = "Transport"
     SUPPLY = "Supply"
     HITLER_APPROVAL = "Hitler Approval"
-
-
-

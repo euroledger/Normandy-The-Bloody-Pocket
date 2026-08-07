@@ -173,7 +173,7 @@ def save_global_game_state():
     return {
         name: serialize_value(value)
         for name, value in GlobalGameState.__dict__.items()
-        if not name.startswith("_") and not callable(value) and name != "counter_attacked_armies"   
+        if not name.startswith("_") and not callable(value) and name != "counter_attacked_armies"
 
     }
 
@@ -209,16 +209,19 @@ def load_global_game_state(saved_state):
 
 BASE_DIR = Path(__file__).resolve().parent.parent   # goes up from /core → /root
 DATA_DIR = BASE_DIR / "data"
-def save_game():
+def save_game(save_name=None):
 
     print("SAVE GAME")
     print()
 
-    save_file_name = input("Save file name: ").strip()
+    if save_name is not None:
+        save_file_name = save_name
+    else:
+        save_file_name = input("Save file name: ").strip()
 
-    if not save_file_name:
-        print("SAVE CANCELLED")
-        return
+        if not save_file_name:
+            print("SAVE CANCELLED")
+            return
 
     if not save_file_name.endswith(".json"):
         save_file_name += ".json"

@@ -7,9 +7,16 @@ from core.allied_armies import (
     US_XV_CORPS,
 )
 from core.enums import ModifierType, ResourceType
-from core.weather import ALL_JABOS_AVAILABLE
+from core.save_load_game import get_all_map_spaces
+from core.tables.weather import ALL_JABOS_AVAILABLE
 from core.map.map_model import TerrainType, transport_track, supply_track, hitler_approval_track
+from core.german_units import TIGER_101
 
+def remove_wittmann():
+    for space in get_all_map_spaces():
+        if TIGER_101 in space.units:
+            space.units.remove(TIGER_101)
+            return
 
 def print_modifiers(card):
     modifiers = card.get_action_modifiers()

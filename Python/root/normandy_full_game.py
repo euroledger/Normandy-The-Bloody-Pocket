@@ -1,20 +1,23 @@
 from random import shuffle, randint
 from cards.decks import draw_deck, mid_deck, late_deck
 from core.actions.actions_menu import do_action_phase
-from core.military import do_military_phase
+from core.allied_advances_phase import do_allied_advances_phase
 from core.save_load_game import load_game, save_game
-from core.weather import get_weather_result
-from core.resources import do_resource_phase_drms, do_resource_phase_reinforcements
-from core.carpet_bombing import get_carpet_bombing_result, ATTACK_CANCELLED
+from core.tables.weather import get_weather_result
+from core.resources import do_resource_phase_adjustments, do_resource_phase_drms, do_resource_phase_reinforcements
+from core.tables.carpet_bombing import get_carpet_bombing_result, ATTACK_CANCELLED
 from core.map.map_utilities import do_opening_setup
 from core.game_summary import print_game_summary
 from core.global_game_state import GlobalGameState
+from datetime import datetime
+
 
 from core.card_utilities import (
     calculate_attack_modifiers,
     get_all_defending_armies,
     get_armies_as_objects,
     calculate_defense_modifiers,
+    remove_wittmann,
 )
 
 GREEN = "\033[92m"
@@ -23,12 +26,21 @@ CYAN = "\033[96m"
 RESET = "\033[0m"
 
 
+GAME_WON = "won"
+GAME_LOST = "lost"
+GAME_CONTINUES = None
+
 do_opening_setup()
 
 opening_cards = draw_deck[:2]
 random_cards = draw_deck[2:]
 
 shuffle(random_cards)
+
+# TEST MICHAEL WITTMANN CARD 9
+from cards.card_9 import card as card_009
+
+random_cards[0] = card_009
 
 draw_deck[:] = opening_cards + random_cards
 
@@ -60,6 +72,23 @@ def print_attack_strengths(card, weather, carpet_bombing):
     print(RESET)
 
 
+from core.map.map_model import hitler_approval_track
+
+
+def check_for_game_end():
+    if hitler_approval_track.value == -2:
+        print()
+        print("========================================")
+        print("HITLER APPROVAL HAS FALLEN TO -2")
+        print("YOU ARE RELIEVED OF COMMAND")
+        print()
+        print("YOU LOSE!")
+        print("========================================")
+        return GAME_LOST
+
+    return GAME_CONTINUES
+
+
 def print_defense_strengths(card, weather):
     print(CYAN)
     print()
@@ -86,12 +115,16 @@ def print_defense_strengths(card, weather):
 
 while True:
     print()
-    print("========================================")
-    print("NORMANDY - THE BLOODY POCKET")
-    print("========================================")
+    print("=========================================")
+    print("NORMANDY SOLITAIRE! D-Day to Falaise 1944")
+    print("=========================================")
     print()
 
     print(f"Cards Drawn: {GlobalGameState.cards_drawn}")
+
+    game_result = check_for_game_end()
+    if game_result == GAME_LOST:
+        break
 
     if GlobalGameState.drawn_cards:
         drawn_ids = [str(card.card_id) for card in GlobalGameState.drawn_cards]
@@ -118,9 +151,9 @@ while True:
     menu_items = [
         "Draw Card",
         "Roll For Weather",
-        "Resource Phase",
+        "Resources Phase",
         "Deploy Non Panzer Div Reinforcements",
-        "Military Phase",
+        "Allied Advances Phase",
         "Action Phase",
     ]
 
@@ -134,10 +167,7 @@ while True:
     print("Press ENTER to perform next action")
     print("Press G to see game summary")
 
-    can_save_game = (
-        GlobalGameState.current_step == 1
-        and GlobalGameState.current_card is not None
-    )
+    can_save_game = GlobalGameState.current_step == 1 and GlobalGameState.current_card is not None
 
     can_load_game = GlobalGameState.current_step == 1
 
@@ -229,7 +259,7 @@ while True:
         continue
 
     if GlobalGameState.current_step == 2 and user_input == "":
-        if GlobalGameState.current_card == 13: # Great Storm
+        if GlobalGameState.current_card == 13:  # Great Storm
             weather = get_weather_result(1)
             weather_roll = "N/A"
         else:
@@ -286,6 +316,7 @@ while True:
         continue
 
     if GlobalGameState.current_step == 3 and user_input == "":
+        do_resource_phase_adjustments(GlobalGameState.current_card)
         do_resource_phase_drms(
             GlobalGameState.current_weather.weather_type,
             GlobalGameState.current_card,
@@ -318,7 +349,7 @@ while True:
 
     if GlobalGameState.current_step == 5 and user_input == "":
         print(CYAN)
-        do_military_phase(
+        do_allied_advances_phase(
             GlobalGameState.current_card,
             GlobalGameState.current_weather,
         )
@@ -335,6 +366,32 @@ while True:
         )
         print(RESET)
         input("Press ENTER to continue...")
+
+        # AutoSave game at end of each turn
+
+
+        save_name = (
+            f"{datetime.now():%b-%d}-end-turn{GlobalGameState.cards_drawn}"
+        ).upper()
+
+        if GlobalGameState.monte_carlo == False:
+            save_game(save_name )
+
+        remove_wittmann()
+
         GlobalGameState.current_step = 1
         GlobalGameState.counter_attacked_armies.clear()
+
         continue
+
+print()
+print("========================================")
+print("GAME OVER")
+print()
+
+if game_result == GAME_WON:
+    print("You won!")
+else:
+    print("You lost!")
+
+print("========================================")
