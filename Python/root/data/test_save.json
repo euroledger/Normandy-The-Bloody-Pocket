@@ -34,7 +34,8 @@
         "us_third_army_activated": false,
         "bocage_defense_modifier": 0,
         "model_in_command": false,
-        "hitler_assassination": false
+        "hitler_assassination": false,
+        "reserve_actions": 0
     },
     "resource_tracks": {
         "transport": 5,

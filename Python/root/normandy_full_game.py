@@ -37,10 +37,10 @@ random_cards = draw_deck[2:]
 
 shuffle(random_cards)
 
-# TEST MICHAEL WITTMANN CARD 9
-from cards.card_9 import card as card_009
+# # TEST MICHAEL WITTMANN CARD 9
+# from cards.card_9 import card as card_009
 
-random_cards[0] = card_009
+# random_cards[0] = card_009
 
 draw_deck[:] = opening_cards + random_cards
 
@@ -218,7 +218,6 @@ while True:
 
         draw_deck.remove(drawn_card)
         GlobalGameState.drawn_cards.append(drawn_card)
-        GlobalGameState.cards_drawn += 1
 
         if drawn_card.card_id == 20 and not GlobalGameState.mid_deck_added:
             draw_deck.extend(mid_deck)
@@ -376,6 +375,7 @@ while True:
 
         if GlobalGameState.monte_carlo == False:
             save_game(save_name )
+        GlobalGameState.cards_drawn += 1
 
         remove_wittmann()
 

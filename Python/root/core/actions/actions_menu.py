@@ -1,6 +1,8 @@
 from random import randint
 
 from core.actions.counter_attack_action import do_counter_attack
+from core.actions.fortified_villages_action import do_build_fortified_villages
+from core.actions.resource_actions import do_resource_augmentation_roll
 from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, do_move_panzer_from_strategic_reserve, do_move_panzer_to_strategic_reserve, get_panzer_divisions_in_strategic_reserve
 from core.enums import ReinforcementType
 from core.game_summary import print_game_summary
@@ -24,7 +26,7 @@ def list_user_actions():
     print()
 
     if TIGER_101 in strategic_reserve_box.units:
-        print(f"{GREEN}*** 101st TIGER BN AVAILABLE ***{YELLOW}")
+        print(f"{GREEN}*** 101st TIGER BN AVAILABLE IN STRATEGIC RESERVE ***{YELLOW}")
 
     print()
 
@@ -33,22 +35,13 @@ def list_user_actions():
     print("3. Move Panzer Division To Strategic Reserve (1)")
     print("4. Move Other Unit from Strategic Reserve (0)")
     print("5. Do Resource Augmentation Roll (1)")
-    print("6. Place Fortified Villages Marker (3)")
+    print("6. Place or Upgrade Fortified Villages Marker (3)")
     print("7. Move Unit One Space (1)")
     print("8. Refit Panzer Division (1)")
     print("9. Move Action Point to Strategic Reserve (1)")
     print("G. Game Summary")
 
     print(RESET)
-
-
-
-def do_resource_augmentation_roll():
-    print("RESOURCE AUGMENTATION ROLL")
-
-
-def do_build_fortified_villages():
-    print("BUILD FORTIFIED VILLAGES")
 
 
 def do_move_unit_one_space():

@@ -45,6 +45,21 @@ def print_game_summary():
                     f"{space.name:<25} {', '.join(f'{unit.display_name} ({unit.strength})' for unit in allied_units)}"
                 )
 
+    # print("\nGERMAN UNITS")
+
+    # printed_spaces = set()
+
+    # for track in all_tracks:
+    #     for space in track:
+    #         if space.name in printed_spaces:
+    #             continue
+
+    #         printed_spaces.add(space.name)
+    #         german_units = [unit for unit in space.units if not hasattr(unit, "nation")]
+    #         if german_units:
+    #             unit_text = ", ".join(f"{unit} ({unit.combat_value})" for unit in german_units)
+    #             print(f"{space.name:<25} {unit_text}")
+
     print("\nGERMAN UNITS")
 
     printed_spaces = set()
@@ -58,9 +73,16 @@ def print_game_summary():
             german_units = [unit for unit in space.units if not hasattr(unit, "nation")]
             if german_units:
                 unit_text = ", ".join(f"{unit} ({unit.combat_value})" for unit in german_units)
-                print(f"{space.name:<25} {unit_text}")
-
+                marker = ""
+                if space.fortified_village_modifier == 1:
+                    marker = "FORTIFIED VILLAGES +1 - "
+                elif space.fortified_village_modifier == 2:
+                    marker = "FORTIFIED VILLAGES +2 - "
+                print(f"{space.name:<25} {marker}{unit_text}")
+            elif space.fortified_village_modifier > 0:
+                print(f"{space.name:<25} FORTIFIED VILLAGES +{space.fortified_village_modifier}")
     print("\nIN TRANSIT")
+    
 
     if in_transit_box.units:
         print(", ".join(str(unit) for unit in in_transit_box.units))

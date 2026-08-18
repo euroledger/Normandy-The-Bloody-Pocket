@@ -1,6 +1,7 @@
 import unittest
 
-from core.actions.strategic_reserve_actions import do_move_panzer_from_strategic_reserve, get_german_controlled_spaces
+from core.actions.actions_helper import get_german_controlled_spaces
+from core.actions.strategic_reserve_actions import do_move_panzer_from_strategic_reserve
 from core.german_units import PZ_LEHR, SS_12
 from core.global_game_state import GlobalGameState
 from core.map.map_model import (

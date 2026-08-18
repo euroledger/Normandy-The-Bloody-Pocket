@@ -57,4 +57,6 @@ class GlobalGameState:
 
     # HITLER ASSASSINATION
     hitler_assassination = False
+    
+    reserve_actions = 0
 

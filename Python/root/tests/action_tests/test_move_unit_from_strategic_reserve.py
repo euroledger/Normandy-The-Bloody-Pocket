@@ -1,8 +1,8 @@
 import unittest
 
+from core.actions.actions_helper import get_german_controlled_spaces
 from core.actions.strategic_reserve_actions import (
     do_move_other_unit_from_strategic_reserve,
-    get_german_controlled_spaces,
 )
 from core.enums import ReinforcementType
 from core.german_units import create_flak88, create_kampfgruppe
