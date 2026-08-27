@@ -1,4 +1,8 @@
-from core.enums import SideType
+from core.actions.stacking_limits import FALLSCHIRMJAGER_STACKING_LIMIT, FLAK_88_STACKING_LIMIT, NEBELWERFER_STACKING_LIMIT, PANZER_STACKING_LIMIT
+from core.enums import ReinforcementType, SideType
+from core.german_units import SS_12
+from core.global_game_state import GlobalGameState
+from core.map.map_model import in_transit_box, strategic_reserve_box, transport_track, eliminated_units_box
 from core.map.map_utilities import get_all_map_spaces
 from core.models import GermanUnit
 
@@ -9,6 +13,62 @@ RED = "\033[91m"
 GREEN = "\033[92m"
 GREY = "\033[90m"
 RESET = "\033[0m"
+BOLD = "\033[1m"
+CYAN = "\033[96m"
+
+
+
+def can_add_unit_to_space(space, unit):
+    counts = {
+        ReinforcementType.PZ_DIV: sum(1 for u in space.units if u.type in [ReinforcementType.PZ_DIV, ReinforcementType.KAMPFGRUPPE]),
+        ReinforcementType.KAMPFGRUPPE: 0,
+        ReinforcementType.NEBELWERFER: sum(1 for u in space.units if u.type == ReinforcementType.NEBELWERFER),
+        ReinforcementType.FALLSCHIRMJAGER: sum(1 for u in space.units if u.type == ReinforcementType.FALLSCHIRMJAGER),
+        ReinforcementType.FLAK_88: sum(1 for u in space.units if u.type == ReinforcementType.FLAK_88),
+    }
+
+    if unit.type in [ReinforcementType.PZ_DIV, ReinforcementType.KAMPFGRUPPE]:
+        return counts[ReinforcementType.PZ_DIV] < PANZER_STACKING_LIMIT
+    if unit.type == ReinforcementType.NEBELWERFER:
+        return counts[ReinforcementType.NEBELWERFER] < NEBELWERFER_STACKING_LIMIT
+    if unit.type == ReinforcementType.FALLSCHIRMJAGER:
+        return counts[ReinforcementType.FALLSCHIRMJAGER] < FALLSCHIRMJAGER_STACKING_LIMIT
+    if unit.type == ReinforcementType.FLAK_88:
+        return counts[ReinforcementType.FLAK_88] < FLAK_88_STACKING_LIMIT
+    return True
+
+def use_action():
+    if GlobalGameState.actions_left_this_turn > 0:
+        GlobalGameState.actions_left_this_turn -= 1
+        return True
+
+    if GlobalGameState.reserve_actions == 0:
+        return False
+
+    print()
+    print("NO ACTIONS REMAINING")
+    choice = input("USE 1 RESERVE ACTION? (Y/N): ").strip().upper()
+
+    if choice != "Y":
+        return False
+
+    GlobalGameState.reserve_actions -= 1
+    return True
+
+def get_adjacent_german_controlled_spaces(source_space):
+    german_spaces = get_german_controlled_spaces()
+
+    if source_space.name == "FALAISE GAP":
+        return [space for space in german_spaces if space.track and space.track_number == 1]
+
+    adjacent_spaces = [space for space in german_spaces if space.track == source_space.track and abs(space.track_number - source_space.track_number) == 1]
+
+    if source_space.track_number == 1:
+        falaise_gap = next((space for space in german_spaces if space.name == "FALAISE GAP"), None)
+        if falaise_gap:
+            adjacent_spaces.append(falaise_gap)
+
+    return [space for space in adjacent_spaces if not space.under_siege]
 
 def get_german_controlled_spaces():
     spaces = [
@@ -34,8 +94,22 @@ def get_german_controlled_spaces():
             -space.track_number,
         )
     )
-    return unique_spaces
+    return [space for space in unique_spaces if not space.under_siege]
 
+
+def get_unit_location(unit: GermanUnit):
+    for space in get_all_map_spaces():
+        if unit in space.units:
+            return space
+    if unit in strategic_reserve_box.units:
+        return strategic_reserve_box
+
+    if unit in eliminated_units_box.units:
+        return eliminated_units_box
+
+    if unit in in_transit_box.units:
+        return in_transit_box
+    return None
 
 def build_display_spaces(spaces):
     us_1_spaces = []
@@ -122,3 +196,23 @@ def print_display_spaces(display_spaces):
 
     print()
     print("0. Return to main menu")
+
+
+def do_panzer_transport_check(unit, die_roll):
+    modified_roll = die_roll + GlobalGameState.transport_check_drm
+
+    print(f"{unit}")
+    print(f"ROLL: {die_roll}")
+    print(f"DRM: {GlobalGameState.transport_check_drm:+}")
+    print(f"MODIFIED ROLL: {modified_roll}")
+    print(f"CHECK: {modified_roll} <= Transport {transport_track.value}")
+
+    if modified_roll <= transport_track.value:
+        in_transit_box.units.remove(unit)
+        strategic_reserve_box.units.append(unit)
+
+        print(f"\t=>{unit} MOVED TO STRATEGIC RESERVE")
+        return True
+
+    print(f"\t=>{unit} REMAINS IN TRANSIT")
+    return False

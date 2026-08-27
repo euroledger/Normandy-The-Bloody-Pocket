@@ -22,8 +22,11 @@ PZ_2 = GermanUnit(ReinforcementType.PZ_DIV, "2nd Panzer", combat_value=2)
 PZ_9 = GermanUnit(ReinforcementType.PZ_DIV, "9th Panzer", combat_value=2)
 
 FS_3 = GermanUnit(ReinforcementType.FALLSCHIRMJAGER, "3rd Fallschirmjager", combat_value=2)
-FS_5 = GermanUnit(ReinforcementType.FALLSCHIRMJAGER, "5th Fallschirmjager", combat_value=2)
+FS_5 = GermanUnit(ReinforcementType.FALLSCHIRMJAGER, "5th Fallschirmjager", combat_value=1)
 
+ROMMEL = GermanUnit(ReinforcementType.COMMANDER, "ROMMEL", combat_value=2)
+MEYER = GermanUnit(ReinforcementType.COMMANDER, "MEYER", combat_value=1)
+MODEL = GermanUnit(ReinforcementType.COMMANDER, "MODEL", combat_value=1)
 
 def create_nebelwerfer():
     return GermanUnit(ReinforcementType.NEBELWERFER, "Nebelwerfer", combat_value=1)

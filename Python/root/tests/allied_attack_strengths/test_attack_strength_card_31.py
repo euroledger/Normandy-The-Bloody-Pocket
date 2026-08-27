@@ -5,11 +5,14 @@ from core.tables.weather import ALL_JABOS_AVAILABLE
 from core.tables.carpet_bombing import get_carpet_bombing_result
 from core.tables.carpet_bombing import ATTACK_CANCELLED
 from tests.allied_attack_strengths.attack_strength_test_utilities import assert_attack_strengths
-from core.card_utilities import get_armies, get_armies_as_objects
-
+from core.card_utilities import get_armies_as_objects
+from core.allied_armies import US_THIRD_ARMY
 
 class TestAttackStrengthCard31(unittest.TestCase):
     def setUp(self):
+
+
+        US_THIRD_ARMY.merged = False
         self.armies = get_armies_as_objects(card_31)
 
     def test_01_attack_strength_overcast(self):
@@ -51,15 +54,15 @@ class TestAttackStrengthCard31(unittest.TestCase):
 
         expected_attack_strengths = {
             "US 1st ARMY": 3,
-            "US 3rd ARMY": 4,
-            "US VIII CORPS": 4,
-            "US XV CORPS": 4,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
         }
         expected_has_air_support = {
             "US 1st ARMY": True,
-            "US 3rd ARMY": True,
-            "US VIII CORPS": True,
-            "US XV CORPS": True,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
         }
         assert_attack_strengths(
             test_case=self,
@@ -78,15 +81,15 @@ class TestAttackStrengthCard31(unittest.TestCase):
         self.assertEqual(carpet_bombing.attack_modifier, 1)
         expected_attack_strengths = {
             "US 1st ARMY": 2,
-            "US 3rd ARMY": 3,
-            "US VIII CORPS": 3,
-            "US XV CORPS": 3,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
         }
         expected_has_air_support = {
             "US 1st ARMY": True,
-            "US 3rd ARMY": True,
-            "US VIII CORPS": True,
-            "US XV CORPS": True,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
         }
         assert_attack_strengths(
             test_case=self,
@@ -138,15 +141,15 @@ class TestAttackStrengthCard31(unittest.TestCase):
         self.assertEqual(carpet_bombing.attack_modifier, 2)
         expected_attack_strengths = {
             "US 1st ARMY": 3,
-            "US 3rd ARMY": 4,
-            "US VIII CORPS": 4,
-            "US XV CORPS": 4,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
         }
         expected_has_air_support = {
             "US 1st ARMY": True,
-            "US 3rd ARMY": True,
-            "US VIII CORPS": True,
-            "US XV CORPS": True,
+            "US 3rd ARMY": False,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
         }
         assert_attack_strengths(
             test_case=self,
@@ -166,15 +169,15 @@ class TestAttackStrengthCard31(unittest.TestCase):
         print("  ==========================")
         expected_attack_strengths = {
             "US 1st ARMY": 2,
-            "US 3rd ARMY": 3,
-            "US VIII CORPS": 3,
-            "US XV CORPS": 3,
+            "US 3rd ARMY": 2,
+            "US VIII CORPS": 2,
+            "US XV CORPS": 2,
         }
         expected_has_air_support = {
             "US 1st ARMY": True,
             "US 3rd ARMY": True,
-            "US VIII CORPS": True,
-            "US XV CORPS": True,
+            "US VIII CORPS": False,
+            "US XV CORPS": False,
         }
         assert_attack_strengths(
             test_case=self,

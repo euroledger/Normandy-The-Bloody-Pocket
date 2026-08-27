@@ -147,7 +147,7 @@ while True:
     print("========================================")
     print()
 
-    print(f"Cards Drawn: {cards_drawn}")
+    print(f"Cards Drawn: {cards_drawn+1}")
 
     if drawn_cards:
 

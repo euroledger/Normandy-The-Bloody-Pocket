@@ -1,18 +1,23 @@
 import unittest
 
 from cards.card_3 import card as card_003
+from cards.card_38 import card as card_038
+
+
 
 from core.enums import SideType
+from core.german_units import PZ_21
 from core.tables.weather import WEATHER_TABLE
 from core.allied_advances_phase import do_allied_attacks, advance_army_one_space
 from core.map.map_utilities import add_units_to_space, do_opening_setup
 from core.map.map_spaces_us_1 import utah_omaha, carentan, valognes, cherbourg
-from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux
+from core.map.map_spaces_brit_2 import gold_juno_sword_brit, bayeux, tilly
 from core.map.map_spaces_can_1 import gold_juno_sword_can, lebisey_wood
 from core.allied_armies import US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY
 from core.global_game_state import GlobalGameState
 from core.models import Strategy
 from core.map.map_model import hitler_approval_track
+from tests.core_mechanics.testing_utilities import setup_units_for_tests
 
 
 class TestAlliedAttacks(unittest.TestCase):
@@ -151,7 +156,7 @@ class TestAlliedAttacks(unittest.TestCase):
 
         self.assertEqual(BRITISH_SECOND_ARMY.location, bayeux)
         self.assertEqual(bayeux.controlling_player, SideType.ALLIED)
-        self.assertEqual(hitler_approval_track.value, 6)
+        self.assertEqual(hitler_approval_track.value, 5)
 
     def test_canadian_first_army_attack_lebisey_wood_natural_6_no_panzer_no_hitler_approval_loss(self):
         hitler_approval_track.value = 6
@@ -215,3 +220,21 @@ class TestAlliedAttacks(unittest.TestCase):
         # Hitler Approval should not be reduced a second time
         self.assertEqual(hitler_approval_track.value, 5)
         self.assertTrue(GlobalGameState.cherbourg_captured)
+        
+
+    def test_fortified_villages_satisfies_german_step_loss_on_capture(self):
+        setup_units_for_tests()
+        GlobalGameState.german_casualty_strategy = Strategy.RANDOM
+        self.weather = WEATHER_TABLE[1]
+
+        add_units_to_space(bayeux, BRITISH_SECOND_ARMY)
+        add_units_to_space(tilly, PZ_21)
+        tilly.fortified_village_modifier = 1
+
+        original_combat_value = PZ_21.combat_value
+
+        do_allied_attacks([BRITISH_SECOND_ARMY], card_038, self.weather, die_roll=6)
+
+        self.assertEqual(PZ_21.combat_value, original_combat_value)
+        self.assertEqual(tilly.fortified_village_modifier, 0)
+        self.assertEqual(BRITISH_SECOND_ARMY.location, tilly)

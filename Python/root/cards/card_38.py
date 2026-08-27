@@ -1,8 +1,10 @@
+from core.global_game_state import GlobalGameState
 from core.models import *
 from core.enums import *
-from core.german_units import create_kampfgruppe
+from core.german_units import MODEL, create_kampfgruppe
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
                                 BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY)
+from core.map.map_model import strategic_reserve_box
 
 # =========================================================
 # CARD #38
@@ -14,6 +16,12 @@ card = Card(card_id=38, title="Model Takes Command")
 # =========================================================
 # MILITARY
 # =========================================================
+
+def event():
+    strategic_reserve_box.units.append(MODEL)
+    GlobalGameState.model_in_command = True
+
+card.event = event
 
 card.military.formations.extend(
     [US_FIRST_ARMY, US_THIRD_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY])

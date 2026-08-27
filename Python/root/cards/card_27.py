@@ -1,3 +1,4 @@
+from core.global_game_state import GlobalGameState
 from core.models import *
 from core.enums import *
 
@@ -8,6 +9,11 @@ from core.enums import *
 
 card = Card(card_id=27, title="Hitler Assassination Attempt")
 
+
+def event():
+    GlobalGameState.hitler_approval_base_level = 4
+
+card.event = event
 # =========================================================
 # MILITARY
 # =========================================================

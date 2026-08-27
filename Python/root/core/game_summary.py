@@ -40,25 +40,14 @@ def print_game_summary():
             printed_spaces.add(space.name)
             allied_units = [unit for unit in space.units if hasattr(unit, "nation")]
             if allied_units:
+
                 # print(f"{space.name:<25} {', '.join(str(unit) for unit in allied_units)}")
+                # beach hack
+                display_name = space.name.replace(" (BRITISH TRACK)", "")
                 print(
-                    f"{space.name:<25} {', '.join(f'{unit.display_name} ({unit.strength})' for unit in allied_units)}"
+                    f"{display_name:<25} {', '.join(f'{unit.display_name} ({unit.strength})' for unit in allied_units)}"
                 )
 
-    # print("\nGERMAN UNITS")
-
-    # printed_spaces = set()
-
-    # for track in all_tracks:
-    #     for space in track:
-    #         if space.name in printed_spaces:
-    #             continue
-
-    #         printed_spaces.add(space.name)
-    #         german_units = [unit for unit in space.units if not hasattr(unit, "nation")]
-    #         if german_units:
-    #             unit_text = ", ".join(f"{unit} ({unit.combat_value})" for unit in german_units)
-    #             print(f"{space.name:<25} {unit_text}")
 
     print("\nGERMAN UNITS")
 
@@ -71,16 +60,20 @@ def print_game_summary():
 
             printed_spaces.add(space.name)
             german_units = [unit for unit in space.units if not hasattr(unit, "nation")]
-            if german_units:
-                unit_text = ", ".join(f"{unit} ({unit.combat_value})" for unit in german_units)
-                marker = ""
-                if space.fortified_village_modifier == 1:
-                    marker = "FORTIFIED VILLAGES +1 - "
-                elif space.fortified_village_modifier == 2:
-                    marker = "FORTIFIED VILLAGES +2 - "
-                print(f"{space.name:<25} {marker}{unit_text}")
-            elif space.fortified_village_modifier > 0:
-                print(f"{space.name:<25} FORTIFIED VILLAGES +{space.fortified_village_modifier}")
+
+            marker = ""
+            if space.fortified_village_modifier == 1:
+                marker = "FORTIFIED VILLAGES +1 - "
+            elif space.fortified_village_modifier == 2:
+                marker = "FORTIFIED VILLAGES +2 - "
+
+            siege_marker = " (SIEGE)" if space.under_siege else ""
+            unit_text = ", ".join(f"{unit} ({unit.combat_value})" for unit in german_units)
+
+            if german_units or marker or space.under_siege:
+                print(f"{space.name + siege_marker:<25} {marker}{unit_text}")
+                
+                
     print("\nIN TRANSIT")
     
 
@@ -92,16 +85,13 @@ def print_game_summary():
     print("\nSTRATEGIC RESERVE")
 
     if strategic_reserve_box.units:
-        print(", ".join(str(unit) for unit in strategic_reserve_box.units))
+        print(", ".join(f"{unit} ({unit.combat_value})" for unit in strategic_reserve_box.units)) 
     else:
         print("EMPTY")
+    print(f"ACTION POINTS IN RESERVE: {GlobalGameState.reserve_actions}")
 
     print("\nELIMINATED UNITS")
 
-    # if eliminated_units_box.units:
-    #     print(", ".join(str(unit) for unit in eliminated_units_box.units))
-    # else:
-    #     print("EMPTY")
     if eliminated_units_box.units:
         print(format_eliminated_units(eliminated_units_box.units))
     else:
@@ -113,4 +103,6 @@ def print_game_summary():
     print(f"Supply:           {supply_track.value}")
     print(f"Hitler Approval:  {hitler_approval_track.value}")
 
+
+    print(f"\nBOCAGE DEFENSE VALUE: {2 + GlobalGameState.bocage_defense_modifier}")
     print("================================================")

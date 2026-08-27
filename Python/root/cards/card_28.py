@@ -22,6 +22,14 @@ card.military.text.append(
     "Replace British XXXX Corps with British 2nd Army and "
     "British I Corps with Canadian 1st Army")
 
+
+def event():
+    US_FIRST_ARMY.flip()
+    BRITISH_SECOND_ARMY.flip()
+    CANADIAN_FIRST_ARMY.flip()
+
+
+card.event = event
 # =========================================================
 # AIR POWER
 # =========================================================

@@ -1,15 +1,28 @@
+from core.global_game_state import GlobalGameState
 from core.models import *
 from core.enums import *
-from core.german_units import create_kampfgruppe
+from core.german_units import MODEL, create_kampfgruppe
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
                                 BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY)
+from core.map.map_model import strategic_reserve_box
 
 # =========================================================
 # CARD #45
 # DESPERATE DEFENSE
 # =========================================================
 
+
+
+
 card = Card(card_id=45, title="Desperate Defense")
+
+
+def event():
+    if GlobalGameState.model_in_command == True:
+        strategic_reserve_box.units.append(MODEL)
+
+
+card.event = event
 
 # =========================================================
 # MILITARY

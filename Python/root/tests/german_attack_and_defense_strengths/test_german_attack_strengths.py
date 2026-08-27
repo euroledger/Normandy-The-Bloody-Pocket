@@ -79,6 +79,7 @@ class TestGermanAttackStrengths(unittest.TestCase):
         GlobalGameState.current_weather = WEATHER_TABLE[1]
 
         options = get_counter_attack_options()
+        
         option = next(option for option in options if option["army"] == US_FIRST_ARMY)
 
         self.assertEqual(option["target_space"], utah_omaha)

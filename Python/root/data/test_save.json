@@ -12,8 +12,8 @@
         "us_3_front_line": 8,
         "us_viii_front_line": 7,
         "us_xv_front_line": 4,
-        "transport_roll_drm": 0,
-        "supply_roll_drm": 0,
+        "transport_roll_drm": 1,
+        "supply_roll_drm": 1,
         "transport_check_drm": 0,
         "supply_check_drm": 0,
         "hitler_approval_check_drm": 0,
@@ -32,9 +32,12 @@
         "current_step": 1,
         "cherbourg_captured": true,
         "us_third_army_activated": false,
+        "us_first_army_furthest_advance": 6,
+        "meyer_available": false,
         "bocage_defense_modifier": 0,
         "model_in_command": false,
         "hitler_assassination": false,
+        "hitler_intervention_no_effect": false,
         "reserve_actions": 0
     },
     "resource_tracks": {
@@ -258,11 +261,7 @@
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
-            "units": [
-                "US 3rd ARMY",
-                "US VIII CORPS",
-                "US XV CORPS"
-            ]
+            "units": []
         },
         "ST. MALO": {
             "controlling_player": "GERMAN",

@@ -9,8 +9,13 @@ from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY)
 # ALENCON COUNTER ATTACK
 # =========================================================
 
-card = Card(card_id=46, title="Hitler Intervention: Alencon Counter Attack")
-
+card = Card(
+    card_id=46,
+    title="Hitler Intervention: Alencon Counter Attack",
+    hitler_intervention=True,
+    hitler_intervention_target_armies=[US_THIRD_ARMY],
+    hitler_intervention_panzer_count=2,
+)
 # =========================================================
 # MILITARY
 # =========================================================
@@ -56,7 +61,7 @@ card.resources.effects.extend([
 card.actions.actions_available = 0
 
 card.actions.conditional_actions.append(
-    Effect(modifier_type=None, value=2, condition=HitlerApprovalCheck(True)))
+    Effect(modifier_type=None, value=2, condition=HitlerInterventionNoEffect(True)))
 
 card.actions.effects.append(
 
@@ -64,4 +69,4 @@ card.actions.effects.append(
     Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
            value=1,
            target=US_THIRD_ARMY,
-           condition=HitlerApprovalCheck(True)))
+           condition=HitlerInterventionNoEffect(True)))

@@ -1,3 +1,4 @@
+from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, get_other_units_in_strategic_reserve
 from core.enums import ModifierType, ReinforcementType, ResourceType
 from core.global_game_state import GlobalGameState
 from core.map.map_model import (
@@ -7,9 +8,16 @@ from core.map.map_model import (
     supply_track,
     transport_track,
 )
+from core.models import Card
 from core.tables.weather import WeatherType
 
 
+def do_event(card: Card):
+    print()
+    print("EVENT")
+    card.event()
+    
+    
 def do_resource_phase_adjustments(card):
     print()
     print("RESOURCE ADJUSTMENTS")
@@ -64,7 +72,7 @@ def do_resource_phase_drms(weather_type, card):
         elif effect.resource_type == ResourceType.HITLER_APPROVAL:
             GlobalGameState.hitler_approval_check_drm += effect.value
 
-
+    
 def do_resource_phase_reinforcements(card):
     print()
     print("========================================")
@@ -75,18 +83,22 @@ def do_resource_phase_reinforcements(card):
     if not reinforcements:
         print("NONE")
         return
+    for unit, _ in reinforcements:
+        if unit.type == ReinforcementType.PZ_DIV:
+            in_transit_box.units.append(unit)
+            print(f"{unit} -> IN TRANSIT")
+        else:
+            strategic_reserve_box.units.append(unit)
+            print(f"{unit} -> STRATEGIC RESERVE")
+            
 
-    for unit, quantity in reinforcements:
-        for _ in range(quantity):
-            if unit.type == ReinforcementType.PZ_DIV:
-                in_transit_box.units.append(unit)
-                print(f"{unit} -> IN TRANSIT")
-
-            else:
-                strategic_reserve_box.units.append(unit)
-                print(f"{unit} -> STRATEGIC RESERVE")
+        for effect in card.actions.effects:
+            if effect.modifier_type == ModifierType.COMMANDER and effect.label and effect.target is None:
+                print(f"{effect.label} -> STRATEGIC RESERVE")
 
     print()
+    
+    
 
 
 # If the die roll is > base level for that resource, increase the resource level by one

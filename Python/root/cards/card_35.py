@@ -2,7 +2,7 @@ from core.models import *
 from core.enums import *
 from core.conditions import *
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
-                                BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY)
+                                BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_VIII_CORPS, US_XV_CORPS)
 
 # =========================================================
 # CARD #35
@@ -11,6 +11,13 @@ from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
 
 card = Card(card_id=35, title="Hitler Intervention - ULTRA")
 
+card = Card(
+    card_id=35,
+    title="Hitler Intervention - ULTRA",
+    hitler_intervention=True,
+    hitler_intervention_target_armies=[US_FIRST_ARMY, US_THIRD_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY],
+    hitler_intervention_panzer_count=2,
+)
 # =========================================================
 # MILITARY
 # =========================================================
@@ -56,7 +63,7 @@ card.resources.effects.extend([
 card.actions.actions_available = 0
 
 card.actions.conditional_actions.append(
-    Effect(modifier_type=None, value=2, condition=HitlerApprovalCheck(True)))
+    Effect(modifier_type=None, value=2, condition=HitlerInterventionNoEffect(True)))
 
 card.actions.effects.extend([
 
@@ -64,23 +71,23 @@ card.actions.effects.extend([
     Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
            value=2,
            target=US_FIRST_ARMY,
-           condition=HitlerApprovalCheck(True)),
+           condition=HitlerInterventionNoEffect(True)),
 
     # +2 Defense Strength 2nd BRIT Army
     Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
            value=2,
            target=BRITISH_SECOND_ARMY,
-           condition=HitlerApprovalCheck(True)),
+           condition=HitlerInterventionNoEffect(True)),
 
     # +2 Defense Strength 1st CAN Army
     Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
            value=2,
            target=CANADIAN_FIRST_ARMY,
-           condition=HitlerApprovalCheck(True)),
+           condition=HitlerInterventionNoEffect(True)),
 
     # +2 Defense Strength 3rd US Army
     Effect(modifier_type=ModifierType.DEFENSE_STRENGTH,
            value=2,
            target=US_THIRD_ARMY,
-           condition=HitlerApprovalCheck(True))
+           condition=HitlerInterventionNoEffect(True))
 ])

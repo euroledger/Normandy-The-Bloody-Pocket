@@ -67,6 +67,8 @@ def setup_units_for_tests():
 
 def reset_game_state_for_tests():
     do_opening_setup()
+    GlobalGameState.counter_attacked_armies.clear()
+
 
     draw_deck[:] = [
         card_003,
@@ -93,6 +95,7 @@ def reset_game_state_for_tests():
     transport_track.value = 5
     supply_track.value = 4
     hitler_approval_track.value = 6
+    GlobalGameState.reserve_actions = 0
 
     in_transit_box.units.clear()
     strategic_reserve_box.units.clear()

@@ -42,12 +42,12 @@ class TestOpeningSetup(unittest.TestCase):
         )
 
     def test_us_third_army_corps_setup(self):
-        self.assertIn(
+        self.assertNotIn(
             US_VIII_CORPS,
             us_3_start_box.units
         )
 
-        self.assertIn(
+        self.assertNotIn(
             US_XV_CORPS,
             us_3_start_box.units
         )

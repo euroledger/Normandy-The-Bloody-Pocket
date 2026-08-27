@@ -56,4 +56,4 @@ card.resources.effects.extend([
 card.actions.actions_available = 0
 
 card.actions.conditional_actions.append(
-    Effect(modifier_type=None, value=2, condition=HitlerApprovalCheck(True)))
+    Effect(modifier_type=None, value=2, condition=HitlerInterventionNoEffect(True)))

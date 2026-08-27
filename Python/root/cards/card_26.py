@@ -1,3 +1,4 @@
+from core.global_game_state import GlobalGameState
 from core.models import *
 from core.enums import *
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY)
@@ -9,6 +10,12 @@ from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY)
 
 card = Card(card_id=26, title='Sherman "Rhino"')
 
+
+def event():
+    GlobalGameState.bocage_defense_modifier = -1
+ 
+
+card.event = event
 # =========================================================
 # MILITARY
 # =========================================================

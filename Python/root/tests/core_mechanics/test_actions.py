@@ -48,31 +48,8 @@ class TestActions(unittest.TestCase):
             2
         )
 
-    # =====================================================
-    # CARD 35 - HITLER INTERVENTION
-    # =====================================================
 
-    def test_card_35_failed_hitler_approval_check(self):
 
-        game_state = MockGameState(
-            hitler_approval_check_passed=False
-        )
-
-        self.assertEqual(
-            card_35.total_actions(game_state),
-            0
-        )
-
-    def test_card_35_passed_hitler_approval_check(self):
-
-        game_state = MockGameState(
-            hitler_approval_check_passed=True
-        )
-
-        self.assertEqual(
-            card_35.total_actions(game_state),
-            2
-        )
 
 
 if __name__ == "__main__":

@@ -36,6 +36,13 @@ class TestResourceAugmentationRoll(unittest.TestCase):
 
         self.assertEqual(transport_track.value, 3)
 
+    def test_transport_augmentation_succeeds_with_weather_drm(self):
+        GlobalGameState.transport_roll_drm = 1
+
+        do_transport_augmentation_roll(die_roll=3)
+
+        self.assertEqual(transport_track.value, 4)
+
     def test_supply_augmentation_succeeds(self):
         do_supply_augmentation_roll(die_roll=4)
 
@@ -45,6 +52,13 @@ class TestResourceAugmentationRoll(unittest.TestCase):
         do_supply_augmentation_roll(die_roll=3)
 
         self.assertEqual(supply_track.value, 3)
+
+    def test_supply_augmentation_succeeds_with_weather_drm(self):
+        GlobalGameState.supply_roll_drm = 1
+
+        do_supply_augmentation_roll(die_roll=3)
+
+        self.assertEqual(supply_track.value, 4)
 
     def test_hitler_approval_augmentation_succeeds(self):
         do_hitler_approval_augmentation_roll(die_roll=4)

@@ -1,0 +1,8 @@
+LIGHT_BROWN = "\033[38;5;180m"
+BLUE = "\033[94m"
+RED = "\033[91m"
+GREEN = "\033[92m"
+GREY = "\033[90m"
+RESET = "\033[0m"
+BOLD = "\033[1m"
+CYAN = "\033[96m"

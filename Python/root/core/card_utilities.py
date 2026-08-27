@@ -7,16 +7,49 @@ from core.allied_armies import (
     US_XV_CORPS,
 )
 from core.enums import ModifierType, ResourceType
+from core.global_game_state import GlobalGameState
 from core.save_load_game import get_all_map_spaces
 from core.tables.weather import ALL_JABOS_AVAILABLE
-from core.map.map_model import TerrainType, transport_track, supply_track, hitler_approval_track
-from core.german_units import TIGER_101
+from core.map.map_model import TerrainType, transport_track, supply_track, hitler_approval_track, strategic_reserve_box
+from core.german_units import MEYER, MODEL, ROMMEL, TIGER_101
 
+
+def remove_meyer():
+    for space in get_all_map_spaces():
+        if MEYER in space.units:
+            space.units.remove(MEYER)
+
+    if MEYER in strategic_reserve_box.units:
+        strategic_reserve_box.units.remove(MEYER)
+
+    GlobalGameState.meyer_available = False
+
+
+def remove_rommel():
+    for space in get_all_map_spaces():
+        if ROMMEL in space.units:
+            space.units.remove(ROMMEL)
+
+    if ROMMEL in strategic_reserve_box.units:
+        strategic_reserve_box.units.remove(ROMMEL)
+
+
+def remove_model():
+    for space in get_all_map_spaces():
+        if MODEL in space.units:
+            space.units.remove(MODEL)
+
+    if MODEL in strategic_reserve_box.units:
+        strategic_reserve_box.units.remove(MODEL)
+        
 def remove_wittmann():
     for space in get_all_map_spaces():
         if TIGER_101 in space.units:
             space.units.remove(TIGER_101)
             return
+    if TIGER_101 in strategic_reserve_box.units:
+        strategic_reserve_box.units.remove(TIGER_101)
+
 
 def print_modifiers(card):
     modifiers = card.get_action_modifiers()
@@ -41,17 +74,6 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
     attack_breakdown = []
 
     modifier_target = get_modifier_target(army)
-
-    # REMOVED FOR SIEGE TEST
-    # print("\n==============================")
-    # print("CALCULATE ATTACK MODIFIERS")
-    # print("==============================")
-    # print("army =", army)
-
-
-    # =========================================================
-    # JABOS
-    # =========================================================
 
     jabo_strength = 0
     if num_jabos > 0:
@@ -81,10 +103,14 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
     # CARPET BOMBING
     # =========================================================
 
-    if carpet_bombing > 0:
+    # if carpet_bombing > 0:
+    #     total_attack_strength += carpet_bombing
+    #     attack_breakdown.append(f"{carpet_bombing:+} Carpet Bombing")
+
+    # No carpet boming for US 3rd Army or its two corps
+    if carpet_bombing > 0 and army not in [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS]:
         total_attack_strength += carpet_bombing
         attack_breakdown.append(f"{carpet_bombing:+} Carpet Bombing")
-
     # =========================================================
     # CARD MODIFIERS
     # =========================================================
@@ -106,7 +132,7 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
             total_attack_strength += value
             attack_breakdown.append(f"{value:+} {label}")
 
-    has_air_support = jabo_strength > 0 or carpet_bombing > 0
+    has_air_support = jabo_strength > 0 or carpet_bombing > 0 and army not in [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS]
 
     if print_modifiers:
         print(

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import auto
-from typing import List, Optional, Union
+from typing import Optional, Union
 from core.enums import *
 from core.conditions import *
 
@@ -148,16 +148,16 @@ class Effect:
 
 @dataclass
 class MilitarySection:
-    formations: List[AlliedArmy] = field(default_factory=list)
-    effects: List[Effect] = field(default_factory=list)
-    text: List[str] = field(default_factory=list)
+    formations: list[AlliedArmy] = field(default_factory=list)
+    effects: list[Effect] = field(default_factory=list)
+    text: list[str] = field(default_factory=list)
     display_text: Optional[str] = None
 
 
 @dataclass
 class AirPowerSection:
-    effects: List[Effect] = field(default_factory=list)
-    text: List[str] = field(default_factory=list)
+    effects: list[Effect] = field(default_factory=list)
+    text: list[str] = field(default_factory=list)
     display_text: Optional[str] = None
 
     def has_carpet_bombing(self) -> bool:
@@ -166,15 +166,15 @@ class AirPowerSection:
 
 @dataclass
 class ResourceSection:
-    effects: List[Effect] = field(default_factory=list)
+    effects: list[Effect] = field(default_factory=list)
     display_text: Optional[str] = None
 
 
 @dataclass
 class ActionSection:
     actions_available: int = 0
-    conditional_actions: List[Effect] = field(default_factory=list)
-    effects: List[Effect] = field(default_factory=list)
+    conditional_actions: list[Effect] = field(default_factory=list)
+    effects: list[Effect] = field(default_factory=list)
 
     def total_actions(self, game_state=None):
         total = self.actions_available
@@ -188,7 +188,6 @@ class ActionSection:
 # CARD OBJECT
 # =========================================================
 
-
 @dataclass
 class Card:
     card_id: int
@@ -197,11 +196,16 @@ class Card:
     air_power: AirPowerSection = field(default_factory=AirPowerSection)
     resources: ResourceSection = field(default_factory=ResourceSection)
     actions: ActionSection = field(default_factory=ActionSection)
-
+    hitler_intervention: bool = False
+    hitler_intervention_target_armies: list[AlliedArmy] | None = None
+    hitler_intervention_panzer_count: int = 0
     # =====================================================
     # HELPERS
     # =====================================================
 
+    def event(self):
+        pass
+    
     def advancing_armies(self):
         return self.military.formations
 
@@ -258,21 +262,15 @@ class Card:
         print("=" * 60)
 
         # -------------------------------------------------
-        # MILITARY
+        # RESOURCES
         # -------------------------------------------------
-        print("\nMILITARY")
-        if self.military.display_text:
-            print(f"  {self.military.display_text}")
-        else:
-            if not self.military.formations and not self.military.effects and not self.military.text:
-                print("  None")
-            for formation in self.military.formations:
-                print(f"  {formation.display_name} ({formation._strength})")
-
-            for effect in self.military.effects:
-                print(f"  {effect}")
-            for text in self.military.text:
-                print(f"  {text}")
+        print("\nRESOURCES")
+        if self.resources.display_text:
+            print(f"  {self.resources.display_text}")
+        elif not self.resources.effects:
+            print("  NONE")
+        for effect in self.resources.effects:
+            print(f"  {effect}")    
 
         # -------------------------------------------------
         # AIR POWER
@@ -285,17 +283,23 @@ class Card:
             print(f"  {effect}")
         for text in self.air_power.text:
             print(f"  {text}")
+        # -------------------------------------------------
+        # ALLIED ADVANCES
+        # -------------------------------------------------
+        print("\nALLIED ADVANCES")
+        if self.military.display_text:
+            print(f"  {self.military.display_text}")
+        else:
+            if not self.military.formations and not self.military.effects and not self.military.text:
+                print("  None")
+            for formation in self.military.formations:
+                print(f"  {formation.display_name} ({formation._strength})")
 
-        # -------------------------------------------------
-        # RESOURCES
-        # -------------------------------------------------
-        print("\nRESOURCES")
-        if self.resources.display_text:
-            print(f"  {self.resources.display_text}")
-        elif not self.resources.effects:
-            print("  NONE")
-        for effect in self.resources.effects:
-            print(f"  {effect}")
+            for effect in self.military.effects:
+                print(f"  {effect}")
+            for text in self.military.text:
+                print(f"  {text}")
+ 
 
         # -------------------------------------------------
         # ACTIONS

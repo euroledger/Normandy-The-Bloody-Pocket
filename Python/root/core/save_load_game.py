@@ -16,6 +16,8 @@ from core.allied_armies import (
 )
 
 from core.german_units import (
+    FS_3,
+    FS_5,
     PZ_LEHR,
     SS_12,
     SS_1,
@@ -50,6 +52,7 @@ from core.map.map_spaces_us_3 import (
     us_xv_track,
 )
 from core.models import Strategy
+from core.tables.weather import WeatherResult, WeatherType
 
 
 # ---------------------------------------------------------
@@ -66,6 +69,8 @@ CARDS_BY_ID = {card.card_id: card for card in draw_deck + mid_deck + late_deck}
 GERMAN_UNITS_BY_SAVE_NAME = {
     unit.name: unit
     for unit in [
+        FS_3,
+        FS_5,
         PZ_LEHR,
         SS_12,
         SS_1,
@@ -160,6 +165,7 @@ def serialize_value(value):
             "__type__": "WeatherResult",
             "weather_type": value.weather_type.name,
             "available_jabos": value.available_jabos,
+            "resource_drm": value.resource_drm,
             "carpet_bombing_drm": value.carpet_bombing_drm,
         }
 
@@ -185,12 +191,12 @@ def load_global_game_state(saved_state):
             value = None if saved_value is None else CARDS_BY_ID[saved_value]
         elif name == "drawn_cards":
             value = [CARDS_BY_ID[card_id] for card_id in saved_value]
-        elif isinstance(saved_value, dict) and saved_value.get("__type__") == "WeatherResult":
-            value = None
         elif name == "german_casualty_strategy":
             value = Strategy[saved_value]
             print(f"SETTING GLOBAL GAME STATE saved_value={saved_value} -> name={name} value={value}")
-
+        elif isinstance(saved_value, dict) and saved_value.get("__type__") == "WeatherResult":
+            value = WeatherResult(weather_type=WeatherType[saved_value["weather_type"]], available_jabos=saved_value["available_jabos"],
+                          resource_drm=saved_value["resource_drm"], carpet_bombing_drm=saved_value["carpet_bombing_drm"])
         else:
             value = saved_value
 
@@ -206,9 +212,10 @@ def load_global_game_state(saved_state):
 # ---------------------------------------------------------
 
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent   # goes up from /core → /root
 DATA_DIR = BASE_DIR / "data"
+
+
 def save_game(save_name=None):
 
     print("SAVE GAME")
@@ -289,7 +296,6 @@ def load_game():
 
     if not save_file_name.endswith(".json"):
         save_file_name += ".json"
-
 
     save_path = DATA_DIR / save_file_name
     if not os.path.exists(save_path):

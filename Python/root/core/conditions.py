@@ -6,10 +6,10 @@ class Condition:
         return True
     
 # =========================================================
-# HITLER APPROVAL CHECK
+# HITLER INTEVENTION CANCELED
 # =========================================================
 
-class HitlerApprovalCheck(Condition):
+class HitlerInterventionNoEffect(Condition):
 
     def __init__(self, passed=True):
         self.passed = passed
@@ -19,7 +19,7 @@ class HitlerApprovalCheck(Condition):
         return (
             getattr(
                 game_state,
-                "hitler_approval_check_passed",
+                "hitler_intervention_no_effect",
                 False
             )
             == self.passed

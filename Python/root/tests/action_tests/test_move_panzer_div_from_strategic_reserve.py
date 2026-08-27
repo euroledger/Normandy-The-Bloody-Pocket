@@ -59,7 +59,7 @@ class TestMovePanzerFromStrategicReserve(unittest.TestCase):
 
         self.assertIn(SS_12, strategic_reserve_box.units)
         self.assertNotIn(SS_12, destination.units)
-        self.assertEqual(GlobalGameState.actions_left_this_turn, 1)
+        self.assertEqual(GlobalGameState.actions_left_this_turn, 0)
 
     def test_invalid_panzer_choice_does_nothing(self):
         hitler_approval_track.value = 6

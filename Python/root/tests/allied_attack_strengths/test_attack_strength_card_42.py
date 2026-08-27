@@ -4,10 +4,11 @@ from core.tables.weather import get_weather_result
 from core.tables.weather import ALL_JABOS_AVAILABLE
 from tests.allied_attack_strengths.attack_strength_test_utilities import assert_attack_strengths
 from core.card_utilities import get_armies_as_objects
-
+from core.allied_armies import US_THIRD_ARMY
 
 class TestAttackStrengthCard42(unittest.TestCase):
     def setUp(self):
+        US_THIRD_ARMY.merged = False
         self.armies = get_armies_as_objects(card_42)
 
     def test_01_attack_strength_overcast(self):

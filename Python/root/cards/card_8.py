@@ -1,7 +1,8 @@
 from core.models import *
 from core.enums import *
-from core.german_units import SS_1
+from core.german_units import ROMMEL, SS_1
 from core.allied_armies import BRITISH_SECOND_ARMY
+from core.map.map_model import strategic_reserve_box
 
 
 # =========================================================
@@ -11,6 +12,12 @@ from core.allied_armies import BRITISH_SECOND_ARMY
 
 card = Card(card_id=8, title="Rommel")
 
+
+def event():
+    strategic_reserve_box.units.append(ROMMEL)
+
+
+card.event = event
 # =========================================================
 # MILITARY
 # =========================================================
@@ -38,3 +45,7 @@ card.actions.effects.append(
     Effect(modifier_type=ModifierType.COMMANDER, value=2, label="Rommel")
 )
 # =========================================================
+# ACTIONS
+# =========================================================
+
+card.actions.actions_available = 3

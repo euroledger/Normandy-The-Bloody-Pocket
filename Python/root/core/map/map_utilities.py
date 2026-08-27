@@ -6,10 +6,11 @@ from core.allied_armies import (
     US_VIII_CORPS,
     US_XV_CORPS,
 )
+from core.game_constants import RED, RESET
 from core.map.map_spaces_us_1 import us_1_start_box, carentan, us_1_track
 from core.map.map_spaces_brit_2 import brit_2_start_box, bayeux, brit_2_track
 from core.map.map_spaces_can_1 import can_1_start_box, lebisey_wood, can_1_track
-from core.map.map_spaces_us_3 import us_3_start_box, us_viii_track, us_xv_track
+from core.map.map_spaces_us_3 import us_viii_track, us_xv_track
 from core.enums import ReinforcementType, SideType
 
 from core.map.map_model import in_transit_box, strategic_reserve_box, eliminated_units_box, supply_track
@@ -67,7 +68,8 @@ def german_defense_strength(space):
     print()
     print(f"GERMAN DEFENSE: {space.name}")
     print(f"TERRAIN: {terrain_value}")
-    print(f"FORTIFIED VILLAGES: {fortified_value}")
+    if fortified_value != 0:
+        print(f"FORTIFIED VILLAGES: {fortified_value}")    
     if model_value != 0:
         print(f"MODEL +{model_value}")
 
@@ -90,10 +92,7 @@ def can_counter_attack(space):
         return False
 
     # Cannot attack beach after turn 3
-    if space.terrain == TerrainType.BEACH and GlobalGameState.cards_drawn >= 3:
-        return False
-
-    return True
+    return not (space.terrain == TerrainType.BEACH and GlobalGameState.cards_drawn >= 3)
 
 
 def calculate_german_attack_strength(space, selected_units):
@@ -101,7 +100,8 @@ def calculate_german_attack_strength(space, selected_units):
     unit_strength = sum(unit.combat_value for unit in selected_units)
 
     print()
-    print(f"GERMAN ATTACK: {space.name}")
+    print(f"LAUNCH GERMAN ATTACK FROM: {space.name}")
+    
     if model_value != 0:
         print(f"MODEL +{model_value}")
 
@@ -124,7 +124,7 @@ def german_attack_strength(space):
     )
 
     print()
-    print(f"GERMAN ATTACK: {space.name}")
+    print(f"LAUNCH GERMAN ATTACK FROM: {space.name}")
     if model_value != 0:
         print(f"MODEL +{model_value}")
 
@@ -165,7 +165,9 @@ def reset_map():
                 space.controlling_player = SideType.ALLIED
             else:
                 space.controlling_player = SideType.GERMAN
-
+    strategic_reserve_box.units.clear()
+    eliminated_units_box.units.clear()
+    in_transit_box.units.clear()
 
 def reset_allied_armies():
     armies = [
@@ -174,8 +176,7 @@ def reset_allied_armies():
         CANADIAN_FIRST_ARMY,
         US_VIII_CORPS,
         US_THIRD_ARMY,
-        US_XV_CORPS,
-        US_VIII_CORPS,
+        US_XV_CORPS
     ]
 
     for army in armies:
@@ -196,6 +197,7 @@ def get_eligible_german_units(space):
 
         # Supply constraint
         if supply_track.value == 0 and unit.is_panzer():
+            print(f"{RED}Supply is 0 - {unit.name} Cannot Attack{RESET}")
             continue
 
         eligible.append(unit)
@@ -242,7 +244,7 @@ def do_opening_setup():
     add_units_to_space(us_1_start_box, US_FIRST_ARMY)
     add_units_to_space(brit_2_start_box, BRITISH_SECOND_ARMY)
     add_units_to_space(can_1_start_box, CANADIAN_FIRST_ARMY)
-    add_units_to_space(us_3_start_box, [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS])
+    # add_units_to_space(us_3_start_box, [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS])
 
     # =========================================================
     # OPENING SETUP - GERMANS
@@ -254,8 +256,12 @@ def do_opening_setup():
 
 
 def update_front_line_for_army(army, track_number):
+    new_furthest_advance = False
     if army == US_FIRST_ARMY:
         GlobalGameState.us_1_front_line = track_number
+        if track_number < GlobalGameState.us_first_army_furthest_advance:
+            GlobalGameState.us_first_army_furthest_advance = track_number
+            new_furthest_advance = True
     elif army == BRITISH_SECOND_ARMY:
         GlobalGameState.brit_2_front_line = track_number
     elif army == CANADIAN_FIRST_ARMY:
@@ -268,3 +274,4 @@ def update_front_line_for_army(army, track_number):
         GlobalGameState.us_xv_front_line = track_number
     else:
         raise ValueError(f"Unknown army: {army}")
+    return new_furthest_advance

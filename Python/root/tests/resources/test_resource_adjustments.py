@@ -2,6 +2,7 @@ import unittest
 
 from cards.card_12 import card as card_012
 from cards.card_36 import card as card_036
+from cards.card_27 import card as card_027
 from core.map.map_model import (
     hitler_approval_track,
     supply_track,
@@ -77,3 +78,9 @@ class TestResourcePhaseAdjustments(unittest.TestCase):
         self.assertEqual(transport_track.value, 5)
         self.assertEqual(supply_track.value, 3)
         self.assertEqual(hitler_approval_track.value, -2)
+        
+
+    def test_card_27_reduces_hitler_approval_by_3(self):
+        hitler_approval_track.value = 4
+        do_resource_phase_adjustments(card_027)
+        self.assertEqual(hitler_approval_track.value, 1)

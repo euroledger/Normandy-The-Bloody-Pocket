@@ -1,6 +1,7 @@
 
 from random import randint
 
+from core.actions.actions_helper import BLUE, BOLD, RED, RESET, use_action
 from core.card_utilities import calculate_defense_modifiers, get_all_defending_armies
 from core.enums import SideType
 from core.global_game_state import GlobalGameState
@@ -52,7 +53,8 @@ def get_german_space_facing_front_line(army):
     track = get_track_for(army)
     front_line_space = get_front_line_space(army)
 
-    return next(space for space in track if space.track_number == front_line_space.track_number - 1)
+    space = next(space for space in track if space.track_number == front_line_space.track_number - 1)
+    return space
 
 
 def get_counter_attack_options():
@@ -75,7 +77,6 @@ def get_counter_attack_options():
 
         # attack = german_attack_strength(attacking_space)
         eligible = get_eligible_german_units(attacking_space)
-        # selected = choose_attacking_units(eligible)
 
         attack = calculate_german_attack_strength(attacking_space, eligible)
         defense = calculate_defense_modifiers(
@@ -98,17 +99,15 @@ def get_counter_attack_options():
 
 
 def print_counter_attack_options(options):
-    RED = "\033[31m"  # bright red
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
-
     print()
-    print(f"{BOLD}{RED}COUNTER-ATTACK OPTIONS{RESET}")
-    print(f"{RED}0. Return to main menu{RESET}")
+    if supply_track.value == 0 and any(unit.is_panzer() for option in options for unit in option["attacking_space"].units):
+        print(f"{RED}NO SUPPLY: PANZER UNITS CANNOT PARTICIPATE")
+    print(f"{BOLD}{BLUE}COUNTER-ATTACK OPTIONS{RESET}")
+    print(f"{BLUE}0. Return to main menu{RESET}")
 
     for index, option in enumerate(options, start=1):
         print(
-            f"{RED}{index}. {option['army'].name} at "
+            f"{BLUE}{index}. {option['army'].name} at "
             f"{option['target_space'].name} "
             f"({option['german_attack']} attack from "
             f"{option['attacking_space'].name} vs "
@@ -192,6 +191,11 @@ def do_post_combat(result, selected_option, selected_units):
 
     if result["result"] == "WIN":
         print("GERMAN VICTORY")
+        
+        if attacking_space.under_siege:
+            attacking_space.under_siege = False
+            print(f"{RED}{attacking_space.name} NO LONGER BESIEGED{RESET}")
+
 
         track = get_track_for(army)
         current_space = army.location
@@ -245,37 +249,42 @@ def do_post_combat(result, selected_option, selected_units):
             print("NO GERMAN UNITS ENGAGED - NO LOSSES APPLIED")
 
 
-def do_counter_attack():
+def do_counter_attack(selected_option=None, selected_units=None):
     options = get_counter_attack_options()
 
     if not options:
         print("NO VALID COUNTER-ATTACK TARGETS")
         return
 
-    print_counter_attack_options(options)
-
-    selected_option = choose_counter_attack_option(options)
+    if selected_option is None:
+        print_counter_attack_options(options)
+        selected_option = choose_counter_attack_option(options)
 
     if selected_option is None:
         return
 
+    if not use_action():
+        print("NOT ENOUGH ACTIONS")
+        return
+
     GlobalGameState.counter_attacked_armies.add(selected_option["army"].name)
 
-    # ✅ NOW choose units (only for chosen attack)
     eligible = get_eligible_german_units(selected_option["attacking_space"])
-    selected_units = choose_attacking_units(eligible)
+
+    if selected_units is None:
+        selected_units = choose_attacking_units(eligible)
 
     attack = calculate_german_attack_strength(selected_option["attacking_space"], selected_units)
     defense = selected_option["allied_defense"]
 
-    GlobalGameState.actions_left_this_turn -= 1
-
     print(f"COUNTER-ATTACK: {selected_option['army'].name} at {selected_option['target_space'].name}")
     print(f"Final attack strength: {attack} vs defense: {defense}")
 
-    # resolution continues...
     result = resolve_counter_attack(
-        attack=attack, defense=defense, selected_units=selected_units, die_roll=randint(1, 6)
+        attack=attack,
+        defense=defense,
+        selected_units=selected_units,
+        die_roll=randint(1, 6),
     )
     do_post_combat(result, selected_option, selected_units)
 

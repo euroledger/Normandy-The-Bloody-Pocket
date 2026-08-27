@@ -1,17 +1,20 @@
 from random import randint
 
+from core.actions.actions_helper import do_panzer_transport_check
 from core.actions.counter_attack_action import do_counter_attack
 from core.actions.fortified_villages_action import do_build_fortified_villages
+from core.actions.hitler_intervention import check_hitler_intervention_applies, do_hitler_intervention_redeploy, do_hitler_intervention_attack
+from core.actions.move_action_point_to_reserve import do_move_action_point_to_strategic_reserve
+from core.actions.move_unit_one_space_action import do_move_unit_one_space
 from core.actions.resource_actions import do_resource_augmentation_roll
-from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, do_move_panzer_from_strategic_reserve, do_move_panzer_to_strategic_reserve, get_panzer_divisions_in_strategic_reserve
+from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, do_move_panzer_from_strategic_reserve, do_move_panzer_to_strategic_reserve, do_refit_panzer_division, get_panzer_divisions_in_strategic_reserve
 from core.enums import ReinforcementType
 from core.game_summary import print_game_summary
-from core.german_units import TIGER_101
+from core.german_units import SS_12, TIGER_101
 from core.global_game_state import GlobalGameState
 from core.map.map_model import (
     in_transit_box,
     strategic_reserve_box,
-    transport_track,
 )
 
 YELLOW = "\033[33m"
@@ -22,11 +25,17 @@ RESET = "\033[0m"
 def list_user_actions():
     print(YELLOW)
     print("AVAILABLE ACTIONS")
-    print(f"ACTIONS REMAINING: {GlobalGameState.actions_left_this_turn}")
+    if GlobalGameState.reserve_actions > 0:
+        print(f"ACTIONS REMAINING: {GlobalGameState.actions_left_this_turn} (+ {GlobalGameState.reserve_actions} IN RESERVE)")
+    else:
+        print(f"ACTIONS REMAINING: {GlobalGameState.actions_left_this_turn}")
     print()
 
     if TIGER_101 in strategic_reserve_box.units:
         print(f"{GREEN}*** 101st TIGER BN AVAILABLE IN STRATEGIC RESERVE ***{YELLOW}")
+
+    if GlobalGameState.meyer_available and SS_12 in strategic_reserve_box.units:
+        print(f"{GREEN}*** MEYER AVAILABLE WITH 12th SS PANZER IN STRATEGIC RESERVE ***{YELLOW}")
 
     print()
 
@@ -39,21 +48,11 @@ def list_user_actions():
     print("7. Move Unit One Space (1)")
     print("8. Refit Panzer Division (1)")
     print("9. Move Action Point to Strategic Reserve (1)")
+    if GlobalGameState.actions_left_this_turn == 0:
+        print("0. End Turn")
     print("G. Game Summary")
 
     print(RESET)
-
-
-def do_move_unit_one_space():
-    print("MOVE UNIT ONE SPACE")
-
-
-def do_refit_panzer_division():
-    print("REFIT PANZER DIVISION")
-
-
-def do_move_action_point_to_strategic_reserve():
-    print("MOVE ACTION POINT TO STRATEGIC RESERVE")
 
 
 def choose_user_action():
@@ -64,7 +63,7 @@ def choose_user_action():
     elif choice == "2":
         do_move_panzer_from_strategic_reserve(randint(1, 6))
     elif choice == "3":
-        do_move_panzer_to_strategic_reserve(randint(1,6))
+        do_move_panzer_to_strategic_reserve(randint(1, 6))
     elif choice == "4":
         do_move_other_unit_from_strategic_reserve()
     elif choice == "5":
@@ -77,65 +76,64 @@ def choose_user_action():
         do_refit_panzer_division()
     elif choice == "9":
         do_move_action_point_to_strategic_reserve()
+    elif choice == "0":
+        return False
     elif choice == "G" or choice == "g":
         print_game_summary()
         print()
         input("Press ENTER to continue...")
+        return True
     else:
         print("INVALID ACTION")
-
-
-def do_panzer_transport_check(unit, die_roll):
-    modified_roll = die_roll + GlobalGameState.transport_check_drm
-
-    print(f"{unit}")
-    print(f"ROLL: {die_roll}")
-    print(f"DRM: {GlobalGameState.transport_check_drm:+}")
-    print(f"MODIFIED ROLL: {modified_roll}")
-    print(f"CHECK: {modified_roll} <= Transport {transport_track.value}")
-
-    if modified_roll <= transport_track.value:
-        in_transit_box.units.remove(unit)
-        strategic_reserve_box.units.append(unit)
-
-        print(f"\t=>{unit} MOVED TO STRATEGIC RESERVE")
         return True
+    return True
 
-    print(f"\t=>{unit} REMAINS IN TRANSIT")
-    return False
 
+def set_available_actions(card):
+    GlobalGameState.actions_left_this_turn = card.actions.actions_available
+    for effect in card.actions.conditional_actions:
+        if effect.condition is not None and effect.condition.is_met(GlobalGameState):
+            GlobalGameState.actions_left_this_turn += effect.value
 
 def do_action_phase(card, weather):
-    GlobalGameState.actions_left_this_turn = card.actions.actions_available
-
     print()
     print("========================================")
     print("ACTION PHASE")
     print("========================================")
     print()
 
-    # 1. Print number actions
+    # 1. Check for Hitler Intervention
+    if card.hitler_intervention:
+        target_army = check_hitler_intervention_applies(card)
+        if target_army is not None:
+            target_army, attacking_space = do_hitler_intervention_redeploy(card, target_army)
+            
+            do_hitler_intervention_attack(card, weather, target_army, attacking_space)
+            return
+
+    # 2. Print number actions - dependent on Hitler Intervention
+    set_available_actions(card)
 
     print(f"ACTIONS AVAILABLE: {GlobalGameState.actions_left_this_turn}")
     print()
 
-    # 2. Do In Transit Pz Div Resource Roll (roll against Transport Level)
+    # 3. Do In Transit Pz Div Resource Roll (roll against Transport Level)
 
     panzer_divisions = [unit for unit in in_transit_box.units[:] if unit.type == ReinforcementType.PZ_DIV]
 
     for unit in panzer_divisions:
         die_roll = randint(1, 6)
+        print("IN TRANSIT CHECK")
+        print("================")
         do_panzer_transport_check(unit, die_roll)
 
-    # 3. Check Card Specific Events, eg Hitler Intervention
-
-    # 4. List Menu of Actions
-
-    # 5. Choose an action -> Implement Action
-
-    while GlobalGameState.actions_left_this_turn > 0:
+    cont = True
+    while cont and GlobalGameState.actions_left_this_turn + GlobalGameState.reserve_actions > 0:
+        # 4. List Menu of Actions
         list_user_actions()
-        choose_user_action()
+
+        # 5. Choose an action -> Implement Action
+        cont = choose_user_action()
 
     print()
     print("NO ACTIONS LEFT")

@@ -1,6 +1,7 @@
-from core.actions.actions_helper import get_display_spaces, get_german_controlled_spaces
+from core.actions.actions_helper import RED, RESET, can_add_unit_to_space, get_display_spaces, get_german_controlled_spaces, use_action
 from core.actions.stacking_limits import PANZER_STACKING_LIMIT
-from core.enums import ReinforcementType
+from core.german_units import MEYER, SS_12
+from core.models import GermanUnit, ReinforcementType
 from core.global_game_state import GlobalGameState
 from core.map.map_model import (
     eliminated_units_box,
@@ -12,7 +13,6 @@ from core.map.map_model import (
 from core.map.map_utilities import (
     get_all_map_spaces,
 )
-from core.models import GermanUnit, ReinforcementType
 
 
 
@@ -21,6 +21,8 @@ def get_panzer_divisions_on_map():
 
     for space in get_all_map_spaces():
         if space in [in_transit_box, strategic_reserve_box, eliminated_units_box]:
+            continue
+        if space.under_siege:
             continue
 
         for unit in space.units:
@@ -46,7 +48,6 @@ def get_other_units_in_strategic_reserve():
     ]
 
 
-
 def do_move_other_unit_from_strategic_reserve(unit_choice=None, space_choice=None):
     print("MOVE OTHER UNIT FROM STRATEGIC RESERVE")
     print()
@@ -55,80 +56,72 @@ def do_move_other_unit_from_strategic_reserve(unit_choice=None, space_choice=Non
 
     if not units:
         print("No Units in Strategic Reserve")
-        return
+        return False
 
     print("SELECT UNIT")
     print()
 
     for index, unit in enumerate(units, start=1):
         print(f"{index}. {unit.name} ({unit.combat_value})")
-
     print()
     print("0. Return to main menu")
     print()
-
     if unit_choice is None:
         unit_choice = input("Choice: ").strip()
     else:
         unit_choice = str(unit_choice).strip()
-
     if unit_choice == "0":
-        return
-
+        return False
     if not unit_choice.isdigit():
         print("INVALID CHOICE")
-        return
+        return False
 
     selected_index = int(unit_choice) - 1
-
     if selected_index < 0 or selected_index >= len(units):
         print("INVALID CHOICE")
-        return
+        return False
 
     selected_unit = units[selected_index]
-
     print()
     print(f"SELECTED: {selected_unit.name}")
 
     german_spaces = get_german_controlled_spaces()
-
     if not german_spaces:
         print("No German-controlled spaces available")
-        return
+        return False
 
     display_spaces = get_display_spaces(space_choice is None)
 
     if display_spaces is None:
-        return
-
+        return False
     if space_choice is None:
         space_choice = input("Choice: ").strip()
     else:
         space_choice = str(space_choice).strip()
-
     if space_choice == "0":
-        return
-
+        return False
     if not space_choice.isdigit():
         print("INVALID CHOICE")
-        return
+        return False
 
     selected_index = int(space_choice) - 1
-
     if selected_index < 0 or selected_index >= len(display_spaces):
         print("INVALID CHOICE")
-        return
+        return False
 
     selected_space = display_spaces[selected_index]
+    if not can_add_unit_to_space(selected_space, selected_unit):
+        print("STACKING LIMIT REACHED, INVALID MOVE")
+        return False
 
     print()
     print(f"{selected_unit.name} moved to {selected_space.name}")
-
     strategic_reserve_box.units.remove(selected_unit)
     selected_space.units.append(selected_unit)
-
+    return True
 
 def do_move_panzer_to_strategic_reserve(die_roll, div_choice=None):
+ 
     print("MOVE PANZER DIVISION TO STRATEGIC RESERVE")
     print()
 
@@ -165,7 +158,9 @@ def do_move_panzer_to_strategic_reserve(die_roll, div_choice=None):
     if selected_index < 0 or selected_index >= len(panzer_divisions):
         print("INVALID CHOICE")
         return
-
+    if not use_action():
+        print("NOT ENOUGH ACTIONS")
+        return
     selected_space, selected_panzer = panzer_divisions[selected_index]
 
     print()
@@ -177,7 +172,7 @@ def do_move_panzer_to_strategic_reserve(die_roll, div_choice=None):
     print(f"TRANSPORT LEVEL: {transport_track.value}")
 
     if die_roll > transport_track.value:
-        print("RESULT: FAILED")
+        print(f"{RED}RESULT: FAILED{RESET}") 
         return
 
     print("RESULT: PASSED")
@@ -186,8 +181,11 @@ def do_move_panzer_to_strategic_reserve(die_roll, div_choice=None):
 
     selected_space.units.remove(selected_panzer)
     strategic_reserve_box.units.append(selected_panzer)
-
-    GlobalGameState.actions_left_this_turn -= 1
+    
+    if selected_panzer == SS_12 and MEYER in selected_space.units:
+        selected_space.units.remove(MEYER)
+        GlobalGameState.meyer_available = True
+        print("MEYER REMOVED - 12th SS PANZER MOVED TO STRATEGIC RESERVE")
 
 
 # TODO move this into separate helper file to be used in move one unit action
@@ -206,7 +204,7 @@ def check_stacking(space):
 
     return True
 
-def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choice=None):
+def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choice=None):    
     print("MOVE PANZER DIVISION FROM STRATEGIC RESERVE")
     print()
 
@@ -238,11 +236,13 @@ def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choic
         print("INVALID CHOICE")
         return
 
+
     selected_index = int(div_choice) - 1
 
     if selected_index < 0 or selected_index >= len(panzer_divisions):
         print("INVALID CHOICE")
         return
+
 
     selected_panzer = panzer_divisions[selected_index]
 
@@ -277,11 +277,16 @@ def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choic
     if selected_index < 0 or selected_index >= len(display_spaces):
         print("INVALID CHOICE")
         return
-
+    
     selected_space = display_spaces[selected_index]
 
     # Check Stacking -> Maximum 4 Panzer Units (Div or Kampfgruppe) per space
-    if check_stacking(selected_space) == False:
+    if not can_add_unit_to_space(selected_space, selected_panzer):
+        print("STACKING LIMIT REACHED, INVALID MOVE")
+        return
+    
+    if not use_action():
+        print("NOT ENOUGH ACTIONS")
         return
 
     print()
@@ -290,7 +295,7 @@ def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choic
     print(f"HITLER APPROVAL: {hitler_approval_track.value}")
 
     if die_roll > hitler_approval_track.value:
-        print("RESULT: FAILED")
+        print(f"{RED}RESULT: FAILED{RESET}")
         return
 
     print("RESULT: PASSED")
@@ -300,4 +305,50 @@ def do_move_panzer_from_strategic_reserve(die_roll, div_choice=None, space_choic
     strategic_reserve_box.units.remove(selected_panzer)
     selected_space.units.append(selected_panzer)
 
+    if selected_panzer == SS_12 and GlobalGameState.meyer_available:
+        selected_space.units.append(MEYER)
+        print(f"MEYER DEPLOYED TO {selected_space.name} WITH 12th SS PANZER")
+        GlobalGameState.meyer_available = False
+
+def do_refit_panzer_division(unit_choice=None):
+    panzer_divisions = get_panzer_divisions_in_strategic_reserve()
+    panzer_divisions = [unit for unit in panzer_divisions if unit.combat_value == 1]
+
+    if not panzer_divisions:
+        print("NO PANZER DIVISIONS AVAILABLE TO REFIT")
+        return
+
+
+    print("REFIT PANZER DIVISION")
+    print()
+
+    for index, unit in enumerate(panzer_divisions, start=1):
+        print(f"{index}. {unit.name} (+1)")
+
+    print()
+    print("0. Return to main menu")
+
+    if unit_choice is None:
+        unit_choice = input("Choice: ").strip()
+    else:
+        unit_choice = str(unit_choice).strip()
+
+    if unit_choice == "0":
+        return
+
+    if not unit_choice.isdigit():
+        print("INVALID CHOICE")
+        return
+
+    selected_index = int(unit_choice) - 1
+
+    if selected_index < 0 or selected_index >= len(panzer_divisions):
+        print("INVALID CHOICE")
+        return
+
+    selected_unit = panzer_divisions[selected_index]
+    selected_unit.combat_value = 2
     GlobalGameState.actions_left_this_turn -= 1
+
+    print(f"{selected_unit.name} REFITTED TO FULL STRENGTH (+2)")
+    print(f"ACTIONS REMAINING: {GlobalGameState.actions_left_this_turn}")

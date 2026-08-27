@@ -36,6 +36,7 @@ class ReinforcementType(Enum):
     FALLSCHIRMJAGER = "FALLSCHIRMJAGER"
     FLAK_88 = "FLAK 88"
     KAMPFGRUPPE = "KAMPFGRUPPE"
+    COMMANDER = "COMMANDER"
 
 
 class ResourceType(Enum):

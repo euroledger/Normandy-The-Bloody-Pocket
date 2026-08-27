@@ -48,6 +48,8 @@ class GlobalGameState:
     # MISC GAME EVENTS
     cherbourg_captured = False
     us_third_army_activated = False
+    us_first_army_furthest_advance = 11
+    meyer_available = False
 
     # BOCAGE MODIFIER, -1 ONCE EVENT CARD DRAWN FOR GERMAN DEFENSE ONLY
     bocage_defense_modifier = 0
@@ -57,6 +59,9 @@ class GlobalGameState:
 
     # HITLER ASSASSINATION
     hitler_assassination = False
+    
+    # HITLER INTERVENTION
+    hitler_intervention_no_effect = False
     
     reserve_actions = 0
 
