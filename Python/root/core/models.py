@@ -294,7 +294,6 @@ class Card:
                 print("  None")
             for formation in self.military.formations:
                 print(f"  {formation.display_name} ({formation._strength})")
-
             for effect in self.military.effects:
                 print(f"  {effect}")
             for text in self.military.text:

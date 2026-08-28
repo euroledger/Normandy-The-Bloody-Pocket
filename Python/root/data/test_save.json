@@ -38,7 +38,8 @@
         "model_in_command": false,
         "hitler_assassination": false,
         "hitler_intervention_no_effect": false,
-        "reserve_actions": 0
+        "reserve_actions": 0,
+        "armies_upgraded": false
     },
     "resource_tracks": {
         "transport": 5,

@@ -15,20 +15,20 @@ from core.map.map_utilities import (
 )
 
 
-
 def get_panzer_divisions_on_map():
     panzer_divisions = []
-
+    seen_spaces = set()
     for space in get_all_map_spaces():
+        if id(space) in seen_spaces:
+            continue
+        seen_spaces.add(id(space))
         if space in [in_transit_box, strategic_reserve_box, eliminated_units_box]:
             continue
         if space.under_siege:
             continue
-
         for unit in space.units:
             if isinstance(unit, GermanUnit) and unit.type == ReinforcementType.PZ_DIV:
                 panzer_divisions.append((space, unit))
-
     return panzer_divisions
 
 

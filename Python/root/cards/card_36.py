@@ -8,8 +8,13 @@ from core.allied_armies import CANADIAN_FIRST_ARMY
 # HITLER INTERVENTION
 # =========================================================
 
-card = Card(card_id=36, title="Hitler Intervention")
-
+card = Card(
+    card_id=36,
+    title="Hitler Intervention",
+    hitler_intervention=True,
+    hitler_intervention_target_armies=[CANADIAN_FIRST_ARMY],
+    hitler_intervention_panzer_count=2,
+)
 # =========================================================
 # MILITARY
 # =========================================================

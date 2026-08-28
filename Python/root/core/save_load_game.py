@@ -175,6 +175,10 @@ def serialize_value(value):
     return value
 
 
+def load_army_flip_state():
+    for army in [US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY]:
+        army.flipped = GlobalGameState.armies_upgraded
+
 def save_global_game_state():
     return {
         name: serialize_value(value)
@@ -312,7 +316,7 @@ def load_game():
     draw_deck[:] = [CARDS_BY_ID[card_id] for card_id in save_data["draw_deck"]]
 
     load_global_game_state(save_data["global_game_state"])
-
+    load_army_flip_state()
     resources = save_data["resource_tracks"]
 
     transport_track.value = resources["transport"]

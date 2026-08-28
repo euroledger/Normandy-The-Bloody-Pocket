@@ -136,7 +136,7 @@ def calculate_attack_modifiers(card, army, num_jabos=0, carpet_bombing=0, print_
 
     if print_modifiers:
         print(
-            f"{army.name} -> ATTACK STRENGTH: {total_attack_strength} ({', '.join(attack_breakdown)}) ; AIR SUPPORT={has_air_support}"
+            f"{army.display_name} -> ATTACK STRENGTH: {total_attack_strength} ({', '.join(attack_breakdown)}) ; AIR SUPPORT={has_air_support}"
         )
 
     return {"attack_strength": total_attack_strength, "has_air_support": has_air_support}
@@ -226,7 +226,7 @@ def calculate_defense_modifiers(card, army, weather, print_modifiers=False):
 
     if print_modifiers:
         print(
-            f"{army.name} -> DEFENSE STRENGTH: "
+            f"{army.display_name} -> DEFENSE STRENGTH: "
             f"{total_defense_strength} "
             f"({', '.join(defense_breakdown)}) ; "
             f"AIR SUPPORT={has_air_support}"
@@ -310,7 +310,7 @@ def calculate_defense_modifiers(card, army, weather, print_modifiers=False):
 #         has_air_support = jabo_strength > 0
 
 #         if print_modifiers:
-#             print(f"{army.name} -> DEFENSE STRENGTH: {total_defense_strength} ({', '.join(defense_breakdown)}) ; AIR SUPPORT={has_air_support}")
+#             print(f"{army.display_name} -> DEFENSE STRENGTH: {total_defense_strength} ({', '.join(defense_breakdown)}) ; AIR SUPPORT={has_air_support}")
 
 #     return {"defense_strength": total_defense_strength, "has_air_support": has_air_support}
 
@@ -327,7 +327,7 @@ def get_armies_as_objects(card):
 
 # def get_armies(card):
 #     armies = get_armies_as_objects(card)
-#     return [army.name for army in armies]
+#     return [army.display_name for army in armies]
 
 
 def get_armies(card):
@@ -338,7 +338,7 @@ def get_armies(card):
         if army == US_THIRD_ARMY and not army.merged:
             armies.extend([US_VIII_CORPS.name, US_XV_CORPS.name])
         else:
-            armies.append(army.name)
+            armies.append(army.display_name)
     return armies
 
 

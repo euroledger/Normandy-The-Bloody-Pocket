@@ -96,6 +96,8 @@ def check_for_game_end():
         print("========================================")
         return GAME_LOST
 
+    if GlobalGameState.cards_drawn == 48:
+        return GAME_WON
     return GAME_CONTINUES
 
 
@@ -215,10 +217,10 @@ while True:
         continue
 
     if GlobalGameState.current_step == 1 and user_input == "":
-        if not draw_deck:
+        if cards_remaining == 0:
             print()
             print("DRAW DECK EMPTY")
-            continue
+            break
 
         drawn_card = draw_deck[0]
 
@@ -365,7 +367,7 @@ while True:
             GlobalGameState.current_weather,
         )
         print(RESET)
-        input("Press ENTER to continue...")
+        # input("Press ENTER to continue...")
         GlobalGameState.current_step = 6
         continue
 

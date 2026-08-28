@@ -17,6 +17,18 @@ BOLD = "\033[1m"
 CYAN = "\033[96m"
 
 
+def get_german_units_on_map():
+    german_units = []
+    for space in get_all_map_spaces():
+        if space in [in_transit_box, strategic_reserve_box, eliminated_units_box]:
+            continue
+        if space.under_siege:
+            continue
+        for unit in space.units:
+            if isinstance(unit, GermanUnit):
+                german_units.append((space, unit))
+    return german_units
+
 
 def can_add_unit_to_space(space, unit):
     counts = {

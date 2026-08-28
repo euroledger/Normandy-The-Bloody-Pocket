@@ -64,4 +64,6 @@ class GlobalGameState:
     hitler_intervention_no_effect = False
     
     reserve_actions = 0
+    
+    armies_upgraded = False
 

@@ -1,3 +1,4 @@
+from core.actions.actions_helper import CYAN, RED, RESET
 from core.card_utilities import get_armies_as_objects
 from random import randint
 from core.allied_armies import (
@@ -8,7 +9,7 @@ from core.allied_armies import (
     US_VIII_CORPS,
     US_XV_CORPS,
 )
-from core.game_constants import CYAN, RED
+from core.game_constants import BLUE, GREEN, LIGHT_BROWN
 from core.tables.carpet_bombing import ATTACK_CANCELLED, get_carpet_bombing_result
 from core.map.map_model import TerrainType, eliminated_units_box, hitler_approval_track
 from core.card_utilities import calculate_attack_modifiers
@@ -70,26 +71,6 @@ def get_front_line_space(army):
     return next(space for space in track if space.track_number == front_line)
 
 
-# def advance_army_one_space(army):
-#     track = get_track_for(army)
-#     current_space = army.location
-#     if army == US_XV_CORPS:
-#         current_index = track.index(current_space)
-#         next_space = track[current_index + 1] if current_index + 1 < len(track) else None
-#     else:
-#         next_space = next((space for space in track if space.track_number == current_space.track_number - 1), None)
-#     if next_space is None:
-#         return
-
-#     current_space.units.remove(army)
-#     next_space.units.append(army)
-#     army.location = next_space
-#     if hasattr(next_space, "controlling_player"):
-#         next_space.controlling_player = SideType.ALLIED
-#     new_furthest_advance = update_front_line_for_army(army, next_space.track_number)
-#     print(f"\n>>>>>>> AFTER ALLIED ADVANCE -> ALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
-#     return new_furthest_advance
-
 def advance_army_one_space(army):
     track = get_track_for(army)
     current_space = army.location
@@ -106,7 +87,7 @@ def advance_army_one_space(army):
     if hasattr(next_space, "controlling_player"):
         next_space.controlling_player = SideType.ALLIED
     new_furthest_advance = update_front_line_for_army(army, next_space.track_number)
-    print(f">>>>>>> AFTER ALLIED ADVANCE -> ALLIED ARMY LOCATION:{army.name} IS AT {army.location.name}")
+    print(f">>>>>>> AFTER ALLIED ADVANCE -> ALLIED ARMY LOCATION:{army.display_name} IS AT {army.location.name}")
     return new_furthest_advance
 
 def dday_landings_first_wave():
@@ -144,7 +125,7 @@ def dday_landings_second_wave(card, weather):
             attacking_armies.append(army)
 
     if attacking_armies:
-        do_allied_attacks(attacking_armies, card, weather)
+        do_allied_attacks(attacking_armies, card, weather, pause_after_attack=True)
 
 
 def adjust_hitler_approval(space):
@@ -326,7 +307,7 @@ def get_carpet_bombing_modifier(card, weather, die_roll=None):
 def do_siege_roll(space, army, card, weather, carpet_bombing, defense_strength, die_roll=None):
     print()
     print("========================================")
-    print(f"{army.name} - SIEGE ROLL")
+    print(f"{army.display_name} - SIEGE ROLL")
     print("========================================")
     print()
     siege_roll = die_roll if die_roll is not None else randint(1, 6)
@@ -377,20 +358,24 @@ def do_siege_roll(space, army, card, weather, carpet_bombing, defense_strength, 
         do_allied_victory(army, space)
 
 
-def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
+def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None, pause_after_attack=False):
     print()
     print("ALLIED ATTACKS")
     print("==============")
     print()
 
-    for army in armies:
-
-
-        # if army.location.terrain == TerrainType.START_BOX:
-        #     advance_army_one_space(army)
-        #     print(f"{army.display_name} -> {army.location.name}")
-        #     continue
-        
+    for army in armies:        
+        if army == US_FIRST_ARMY:
+            army_color = LIGHT_BROWN
+        elif army == BRITISH_SECOND_ARMY:
+            army_color = BLUE
+        elif army == CANADIAN_FIRST_ARMY:
+            army_color = RED
+        elif army in [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS]:
+            army_color = GREEN
+        else:
+            army_color = CYAN
+        print(army_color) 
         # NEW RULE TO ENSURE two US 3rd ARMY CORPS NEED TO ATTACK OUT OF THEIR BOX
         if army.location.terrain == TerrainType.START_BOX and army in [US_VIII_CORPS, US_XV_CORPS]:
             target_space = get_track_for(army)[1]
@@ -401,10 +386,19 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
         else:
             target_space = next((space for space in get_track_for(army) if space.track_number == army.location.track_number - 1), None)
 
-        attack_result = calculate_attack_modifiers(card, army=army, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing)
-        attack_strength = attack_result["attack_strength"]
-        defense_strength = german_defense_strength(target_space)
 
+        # attack_result = calculate_attack_modifiers(card, army=army, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing)
+        # attack_strength = attack_result["attack_strength"]
+        # defense_strength = german_defense_strength(target_space)
+        attack_result = calculate_attack_modifiers(card, army, weather.available_jabos)
+        attack_strength = attack_result["attack_strength"]
+        attacking_from = army.location.name
+        print()
+        print(f"{army.display_name} ADVANCING FROM {attacking_from}")
+        print("=" * len(f"{army.display_name} ADVANCING FROM {attacking_from}"))
+        defense_strength = german_defense_strength(target_space)
+        
+        
         actual_die_roll = die_roll if die_roll is not None else randint(1, 6)
         attack_total = attack_strength + actual_die_roll
         had_fortified_villages = target_space.fortified_village_modifier > 0
@@ -419,27 +413,31 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None):
         if target_space.under_siege or (defense_strength - attack_strength >= 6 and target_space.terrain == TerrainType.FORTRESS):
             target_space.under_siege = True
             do_siege_roll(space=target_space, army=army, card=card, weather=weather, carpet_bombing=carpet_bombing, defense_strength=defense_strength, die_roll=actual_die_roll)
-            continue
-        print(f"DIE ROLL: {actual_die_roll}")
-        print(f"ATTACK TOTAL: {attack_total}")
-        print()
-        
-        if actual_die_roll == 6:
-            adjust_hitler_approval(target_space)
-            if not had_fortified_villages:
-                do_german_losses(target_space)
-            do_allied_victory(army, target_space)
-        elif actual_die_roll == 1:
-            do_german_losses(target_space)
-            print(RED + "ALLIED DEFEAT (UNMODIFIED 1)" + CYAN)
-        elif attack_total > defense_strength:
-            adjust_hitler_approval(target_space)
-            if not had_fortified_villages:
-                do_german_losses(target_space)
-            do_allied_victory(army, target_space)
         else:
-            do_german_losses(target_space)
-            print("ALLIED DEFEAT")
+            print(f"DIE ROLL: {actual_die_roll}")
+            print(f"ATTACK TOTAL: {attack_total}")
+            print()
+            
+            if actual_die_roll == 6:
+                adjust_hitler_approval(target_space)
+                if not had_fortified_villages:
+                    do_german_losses(target_space)
+                do_allied_victory(army, target_space)
+            elif actual_die_roll == 1:
+                do_german_losses(target_space)
+                print("ALLIED DEFEAT (UNMODIFIED 1)")
+            elif attack_total > defense_strength:
+                adjust_hitler_approval(target_space)
+                if not had_fortified_villages:
+                    do_german_losses(target_space)
+                do_allied_victory(army, target_space)
+            else:
+                do_german_losses(target_space)
+                print("ALLIED DEFEAT")
+                
+        if pause_after_attack:
+            input("Press ENTER to continue...")
+        print(RESET)
 
 
 def do_allied_advances_phase(card, weather):
@@ -473,4 +471,4 @@ def do_allied_advances_phase(card, weather):
 
     advancing_armies = [army for army in armies if army not in [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS] or GlobalGameState.us_third_army_activated]
     carpet_bombing = get_carpet_bombing_modifier(card, weather)
-    do_allied_attacks(advancing_armies, card, weather, carpet_bombing)
+    do_allied_attacks(advancing_armies, card, weather, carpet_bombing, pause_after_attack=True)

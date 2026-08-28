@@ -7,8 +7,13 @@ from core.allied_armies import US_FIRST_ARMY
 # MORTAIN COUNTER ATTACK
 # =========================================================
 
-card = Card(card_id=32, title="Mortain Counter Attack")
-
+card = Card(
+    card_id=32,
+    title="Mortain Counter Attack",
+    hitler_intervention=True,
+    hitler_intervention_target_armies=[US_FIRST_ARMY],
+    hitler_intervention_panzer_count=2,
+)
 # =========================================================
 # MILITARY
 # =========================================================
@@ -18,7 +23,7 @@ card.military.display_text = "NONE"
 card.military.text.extend([
     "If 3rd Army has not taken St Malo, No Effect.",
     "2 panzer divs (player’s choice) placed in "
-    "Liittich space.", "No Hitler roll; attack cannot be cancelled, "
+    "Luttich space.", "No Hitler roll; attack cannot be cancelled, "
     "even if supply level is 0.", "Must attack US 1st Army."
 ])
 

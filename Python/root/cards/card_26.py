@@ -10,6 +10,7 @@ from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY)
 
 card = Card(card_id=26, title='Sherman "Rhino"')
 
+card.military.text.append("Bocage Defense Value reduced from 2 to 1")
 
 def event():
     GlobalGameState.bocage_defense_modifier = -1

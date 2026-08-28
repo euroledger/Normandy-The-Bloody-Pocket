@@ -213,7 +213,7 @@ def do_post_combat(result, selected_option, selected_units):
 
             update_front_line_for_army(army, retreat_space.track_number)
 
-            print(f"{army.name} RETREATS TO {retreat_space.name}")
+            print(f"{army.display_name} RETREATS TO {retreat_space.name}")
         else:
             print("NO RETREAT POSSIBLE")
 

@@ -9,7 +9,7 @@ from core.map.map_spaces_us_3 import us_viii_track, us_xv_track
 from core.map.map_spaces_can_1 import can_1_track
 from core.map.map_spaces_brit_2 import brit_2_track
 from core.map.map_model import hitler_approval_track, strategic_reserve_box, TerrainType
-from core.allied_armies import US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS
+from core.allied_armies import US_FIRST_ARMY, US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS
 from core.map.map_utilities import calculate_german_attack_strength, get_eligible_german_units
 from core.models import GermanUnit
 
@@ -52,7 +52,22 @@ def check_hitler_intervention_applies(card, die_roll=None, target_choice=None, c
         print("HITLER INTERVENTION - NO EFFECT")
         GlobalGameState.hitler_intervention_no_effect = True
         return None
+    
+    if card.card_id == 32:
+        # Mortain Counter-Attack
+        if not GlobalGameState.us_third_army_activated:
+            print("HITLER INTERVENTION - NO EFFECT")
+            GlobalGameState.hitler_intervention_no_effect = True
+            return None
 
+        if US_VIII_CORPS.location is None or US_VIII_CORPS.location.track_number > 7:
+            print("HITLER INTERVENTION - NO EFFECT")
+            GlobalGameState.hitler_intervention_no_effect = True
+            return None
+
+        print(f"SELECTED TARGET: {US_FIRST_ARMY.display_name}")
+        return US_FIRST_ARMY
+        
     if card.card_id != 32:
         if cancel_choice is None:
             cancel_choice = input("ATTEMPT TO CANCEL HITLER INTERVENTION? (Y/N): ").strip().upper()

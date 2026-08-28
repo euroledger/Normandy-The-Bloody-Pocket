@@ -1,4 +1,4 @@
-from core.actions.actions_helper import get_german_controlled_spaces, get_adjacent_german_controlled_spaces, use_action
+from core.actions.actions_helper import can_add_unit_to_space, get_german_controlled_spaces, get_adjacent_german_controlled_spaces, use_action
 from core.global_game_state import GlobalGameState
 from core.german_units import GermanUnit
 
@@ -92,7 +92,9 @@ def do_move_unit_one_space(unit_choice=None, space_choice=None):
             return
 
         selected_space = destination_spaces[selected_index]
-
+        if not can_add_unit_to_space(selected_space, selected_unit):
+            print("STACKING LIMIT REACHED, INVALID MOVE")
+            return
     else:
         selected_space = space_choice
 

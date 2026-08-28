@@ -8,7 +8,7 @@ from core.tables.carpet_bombing import get_carpet_bombing_result
 from core.tables.carpet_bombing import ATTACK_CANCELLED
 
 from core.card_utilities import calculate_attack_modifiers
-from core.card_utilities import get_armies, get_armies_as_objects
+from core.card_utilities import get_armies
 from core.tables.siege import calculate_siege_drm, get_siege_result
 
 from cards.card_3 import card as card_003

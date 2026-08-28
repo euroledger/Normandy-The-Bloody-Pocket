@@ -1,3 +1,4 @@
+from core.global_game_state import GlobalGameState
 from core.models import *
 from core.enums import *
 from core.allied_armies import (US_FIRST_ARMY, US_THIRD_ARMY,
@@ -27,6 +28,7 @@ def event():
     US_FIRST_ARMY.flip()
     BRITISH_SECOND_ARMY.flip()
     CANADIAN_FIRST_ARMY.flip()
+    GlobalGameState.armies_upgraded = True
 
 
 card.event = event
