@@ -112,7 +112,7 @@ def do_move_other_unit_from_strategic_reserve(unit_choice=None, space_choice=Non
     selected_space = display_spaces[selected_index]
     if not can_add_unit_to_space(selected_space, selected_unit):
         print("STACKING LIMIT REACHED, INVALID MOVE")
-        return False
+        return True
 
     print()
     print(f"{selected_unit.name} moved to {selected_space.name}")
@@ -121,7 +121,6 @@ def do_move_other_unit_from_strategic_reserve(unit_choice=None, space_choice=Non
     return True
 
 def do_move_panzer_to_strategic_reserve(die_roll, div_choice=None):
- 
     print("MOVE PANZER DIVISION TO STRATEGIC RESERVE")
     print()
 

@@ -92,8 +92,13 @@ def do_resource_phase_reinforcements(card):
             print(f"{unit} -> STRATEGIC RESERVE")
             
 
-        for effect in card.actions.effects:
-            if effect.modifier_type == ModifierType.COMMANDER and effect.label and effect.target is None:
+    for effect in card.actions.effects:
+            if effect.modifier_type != ModifierType.COMMANDER or not effect.label or effect.target is not None:
+                continue
+            if effect.label == "Model":
+                if GlobalGameState.model_in_command:
+                    print("Model -> STRATEGIC RESERVE")
+            else:
                 print(f"{effect.label} -> STRATEGIC RESERVE")
 
     print()

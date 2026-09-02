@@ -3,6 +3,7 @@ from cards.decks import draw_deck, mid_deck, late_deck
 from core.actions.actions_menu import do_action_phase
 from core.actions.strategic_reserve_actions import do_move_other_unit_from_strategic_reserve, get_other_units_in_strategic_reserve
 from core.allied_advances_phase import do_allied_advances_phase
+from core.allied_armies import BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_FIRST_ARMY, US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS
 from core.game_constants import CYAN, GREEN, RED, RESET
 from core.save_load_game import load_game, save_game
 from core.tables.weather import get_weather_result
@@ -37,32 +38,22 @@ GAME_CONTINUES = None
 
 do_opening_setup()
 
+# opening_cards = draw_deck[:2]
+# random_cards = draw_deck[2:]
+
+# shuffle(random_cards)
+
+# draw_deck[:] = opening_cards + random_cards
 opening_cards = draw_deck[:2]
 random_cards = draw_deck[2:]
-
 shuffle(random_cards)
-
-# TEST MICHAEL WITTMANN CARD 9
-# from cards.card_9 import card as card_009
-
-# random_cards[0] = card_009
-
-# TEST ROMMEL CARD
-from cards.card_8 import card as card_008
-
-random_cards[0] = card_008
-
 draw_deck[:] = opening_cards + random_cards
-
 
 def print_attack_strengths(card, weather, carpet_bombing):
     print(CYAN)
-    print()
     print("========================================")
     print("ATTACK STRENGTHS (ALLIED ARMIES)")
     print("========================================")
-    print()
-
     armies = get_armies_as_objects(card)
 
     if not armies:
@@ -96,6 +87,16 @@ def check_for_game_end():
         print("========================================")
         return GAME_LOST
 
+
+    allied_formations = [US_FIRST_ARMY, BRITISH_SECOND_ARMY, CANADIAN_FIRST_ARMY, US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS]
+    if any(formation.location and formation.location.name == "FALAISE GAP" for formation in allied_formations):
+        print()
+        print("========================================")
+        print("ALLIED FORMATION HAS REACHED FALAISE GAP")
+        print()
+        print("YOU LOSE!")
+        print("========================================")
+        return GAME_LOST
     if GlobalGameState.cards_drawn == 48:
         return GAME_WON
     return GAME_CONTINUES
@@ -103,11 +104,9 @@ def check_for_game_end():
 
 def print_defense_strengths(card, weather):
     print(CYAN)
-    print()
     print("========================================")
     print("DEFENSE STRENGTHS (ALLIED ARMIES)")
     print("========================================")
-    print()
 
     if GlobalGameState.cards_drawn == 0:
         print()
@@ -368,6 +367,9 @@ while True:
         )
         print(RESET)
         # input("Press ENTER to continue...")
+        game_result = check_for_game_end()
+        if game_result == GAME_LOST:
+            break
         GlobalGameState.current_step = 6
         continue
 
@@ -381,8 +383,8 @@ while True:
         input("Press ENTER to continue...")
 
         # AutoSave game at end of each turn
-        save_name = (f"{datetime.now():%y-%m-%d}-end-turn{GlobalGameState.cards_drawn}-card{GlobalGameState.current_card.card_id}").upper()
-
+        # save_name = (f"{datetime.now():%y-%m-%d}-end-turn{GlobalGameState.cards_drawn}-card{GlobalGameState.current_card.card_id}").upper()
+        save_name = f"{datetime.now():%d-%b}-END-TURN-{GlobalGameState.cards_drawn}-CARD-{GlobalGameState.current_card.card_id}".upper()        
         GlobalGameState.cards_drawn += 1
 
         remove_wittmann()

@@ -32,6 +32,7 @@
         "current_step": 1,
         "cherbourg_captured": true,
         "us_third_army_activated": false,
+        "us_third_army_merged": false,
         "us_first_army_furthest_advance": 6,
         "meyer_available": false,
         "bocage_defense_modifier": 0,
@@ -125,14 +126,14 @@
             "under_siege": false,
             "units": []
         },
-        "FLERS": {
+        "VIRE": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,
             "under_siege": false,
             "units": []
         },
-        "VIRE": {
+        "FLERS": {
             "controlling_player": "GERMAN",
             "fortified_village_modifier": 0,
             "fortified": false,

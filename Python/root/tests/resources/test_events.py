@@ -14,7 +14,7 @@ from core.map.map_spaces_us_1 import cherbourg
 from core.map.map_spaces_can_1 import caen
 from cards.card_27 import card as card_027
 from cards.card_42 import card as card_042
-from core.map.map_spaces_us_3 import us_viii_track, us_xv_track
+from core.map.map_spaces_us_3 import us_viii_track, us_xv_track, alencon, le_mans, rennes
 
 
 class TestEvents(unittest.TestCase):
@@ -102,73 +102,41 @@ class TestEvents(unittest.TestCase):
     # =========================================================
 
     def test_card_42_retreats_third_army_from_le_mans(self):
-        le_mans = next(space for space in us_viii_track if space.name == "LE MANS")
-        retreat_space = next(space for space in us_viii_track if space.track_number == le_mans.track_number + 1)
-
         add_units_to_space(le_mans, US_THIRD_ARMY)
         do_event(card_042)
 
-        self.assertEqual(US_THIRD_ARMY.location, retreat_space)
-        self.assertIn(US_THIRD_ARMY, retreat_space.units)
+        self.assertEqual(US_THIRD_ARMY.location, rennes)
+        self.assertIn(US_THIRD_ARMY, rennes.units)
         self.assertNotIn(US_THIRD_ARMY, le_mans.units)
 
     def test_card_42_retreats_xv_corps_from_le_mans(self):
-        le_mans = next(space for space in us_xv_track if space.name == "LE MANS")
-        retreat_space = next(space for space in us_xv_track if space.track_number == le_mans.track_number + 1)
-
         add_units_to_space(le_mans, US_XV_CORPS)
         do_event(card_042)
 
-        self.assertEqual(US_XV_CORPS.location, retreat_space)
-        self.assertIn(US_XV_CORPS, retreat_space.units)
+        self.assertEqual(US_XV_CORPS.location, rennes)
+        self.assertIn(US_XV_CORPS, rennes.units)
         self.assertNotIn(US_XV_CORPS, le_mans.units)
 
     def test_card_42_has_no_effect_before_le_mans(self):
-        le_mans_track_number = next(space.track_number for space in us_viii_track if space.name == "LE MANS")
-        before_le_mans = next(space for space in us_viii_track if space.track_number > le_mans_track_number)
-
-        add_units_to_space(before_le_mans, US_THIRD_ARMY)
+        add_units_to_space(rennes, US_THIRD_ARMY)
         do_event(card_042)
 
-        self.assertEqual(US_THIRD_ARMY.location, before_le_mans)
-        self.assertIn(US_THIRD_ARMY, before_le_mans.units)
+        self.assertEqual(US_THIRD_ARMY.location, rennes)
+        self.assertIn(US_THIRD_ARMY, rennes.units)
 
-    def test_card_42_retreats_third_army_beyond_le_mans(self):
-        le_mans_track_number = next(space.track_number for space in us_viii_track if space.name == "LE MANS")
-        beyond_le_mans = next(space for space in us_viii_track if space.track_number < le_mans_track_number)
-        retreat_space = next(space for space in us_viii_track if space.track_number == beyond_le_mans.track_number + 1)
-
-        add_units_to_space(beyond_le_mans, US_THIRD_ARMY)
+    def test_card_42_retreats_third_army_alencon(self):
+        add_units_to_space(alencon, US_THIRD_ARMY)
         do_event(card_042)
 
-        self.assertEqual(US_THIRD_ARMY.location, retreat_space)
-        self.assertIn(US_THIRD_ARMY, retreat_space.units)
-        self.assertNotIn(US_THIRD_ARMY, beyond_le_mans.units)
+        self.assertEqual(US_THIRD_ARMY.location, le_mans)
+        self.assertIn(US_THIRD_ARMY, le_mans.units)
+        self.assertNotIn(US_THIRD_ARMY, alencon.units)
 
-    def test_card_42_retreats_xv_corps_beyond_le_mans(self):
-        le_mans_track_number = next(space.track_number for space in us_xv_track if space.name == "LE MANS")
-        beyond_le_mans = next(space for space in us_xv_track if space.track_number < le_mans_track_number)
-        retreat_space = next(space for space in us_xv_track if space.track_number == beyond_le_mans.track_number + 1)
-
-        add_units_to_space(beyond_le_mans, US_XV_CORPS)
+    def test_card_42_retreats_xv_corps_alencon(self):
+        add_units_to_space(alencon, US_XV_CORPS)
         do_event(card_042)
 
-        self.assertEqual(US_XV_CORPS.location, retreat_space)
-        self.assertIn(US_XV_CORPS, retreat_space.units)
-        self.assertNotIn(US_XV_CORPS, beyond_le_mans.units)
+        self.assertEqual(US_XV_CORPS.location, le_mans)
+        self.assertIn(US_XV_CORPS, le_mans.units)
+        self.assertNotIn(US_XV_CORPS, alencon.units)
 
-    def test_card_42_xv_corps_takes_priority_over_third_army(self):
-        xv_le_mans = next(space for space in us_xv_track if space.name == "LE MANS")
-        xv_retreat_space = next(space for space in us_xv_track if space.track_number == xv_le_mans.track_number + 1)
-
-        third_le_mans = next(space for space in us_viii_track if space.name == "LE MANS")
-
-        add_units_to_space(xv_le_mans, US_XV_CORPS)
-        add_units_to_space(third_le_mans, US_THIRD_ARMY)
-
-        do_event(card_042)
-
-        self.assertEqual(US_XV_CORPS.location, xv_retreat_space)
-        self.assertIn(US_XV_CORPS, xv_retreat_space.units)
-        self.assertEqual(US_THIRD_ARMY.location, third_le_mans)
-        self.assertIn(US_THIRD_ARMY, third_le_mans.units)

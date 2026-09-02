@@ -24,4 +24,4 @@ coverage.xml
 Thumbs.db
 
 # Game save files
-data/*.json
+*.json

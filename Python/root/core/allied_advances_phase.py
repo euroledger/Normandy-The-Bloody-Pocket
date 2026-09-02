@@ -1,4 +1,5 @@
 from core.actions.actions_helper import CYAN, RED, RESET
+from core.actions.stacking_limits import FALLSCHIRMJAGER_STACKING_LIMIT, FLAK_88_STACKING_LIMIT, NEBELWERFER_STACKING_LIMIT, PANZER_STACKING_LIMIT
 from core.card_utilities import get_armies_as_objects
 from random import randint
 from core.allied_armies import (
@@ -13,7 +14,7 @@ from core.game_constants import BLUE, GREEN, LIGHT_BROWN
 from core.tables.carpet_bombing import ATTACK_CANCELLED, get_carpet_bombing_result
 from core.map.map_model import TerrainType, eliminated_units_box, hitler_approval_track
 from core.card_utilities import calculate_attack_modifiers
-from core.map.map_utilities import add_units_to_space, german_defense_strength, remove_units_from_space
+from core.map.map_utilities import add_units_to_space, german_defense_strength
 from random import choice
 from core.global_game_state import GlobalGameState
 from core.map.map_utilities import update_front_line_for_army
@@ -38,7 +39,7 @@ def get_track_for(army):
     elif army.nation == Nation.CAN_1:
         track = can_1_track
     elif army.nation == Nation.US_3:
-        track = us_viii_track
+        track = us_xv_track
     elif army.nation == Nation.US_VIII:
         track = us_viii_track
     elif army.nation == Nation.US_XV:
@@ -65,9 +66,6 @@ def get_front_line_space(army):
         front_line = GlobalGameState.us_xv_front_line
     else:
         raise ValueError(f"Unknown army: {army}")
-
-    print(f"DEBUG {army.display_name} -> us_xv_front_line = {front_line}")
-
     return next(space for space in track if space.track_number == front_line)
 
 
@@ -88,6 +86,9 @@ def advance_army_one_space(army):
         next_space.controlling_player = SideType.ALLIED
     new_furthest_advance = update_front_line_for_army(army, next_space.track_number)
     print(f">>>>>>> AFTER ALLIED ADVANCE -> ALLIED ARMY LOCATION:{army.display_name} IS AT {army.location.name}")
+    if army in [US_VIII_CORPS, US_XV_CORPS]:
+        check_and_merge_us_third_army(next_space)
+        
     return new_furthest_advance
 
 def dday_landings_first_wave():
@@ -199,20 +200,94 @@ def do_german_losses(space, selected_units=None):
         print(f"ELIMINATED: {casualty}")
 
 
+def choose_german_excess_unit(units, choice=None):
+    print()
+    print("SELECT UNIT TO ELIMINATE")
+    for i, unit in enumerate(units, start=1):
+        print(f"{i}. {unit} ({unit.combat_value})")
+
+    if choice is None:
+        selection = int(input("Select unit to eliminate: "))
+    else:
+        selection = choice
+
+    return units[selection - 1]
+
+
+def enforce_german_stacking_limit(space, choice=None):
+    stacking_groups = [
+        ("PANZER / KAMPFGRUPPE", lambda unit: unit.is_panzer(), PANZER_STACKING_LIMIT),
+        ("FLAK 88", lambda unit: unit.type == ReinforcementType.FLAK_88, FLAK_88_STACKING_LIMIT),
+        ("NEBELWERFER", lambda unit: unit.type == ReinforcementType.NEBELWERFER, NEBELWERFER_STACKING_LIMIT),
+        ("FALLSCHIRMJAGER", lambda unit: unit.type == ReinforcementType.FALLSCHIRMJAGER, FALLSCHIRMJAGER_STACKING_LIMIT)
+    ]
+
+
+    # for group_name, selector, limit in stacking_groups:
+    #     units = [unit for unit in space.units if selector(unit)]
+    #     excess = len(units) - limit
+    for group_name, selector, limit in stacking_groups:
+        units = [unit for unit in space.units if isinstance(unit, GermanUnit) and selector(unit)]
+        excess = len(units) - limit
+        if excess <= 0:
+            continue
+
+        print()
+        print(f"STACKING LIMIT EXCEEDED — {space.name}")
+        print(f"{group_name} LIMIT: {limit}")
+        print(f"UNITS PRESENT: {len(units)}")
+        print(f"EXCESS UNITS: {excess}")
+
+        if group_name == "NEBELWERFER":
+            for _ in range(excess):
+                casualty = units.pop()
+                space.units.remove(casualty)
+                eliminated_units_box.units.append(casualty)
+                print(f"ELIMINATED: {casualty}")
+            continue
+
+        for _ in range(excess):
+            available_units = [unit for unit in units if unit in space.units]
+            casualty = choose_german_excess_unit(available_units, choice)
+            space.units.remove(casualty)
+            eliminated_units_box.units.append(casualty)
+            print(f"ELIMINATED: {casualty}")
+
 def retreat_german_units(space, track):
     retreat_space = next((s for s in track if s.track_number == space.track_number - 1), None)
-
     if retreat_space is None:
         print("NO RETREAT POSSIBLE")
         return
-
     retreating_units = list(space.units)
-
     for unit in retreating_units:
         space.units.remove(unit)
         retreat_space.units.append(unit)
-
     print(f"GERMANS RETREAT FROM {space.name} TO {retreat_space.name}")
+    enforce_german_stacking_limit(retreat_space)
+    
+# if two US Corps occupy same space -> merge
+def check_and_merge_us_third_army(space):
+    if US_VIII_CORPS not in space.units or US_XV_CORPS not in space.units:
+        return False
+
+    space.units.remove(US_VIII_CORPS)
+    space.units.remove(US_XV_CORPS)
+
+    US_VIII_CORPS.location = None
+    US_XV_CORPS.location = None
+
+    space.units.append(US_THIRD_ARMY)
+    US_THIRD_ARMY.location = space
+    US_THIRD_ARMY.merged = True
+    GlobalGameState.us_third_army_merged = True
+
+    update_front_line_for_army(US_THIRD_ARMY, space.track_number)
+
+    print()
+    print(f">>>>>>> US VIII CORPS AND US XV CORPS MERGE AT {space.name}")
+    print(f">>>>>>> US 3RD ARMY IS NOW AT {space.name}")
+
+    return True
 
 
 def activate_us_third_army():
@@ -280,6 +355,9 @@ def do_allied_victory(army, target_space, activation_die_roll=None):
         target_space.fortified_village_modifier = 0
         print(f"FORTIFIED VILLAGES REMOVED FROM {target_space.name}")
     advance_army_one_space(army)
+    print(f"{army.display_name} -> {army.location.name}")
+    if army.location.terrain == TerrainType.FALAISE_GAP:
+        return True
 
     if (
         GlobalGameState.us_third_army_activated == False
@@ -390,7 +468,7 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None, pa
         # attack_result = calculate_attack_modifiers(card, army=army, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing)
         # attack_strength = attack_result["attack_strength"]
         # defense_strength = german_defense_strength(target_space)
-        attack_result = calculate_attack_modifiers(card, army, weather.available_jabos)
+        attack_result = calculate_attack_modifiers(card=card, army=army, num_jabos=weather.available_jabos, carpet_bombing=carpet_bombing)
         attack_strength = attack_result["attack_strength"]
         attacking_from = army.location.name
         print()
@@ -409,11 +487,12 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None, pa
         print(f"DEFENSE STRENGTH: {defense_strength}")
         print()
       
-
         if target_space.under_siege or (defense_strength - attack_strength >= 6 and target_space.terrain == TerrainType.FORTRESS):
             target_space.under_siege = True
             do_siege_roll(space=target_space, army=army, card=card, weather=weather, carpet_bombing=carpet_bombing, defense_strength=defense_strength, die_roll=actual_die_roll)
         else:
+            # QUACK TEST DIE ROLL!!!!!!!!!!
+            # actual_die_roll=6
             print(f"DIE ROLL: {actual_die_roll}")
             print(f"ATTACK TOTAL: {attack_total}")
             print()
@@ -423,6 +502,8 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None, pa
                 if not had_fortified_villages:
                     do_german_losses(target_space)
                 do_allied_victory(army, target_space)
+                if army.location.terrain == TerrainType.FALAISE_GAP:
+                    return True
             elif actual_die_roll == 1:
                 do_german_losses(target_space)
                 print("ALLIED DEFEAT (UNMODIFIED 1)")
@@ -431,6 +512,8 @@ def do_allied_attacks(armies, card, weather, carpet_bombing=0, die_roll=None, pa
                 if not had_fortified_villages:
                     do_german_losses(target_space)
                 do_allied_victory(army, target_space)
+                if army.location.terrain == TerrainType.FALAISE_GAP:
+                    return True
             else:
                 do_german_losses(target_space)
                 print("ALLIED DEFEAT")
@@ -471,4 +554,8 @@ def do_allied_advances_phase(card, weather):
 
     advancing_armies = [army for army in armies if army not in [US_THIRD_ARMY, US_VIII_CORPS, US_XV_CORPS] or GlobalGameState.us_third_army_activated]
     carpet_bombing = get_carpet_bombing_modifier(card, weather)
-    do_allied_attacks(advancing_armies, card, weather, carpet_bombing, pause_after_attack=True)
+    # do_allied_attacks(advancing_armies, card, weather, carpet_bombing, pause_after_attack=True)
+    
+    game_over = do_allied_attacks(advancing_armies, card, weather, carpet_bombing,pause_after_attack=True)
+    if game_over:
+        return True

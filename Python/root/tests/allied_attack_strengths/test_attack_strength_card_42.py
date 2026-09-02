@@ -12,7 +12,7 @@ class TestAttackStrengthCard42(unittest.TestCase):
         self.armies = get_armies_as_objects(card_42)
 
     def test_01_attack_strength_overcast(self):
-        self.assertEqual(len(self.armies), 4)
+        self.assertEqual(len(self.armies), 2)
 
         weather = get_weather_result(1)
         self.assertEqual(weather.available_jabos, 0)

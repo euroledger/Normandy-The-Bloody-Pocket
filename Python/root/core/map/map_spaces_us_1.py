@@ -82,20 +82,21 @@ mortain = MapSpace(
     controlling_player=SideType.GERMAN,
 )
 
-flers = MapSpace(
-    name="FLERS",
-    track=Nation.US_1,
-    terrain=TerrainType.BOCAGE,
-    terrain_value=2,
-    track_number=2,
-    controlling_player=SideType.GERMAN,
-)
 
 vire = MapSpace(
     name="VIRE",
     track=Nation.US_1,
     terrain=TerrainType.TOWN,
     terrain_value=1,
+    track_number=2,
+    controlling_player=SideType.GERMAN,
+)
+
+flers = MapSpace(
+    name="FLERS",
+    track=Nation.US_1,
+    terrain=TerrainType.BOCAGE,
+    terrain_value=2,
     track_number=1,
     controlling_player=SideType.GERMAN,
 )
@@ -111,7 +112,7 @@ us_1_track = [
     coutances,
     avranches,
     mortain,
-    flers,
     vire,
+    flers,
     falaise_gap,
 ]

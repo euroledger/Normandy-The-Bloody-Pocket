@@ -48,6 +48,7 @@ class GlobalGameState:
     # MISC GAME EVENTS
     cherbourg_captured = False
     us_third_army_activated = False
+    us_third_army_merged = False
     us_first_army_furthest_advance = 11
     meyer_available = False
 

@@ -1,4 +1,5 @@
 from core.actions.actions_helper import can_add_unit_to_space, get_german_controlled_spaces, get_adjacent_german_controlled_spaces, use_action
+from core.enums import ReinforcementType
 from core.global_game_state import GlobalGameState
 from core.german_units import GermanUnit
 
@@ -12,7 +13,7 @@ def do_move_unit_one_space(unit_choice=None, space_choice=None):
 
     for space in german_controlled_spaces:
         for unit in space.units:
-            if isinstance(unit, GermanUnit):
+            if isinstance(unit, GermanUnit) and unit.type != ReinforcementType.COMMANDER:
                 movable_units.append((space, unit))
 
     if not movable_units:

@@ -169,6 +169,7 @@ def reset_map():
     eliminated_units_box.units.clear()
     in_transit_box.units.clear()
 
+
 def reset_allied_armies():
     armies = [
         US_FIRST_ARMY,
@@ -187,7 +188,6 @@ def reset_allied_armies():
 
 def get_eligible_german_units(space):
     eligible = []
-
     for unit in space.units:
         if not isinstance(unit, GermanUnit):
             continue

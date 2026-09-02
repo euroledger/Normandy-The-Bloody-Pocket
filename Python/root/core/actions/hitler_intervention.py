@@ -45,6 +45,13 @@ def get_hitler_intervention_targets(card):
     return targets
 
 
+def has_us_third_army_taken_st_malo():
+    if US_THIRD_ARMY.location is not None:
+        return US_THIRD_ARMY.location.track_number <= 7
+    if US_VIII_CORPS.location is not None:
+        return US_VIII_CORPS.location.track_number <= 7
+    return False
+
 def check_hitler_intervention_applies(card, die_roll=None, target_choice=None, cancel_choice=None):
     GlobalGameState.hitler_intervention_no_effect = False
     targets = get_hitler_intervention_targets(card)
@@ -60,11 +67,11 @@ def check_hitler_intervention_applies(card, die_roll=None, target_choice=None, c
             GlobalGameState.hitler_intervention_no_effect = True
             return None
 
-        if US_VIII_CORPS.location is None or US_VIII_CORPS.location.track_number > 7:
+        if not has_us_third_army_taken_st_malo():
             print("HITLER INTERVENTION - NO EFFECT")
             GlobalGameState.hitler_intervention_no_effect = True
             return None
-
+        
         print(f"SELECTED TARGET: {US_FIRST_ARMY.display_name}")
         return US_FIRST_ARMY
         

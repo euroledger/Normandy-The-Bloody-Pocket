@@ -2,6 +2,7 @@
 from random import randint
 
 from core.actions.actions_helper import BLUE, BOLD, RED, RESET, use_action
+from core.allied_armies import US_VIII_CORPS, US_XV_CORPS
 from core.card_utilities import calculate_defense_modifiers, get_all_defending_armies
 from core.enums import SideType
 from core.global_game_state import GlobalGameState
@@ -16,7 +17,7 @@ from core.map.map_utilities import (
     get_eligible_german_units,
     update_front_line_for_army,
 )
-from core.allied_advances_phase import get_front_line_space, get_track_for, do_german_losses
+from core.allied_advances_phase import get_front_line_space, get_track_for, do_german_losses, check_and_merge_us_third_army
 from core.models import GermanUnit
 
 def choose_attacking_units(units):
@@ -211,6 +212,8 @@ def do_post_combat(result, selected_option, selected_units):
             retreat_space.units.append(army)
             army.location = retreat_space
 
+            if army in [US_VIII_CORPS, US_XV_CORPS]:
+                check_and_merge_us_third_army(retreat_space)
             update_front_line_for_army(army, retreat_space.track_number)
 
             print(f"{army.display_name} RETREATS TO {retreat_space.name}")

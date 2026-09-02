@@ -50,4 +50,4 @@ class TestUs1Track(unittest.TestCase):
         self.assertEqual(space.name, "MORTAIN")
         current_space += 1
         space = us_1_track[current_space]
-        self.assertEqual(space.name, "FLERS")
+        self.assertEqual(space.name, "VIRE")
